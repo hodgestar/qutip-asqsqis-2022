@@ -1,0 +1,32 @@
+name: test
+
+on: [push, pull_request]
+
+defaults:
+  run:
+    shell: bash -l {0}
+
+jobs:
+  smoke-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: conda-incubator/setup-miniconda@v2
+      with:
+          environment-file: environment.yml
+          activate-environment: qutip-summer-school-env
+          auto-activate-base: false
+          python-version: "3.9"
+    - name: "Environment informaton"
+      run: |
+        python -V
+        conda info
+        conda list
+        python -c "import qutip; qutip.about()"
+    - name: "Install pytest and nbmake"
+      run: |
+        pip install pytest nbmake
+    - name: Run smoke test notebook
+      run: |
+        jupyter kernel &
+        pytest --nbmake smoke-test.ipynb --nbmake-timeout=500
