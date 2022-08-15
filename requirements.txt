@@ -1,0 +1,2 @@
+qutip[full]==4.7.0
+jupyter==1.0.0

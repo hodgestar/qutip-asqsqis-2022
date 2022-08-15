@@ -1,0 +1,10 @@
+name: qutip-tutorial-env
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.9
+  - qutip=4.7.0
+  - jupyter=1.0.0
+  - matplotlib=3.5.2
+  - pyzmq  # See https://github.com/qutip/qutip/issues/1915
