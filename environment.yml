@@ -1,4 +1,4 @@
-name: qutip-tutorial-env
+name: qutip-summer-school-env
 channels:
   - conda-forge
   - defaults
