@@ -77,7 +77,7 @@ Otherwise, you can download the latest contents of the repository
 
 ## Running remotely with Binder
 
-I'd highly recommend installing and running Python locally for the summer
+We'd highly recommend installing and running Python locally for the summer
 school, but if that really isn't possible, you are welcome to try running
 Jupyter and the necessary dependencies online using either Binder, by clicking
 the button below:
