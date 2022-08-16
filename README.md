@@ -59,7 +59,7 @@ Otherwise, you can download the latest contents of the repository
 5. Install QuTiP and the other required libraries by running
    `pip install -r requirements.txt`.
 
-6. Open the Jupyter notebook by running `jupyer notebook`.
+6. Open the Jupyter notebook by running `jupyter notebook`.
 
 
 ## Installing locally with conda
