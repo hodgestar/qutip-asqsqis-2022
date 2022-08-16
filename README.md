@@ -50,7 +50,7 @@ Otherwise, you can download the latest contents of the repository
    first two steps, the hardest part is done.
 
 3. Create a virtual environment by running
-   `python3 -m venv -m qutip-summer-school-env`.
+   `python3 -m venv qutip-summer-school-env`.
 
 4. Activate the environment you have just created by running
    `source qutip-summer-school-env/bin/activate` (on Linux or Mac OS) or
