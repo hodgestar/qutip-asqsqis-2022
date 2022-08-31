@@ -18,51 +18,51 @@ kernelspec:
 
 ## Tasks
 
-- [Pre-flight check](#Pre-flight-check)
+- [Pre-flight check](#pre-flight-check)
   - Open Jupyter
   - Run the smoke test notebook
-- [Import qutip](#Imports)
+- [Import qutip](#imports)
   - Imports
-- [States](#States)
+- [States](#states)
   - Creating and examining quantum states
   - Arithmetic with states
   - What is a Qobj?
-- [Bloch sphere](#Bloch-sphere)
+- [Bloch sphere](#bloch-sphere)
   - Plotting 2-level states on the Bloch sphere
   - Plotting many states at once
   - Changing the colors
   - Changing the transparency
-- [Operators](#Operators)
+- [Operators](#operators)
   - Creating and examining quantum operators
   - Calculating expectation values
   - Making projectors
-- [Eigenvalues and eigenstates](#Eigenvalues-and-eigenstates)
+- [Eigenvalues and eigenstates](#eigenvalues-and-eigenstates)
   - Eigenvalues
   - Eigenstates
-- [Density matrices](#Density-matrices)
+- [Density matrices](#density-matrices)
   - Creating density matrices
   - Plotting 2-level density matrices on the Bloch sphere
   - Plot some pure states
   - Plot some mixed states
-- [Time-dependent operators](#Time-dependent-operators)
+- [Time-dependent operators](#time-dependent-operators)
   - Create a time-dependent operator
   - What is a QobjEvo?
   - Adding arguments
-- [Tensor products and partial traces](#Tensor-products-and-partial-traces)
+- [Tensor products and partial traces](#tensor-products-and-partial-traces)
   - Construct a state with two or three qubits
   - Construct an operator on multiple qubits
   - Construct an entangled state
   - Take the partial trace of a product state
   - Take the partial trace of an entangled state
-- [Hamiltonians](#Hamiltonians)
+- [Hamiltonians](#hamiltonians)
   - Building Hamiltonians
   - Determining eigenvalues and eigenstates
   - Plotting eigenvalues
-- [Solving the Schrödinger Equation using sesolve](#Solving-the-Schrödinger-Equation-using-sesolve)
+- [Solving the Schrödinger Equation using sesolve](#solving-the-Schrödinger-Equation-using-sesolve)
   - Plotting the states
   - Plotting the states on the Bloch sphere
   - Plotting expectation values
-- [Using functions to make your notebooks neater](#Using-functions-to-make-your-notebooks-neater)
+- [Using functions to make your notebooks neater](#using-functions-to-make-your-notebooks-neater)
   - Write a function for displaying the eigenstates of an operator
   - Write a function for displaying states on the Bloch sphere
 
