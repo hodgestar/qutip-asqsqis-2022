@@ -1,0 +1,1709 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>00: Introduction to QuTiP &#8212; ASQSQIS Tutorials with QuTiP</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Build information" href="../build-stats.html" />
+    <link rel="prev" title="Overview" href="../intro.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../_static/logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">ASQSQIS Tutorials with QuTiP</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Overview
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Tutorials
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   00: Introduction to QuTiP
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Backmatter
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../build-stats.html">
+   Build information
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../references.html">
+   Bibliography
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://mybinder.org/v2/gh/hodgestar/qutip-asqsqis-2022/master?urlpath=tree/tutbok/tutorials/00-qutip-intro.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Launch on Binder"
+>
+  
+
+<span class="headerbtn__icon-container">
+  
+    <img src="../_static/images/logo_binder.svg">
+  </span>
+<span class="headerbtn__text-container">Binder</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/hodgestar/qutip-asqsqis-2022"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/hodgestar/qutip-asqsqis-2022/issues/new?title=Issue%20on%20page%20%2Ftutorials/00-qutip-intro.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/tutorials/00-qutip-intro.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download notebook file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-code"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="../_sources/tutorials/00-qutip-intro.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#tasks">
+   Tasks
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#pre-flight-check">
+   Pre-flight check
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#imports">
+   Imports
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#helper-functions">
+   Helper functions
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#states">
+   States
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#bloch-sphere">
+   Bloch sphere
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#operators">
+   Operators
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#eigenvalues-and-eigenstates">
+   Eigenvalues and eigenstates
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#density-matrices">
+   Density matrices
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#time-dependent-operators">
+   Time-dependent operators
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#tensor-products-and-partial-traces">
+   Tensor products and partial traces
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#hamiltonians">
+   Hamiltonians
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#solving-the-schrodinger-equation-using-sesolve">
+   Solving the Schrödinger Equation using sesolve
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#using-functions-to-make-your-notebooks-neater">
+   Using functions to make your notebooks neater
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>00: Introduction to QuTiP</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#tasks">
+   Tasks
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#pre-flight-check">
+   Pre-flight check
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#imports">
+   Imports
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#helper-functions">
+   Helper functions
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#states">
+   States
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#bloch-sphere">
+   Bloch sphere
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#operators">
+   Operators
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#eigenvalues-and-eigenstates">
+   Eigenvalues and eigenstates
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#density-matrices">
+   Density matrices
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#time-dependent-operators">
+   Time-dependent operators
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#tensor-products-and-partial-traces">
+   Tensor products and partial traces
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#hamiltonians">
+   Hamiltonians
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#solving-the-schrodinger-equation-using-sesolve">
+   Solving the Schrödinger Equation using sesolve
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#using-functions-to-make-your-notebooks-neater">
+   Using functions to make your notebooks neater
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section class="tex2jax_ignore mathjax_ignore" id="introduction-to-qutip">
+<h1>00: Introduction to QuTiP<a class="headerlink" href="#introduction-to-qutip" title="Permalink to this headline">#</a></h1>
+<section id="tasks">
+<h2>Tasks<a class="headerlink" href="#tasks" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="#Pre-flight-check">Pre-flight check</a></p>
+<ul>
+<li><p>Open Jupyter</p></li>
+<li><p>Run the smoke test notebook</p></li>
+</ul>
+</li>
+<li><p><a class="reference external" href="#Imports">Import qutip</a></p>
+<ul>
+<li><p>Imports</p></li>
+</ul>
+</li>
+<li><p><a class="reference external" href="#States">States</a></p>
+<ul>
+<li><p>Creating and examining quantum states</p></li>
+<li><p>Arithmetic with states</p></li>
+<li><p>What is a Qobj?</p></li>
+</ul>
+</li>
+<li><p><a class="reference external" href="#Bloch-sphere">Bloch sphere</a></p>
+<ul>
+<li><p>Plotting 2-level states on the Bloch sphere</p></li>
+<li><p>Plotting many states at once</p></li>
+<li><p>Changing the colors</p></li>
+<li><p>Changing the transparency</p></li>
+</ul>
+</li>
+<li><p><a class="reference external" href="#Operators">Operators</a></p>
+<ul>
+<li><p>Creating and examining quantum operators</p></li>
+<li><p>Calculating expectation values</p></li>
+<li><p>Making projectors</p></li>
+</ul>
+</li>
+<li><p><a class="reference external" href="#Eigenvalues-and-eigenstates">Eigenvalues and eigenstates</a></p>
+<ul>
+<li><p>Eigenvalues</p></li>
+<li><p>Eigenstates</p></li>
+</ul>
+</li>
+<li><p><a class="reference external" href="#Density-matrices">Density matrices</a></p>
+<ul>
+<li><p>Creating density matrices</p></li>
+<li><p>Plotting 2-level density matrices on the Bloch sphere</p></li>
+<li><p>Plot some pure states</p></li>
+<li><p>Plot some mixed states</p></li>
+</ul>
+</li>
+<li><p><a class="reference external" href="#Time-dependent-operators">Time-dependent operators</a></p>
+<ul>
+<li><p>Create a time-dependent operator</p></li>
+<li><p>What is a QobjEvo?</p></li>
+<li><p>Adding arguments</p></li>
+</ul>
+</li>
+<li><p><a class="reference external" href="#Tensor-products-and-partial-traces">Tensor products and partial traces</a></p>
+<ul>
+<li><p>Construct a state with two or three qubits</p></li>
+<li><p>Construct an operator on multiple qubits</p></li>
+<li><p>Construct an entangled state</p></li>
+<li><p>Take the partial trace of a product state</p></li>
+<li><p>Take the partial trace of an entangled state</p></li>
+</ul>
+</li>
+<li><p><a class="reference external" href="#Hamiltonians">Hamiltonians</a></p>
+<ul>
+<li><p>Building Hamiltonians</p></li>
+<li><p>Determining eigenvalues and eigenstates</p></li>
+<li><p>Plotting eigenvalues</p></li>
+</ul>
+</li>
+<li><p><a class="reference external" href="#Solving-the-Schr%C3%B6dinger-Equation-using-sesolve">Solving the Schrödinger Equation using sesolve</a></p>
+<ul>
+<li><p>Plotting the states</p></li>
+<li><p>Plotting the states on the Bloch sphere</p></li>
+<li><p>Plotting expectation values</p></li>
+</ul>
+</li>
+<li><p><a class="reference external" href="#Using-functions-to-make-your-notebooks-neater">Using functions to make your notebooks neater</a></p>
+<ul>
+<li><p>Write a function for displaying the eigenstates of an operator</p></li>
+<li><p>Write a function for displaying states on the Bloch sphere</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="pre-flight-check">
+<h2>Pre-flight check<a class="headerlink" href="#pre-flight-check" title="Permalink to this headline">#</a></h2>
+<p>If you haven’t installed Python, QuTiP, Jupyter and the other requirements yet, do so now by following one of the <a class="reference external" href="https://github.com/hodgestar/qutip-asqsqis-2022/">sets of instructions</a>.</p>
+<p>You can test that your setup is working by running the <a class="reference external" href="https://github.com/hodgestar/qutip-asqsqis-2022/blob/main/smoke-test.ipynb">smoke test notebook</a>.</p>
+</section>
+<section id="imports">
+<h2>Imports<a class="headerlink" href="#imports" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">matplotlib</span> inline
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">qutip</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="helper-functions">
+<h2>Helper functions<a class="headerlink" href="#helper-functions" title="Permalink to this headline">#</a></h2>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">display_list</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Display a list of items using Jupyter&#39;s display function. &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">title</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">title</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">a</span><span class="p">:</span>
+        <span class="n">display</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">print_attrs</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Print the listed attributes of an object. &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="n">attrs</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">attr</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">show_bloch</span><span class="p">(</span><span class="n">states</span><span class="p">,</span> <span class="n">vector_color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vector_alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Show states or density matrices on the Bloch sphere. &quot;&quot;&quot;</span>
+    <span class="n">bloch</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">Bloch</span><span class="p">()</span>
+    <span class="n">bloch</span><span class="o">.</span><span class="n">add_states</span><span class="p">(</span><span class="n">states</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">vector_color</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">vector_color</span> <span class="o">==</span> <span class="s2">&quot;rb&quot;</span><span class="p">:</span>
+            <span class="n">vector_color</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">states</span><span class="p">))</span>
+            <span class="p">]</span>
+        <span class="n">bloch</span><span class="o">.</span><span class="n">vector_color</span> <span class="o">=</span> <span class="n">vector_color</span>
+    <span class="k">if</span> <span class="n">vector_alpha</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">bloch</span><span class="o">.</span><span class="n">vector_alpha</span> <span class="o">=</span> <span class="n">vector_alpha</span>
+    <span class="n">bloch</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">display_eigenstates</span><span class="p">(</span><span class="n">op</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Display the eigenvalues and eigenstates of an operator. &quot;&quot;&quot;</span>
+    <span class="n">evals</span><span class="p">,</span> <span class="n">evecs</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">eigenstates</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Eigenvalues:&quot;</span><span class="p">,</span> <span class="n">evals</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Eigenstates&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;===========&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">evecs</span><span class="p">:</span>
+        <span class="n">display</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="states">
+<h2>States<a class="headerlink" href="#states" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>Creating and examining quantum states</p></li>
+<li><p>Arithmetic with states</p></li>
+<li><p>What is a Qobj?</p></li>
+</ul>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># a qubit in the |0&gt; state</span>
+<span class="n">ket</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">ket</span><span class="p">(</span><span class="s2">&quot;0&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># show some of the properties relevant to kets</span>
+<span class="n">display</span><span class="p">(</span><span class="n">ket</span><span class="p">)</span>
+<span class="n">print_attrs</span><span class="p">(</span><span class="n">ket</span><span class="p">,</span> <span class="s2">&quot;ket&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="s2">&quot;dims&quot;</span><span class="p">,</span> <span class="s2">&quot;shape&quot;</span><span class="p">,</span> <span class="s2">&quot;isket&quot;</span><span class="p">,</span> <span class="s2">&quot;isbra&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2], [1]], shape = (2, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}1.0\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ket.type: ket
+ket.dims: [[2], [1]]
+ket.shape: (2, 1)
+ket.isket: True
+ket.isbra: False
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># show the adjoint of the ket -- a bra</span>
+<span class="n">ket</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[1], [2]], shape = (1, 2), type = bra\begin{equation*}\left(\begin{array}{*{11}c}1.0 &amp; 0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># construct the bra directly</span>
+<span class="n">bra</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">bra</span><span class="p">(</span><span class="s2">&quot;0&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># a qubit in the |1&gt; state</span>
+<span class="n">qutip</span><span class="o">.</span><span class="n">ket</span><span class="p">(</span><span class="s2">&quot;1&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2], [1]], shape = (2, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\1.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># construct |0&gt; and |1&gt; using qutip.basis</span>
+<span class="n">q0</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">basis</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">q1</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">basis</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">display_list</span><span class="p">([</span><span class="n">q0</span><span class="p">,</span> <span class="n">q1</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2], [1]], shape = (2, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}1.0\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2], [1]], shape = (2, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\1.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># show that Qobj&#39;s with the same values are equal</span>
+<span class="n">q0</span> <span class="o">==</span> <span class="n">q0</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>True
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># show that Qobj&#39;s with different global phases are not equal</span>
+<span class="n">display</span><span class="p">(</span><span class="n">q0</span> <span class="o">*</span> <span class="mi">1</span><span class="n">j</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Equal:&quot;</span><span class="p">,</span> <span class="n">q0</span> <span class="o">==</span> <span class="n">q0</span> <span class="o">*</span> <span class="mi">1</span><span class="n">j</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Overlap:&quot;</span><span class="p">,</span> <span class="n">q0</span><span class="o">.</span><span class="n">overlap</span><span class="p">(</span><span class="n">q0</span> <span class="o">*</span> <span class="mi">1</span><span class="n">j</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Overlap is 1:&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">q0</span><span class="o">.</span><span class="n">overlap</span><span class="p">(</span><span class="n">q0</span> <span class="o">*</span> <span class="mi">1</span><span class="n">j</span><span class="p">))</span> <span class="o">==</span> <span class="mf">1.0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2], [1]], shape = (2, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}1.0j\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Equal: False
+Overlap: 1j
+Overlap is 1: True
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># orthogonal vectors have 0 overlap</span>
+<span class="n">q0</span><span class="o">.</span><span class="n">overlap</span><span class="p">(</span><span class="n">q1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0j
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># for states, the overlap is the inner product</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;q0 · q1:&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">q0</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">q1</span><span class="p">)</span><span class="o">.</span><span class="n">full</span><span class="p">()[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;q0 · q1:&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">q1</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">q0</span><span class="p">)</span><span class="o">.</span><span class="n">full</span><span class="p">()[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;(1j * q0) · q0:&quot;</span><span class="p">,</span> <span class="p">((</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">q0</span><span class="p">)</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">q0</span><span class="p">)</span><span class="o">.</span><span class="n">full</span><span class="p">()[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>q0 · q1: 0j
+q0 · q1: 0j
+(1j * q0) · q0: -1j
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># adding states</span>
+<span class="n">q0</span> <span class="o">+</span> <span class="n">q1</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2], [1]], shape = (2, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}1.0\\1.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># calculating the norm</span>
+<span class="p">(</span><span class="n">q0</span> <span class="o">+</span> <span class="n">q1</span><span class="p">)</span><span class="o">.</span><span class="n">norm</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1.4142135623730951
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># manually normalizing a state to unit length</span>
+<span class="p">(</span><span class="n">q0</span> <span class="o">+</span> <span class="n">q1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">q0</span> <span class="o">+</span> <span class="n">q1</span><span class="p">)</span><span class="o">.</span><span class="n">norm</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2], [1]], shape = (2, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.707\\0.707\\\end{array}\right)\end{equation*}\end{split}\]</div>
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># using .unit() to normalize the length of a state</span>
+<span class="p">(</span><span class="n">q0</span> <span class="o">+</span> <span class="n">q1</span><span class="p">)</span><span class="o">.</span><span class="n">unit</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2], [1]], shape = (2, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.707\\0.707\\\end{array}\right)\end{equation*}\end{split}\]</div>
+</div>
+</div>
+</section>
+<section id="bloch-sphere">
+<h2>Bloch sphere<a class="headerlink" href="#bloch-sphere" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>Plotting 2-level states on the Bloch sphere</p></li>
+<li><p>Plotting many states at once</p></li>
+<li><p>Changing the colors</p></li>
+<li><p>Changing the transparency</p></li>
+</ul>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># show a single state</span>
+<span class="n">show_bloch</span><span class="p">(</span><span class="n">q0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/00-qutip-intro_28_0.png" src="../_images/00-qutip-intro_28_0.png" />
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># show both basis states</span>
+<span class="n">show_bloch</span><span class="p">([</span><span class="n">q0</span><span class="p">,</span> <span class="n">q1</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/00-qutip-intro_29_0.png" src="../_images/00-qutip-intro_29_0.png" />
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># show many states</span>
+<span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+<span class="n">states</span> <span class="o">=</span> <span class="p">[</span><span class="n">q0</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">th</span><span class="p">)</span> <span class="o">*</span> <span class="n">q1</span> <span class="k">for</span> <span class="n">th</span> <span class="ow">in</span> <span class="n">theta</span><span class="p">]</span>
+<span class="n">states</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">unit</span><span class="p">()</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">states</span><span class="p">]</span>
+<span class="n">show_bloch</span><span class="p">(</span><span class="n">states</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/00-qutip-intro_30_0.png" src="../_images/00-qutip-intro_30_0.png" />
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># How to remove the colours:</span>
+<span class="n">show_bloch</span><span class="p">(</span>
+    <span class="n">states</span><span class="p">,</span>
+    <span class="n">vector_color</span><span class="o">=</span><span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">states</span><span class="p">),</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/00-qutip-intro_31_0.png" src="../_images/00-qutip-intro_31_0.png" />
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use transparency to show where states are in the list</span>
+<span class="n">show_bloch</span><span class="p">(</span>
+    <span class="n">states</span><span class="p">,</span>
+    <span class="n">vector_color</span><span class="o">=</span><span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">states</span><span class="p">),</span>
+    <span class="n">vector_alpha</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">states</span><span class="p">)),</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/00-qutip-intro_32_0.png" src="../_images/00-qutip-intro_32_0.png" />
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use color map to show where states are in the list</span>
+<span class="n">show_bloch</span><span class="p">(</span>
+    <span class="n">states</span><span class="p">,</span>
+    <span class="n">vector_color</span><span class="o">=</span><span class="p">[(</span><span class="n">c</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">states</span><span class="p">))],</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/00-qutip-intro_33_0.png" src="../_images/00-qutip-intro_33_0.png" />
+</div>
+</div>
+</section>
+<section id="operators">
+<h2>Operators<a class="headerlink" href="#operators" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>Creating and examining quantum operators</p></li>
+<li><p>Calculating expectation values</p></li>
+<li><p>Making projectors</p></li>
+</ul>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># the Pauli X operator</span>
+<span class="n">sx</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">sigmax</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># show some of the properties relevant to operators</span>
+<span class="n">display</span><span class="p">(</span><span class="n">sx</span><span class="p">)</span>
+<span class="n">print_attrs</span><span class="p">(</span><span class="n">sx</span><span class="p">,</span> <span class="s2">&quot;sx&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="s2">&quot;isoper&quot;</span><span class="p">,</span> <span class="s2">&quot;dims&quot;</span><span class="p">,</span> <span class="s2">&quot;shape&quot;</span><span class="p">,</span> <span class="s2">&quot;isherm&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2], [2]], shape = (2, 2), type = oper, isherm = True\begin{equation*}\left(\begin{array}{*{11}c}0.0 &amp; 1.0\\1.0 &amp; 0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>sx.type: oper
+sx.isoper: True
+sx.dims: [[2], [2]]
+sx.shape: (2, 2)
+sx.isherm: True
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># show the adjoint</span>
+<span class="n">sx</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2], [2]], shape = (2, 2), type = oper, isherm = True\begin{equation*}\left(\begin{array}{*{11}c}0.0 &amp; 1.0\\1.0 &amp; 0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># show the diagonal entries</span>
+<span class="n">sx</span><span class="o">.</span><span class="n">diag</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([0., 0.])
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># show the trace</span>
+<span class="n">sx</span><span class="o">.</span><span class="n">tr</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.0
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># show the (trace) norm</span>
+<span class="n">sx</span><span class="o">.</span><span class="n">norm</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2.0
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># apply sx to the basis states -- it swaps them</span>
+<span class="n">display_list</span><span class="p">([</span><span class="n">sx</span> <span class="o">*</span> <span class="n">q0</span><span class="p">,</span> <span class="n">sx</span> <span class="o">*</span> <span class="n">q1</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2], [1]], shape = (2, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\1.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2], [1]], shape = (2, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}1.0\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># construct the other Pauli matrices and the identity matrix</span>
+<span class="n">sy</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">sigmay</span><span class="p">()</span>
+<span class="n">sz</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">sigmaz</span><span class="p">()</span>
+<span class="n">I</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">display_list</span><span class="p">([</span><span class="n">I</span><span class="p">,</span> <span class="n">sx</span><span class="p">,</span> <span class="n">sy</span><span class="p">,</span> <span class="n">sz</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2], [2]], shape = (2, 2), type = oper, isherm = True\begin{equation*}\left(\begin{array}{*{11}c}1.0 &amp; 0.0\\0.0 &amp; 1.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2], [2]], shape = (2, 2), type = oper, isherm = True\begin{equation*}\left(\begin{array}{*{11}c}0.0 &amp; 1.0\\1.0 &amp; 0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2], [2]], shape = (2, 2), type = oper, isherm = True\begin{equation*}\left(\begin{array}{*{11}c}0.0 &amp; -1.0j\\1.0j &amp; 0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2], [2]], shape = (2, 2), type = oper, isherm = True\begin{equation*}\left(\begin{array}{*{11}c}1.0 &amp; 0.0\\0.0 &amp; -1.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Hadamard gate</span>
+<span class="n">H</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">qip</span><span class="o">.</span><span class="n">operations</span><span class="o">.</span><span class="n">hadamard_transform</span><span class="p">()</span>
+<span class="n">H</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2], [2]], shape = (2, 2), type = oper, isherm = True\begin{equation*}\left(\begin{array}{*{11}c}0.707 &amp; 0.707\\0.707 &amp; -0.707\\\end{array}\right)\end{equation*}\end{split}\]</div>
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Making projectors</span>
+<span class="n">q0</span><span class="o">.</span><span class="n">proj</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2], [2]], shape = (2, 2), type = oper, isherm = True\begin{equation*}\left(\begin{array}{*{11}c}1.0 &amp; 0.0\\0.0 &amp; 0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">q0</span> <span class="o">*</span> <span class="n">q0</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2], [2]], shape = (2, 2), type = oper, isherm = True\begin{equation*}\left(\begin{array}{*{11}c}1.0 &amp; 0.0\\0.0 &amp; 0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+</div>
+</div>
+</section>
+<section id="eigenvalues-and-eigenstates">
+<h2>Eigenvalues and eigenstates<a class="headerlink" href="#eigenvalues-and-eigenstates" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>Eigenvalues</p></li>
+<li><p>Eigenstates</p></li>
+</ul>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">display_eigenstates</span><span class="p">(</span><span class="n">sz</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Eigenvalues: [-1.  1.]
+
+Eigenstates
+===========
+</pre></div>
+</div>
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2], [1]], shape = (2, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\-1.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2], [1]], shape = (2, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}-1.0\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">display_eigenstates</span><span class="p">(</span><span class="n">sx</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Eigenvalues: [-1.  1.]
+
+Eigenstates
+===========
+</pre></div>
+</div>
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2], [1]], shape = (2, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}-0.707\\0.707\\\end{array}\right)\end{equation*}\end{split}\]</div>
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2], [1]], shape = (2, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.707\\0.707\\\end{array}\right)\end{equation*}\end{split}\]</div>
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">display_eigenstates</span><span class="p">(</span><span class="n">sy</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Eigenvalues: [-1.  1.]
+
+Eigenstates
+===========
+</pre></div>
+</div>
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2], [1]], shape = (2, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}-0.707\\0.707j\\\end{array}\right)\end{equation*}\end{split}\]</div>
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2], [1]], shape = (2, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}-0.707\\-0.707j\\\end{array}\right)\end{equation*}\end{split}\]</div>
+</div>
+</div>
+</section>
+<section id="density-matrices">
+<h2>Density matrices<a class="headerlink" href="#density-matrices" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>Creating density matrices</p></li>
+<li><p>Plotting 2-level density matrices on the Bloch sphere</p></li>
+<li><p>Plot some pure states</p></li>
+<li><p>Plot some mixed states</p></li>
+</ul>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rho0</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">ket2dm</span><span class="p">(</span><span class="n">q0</span><span class="p">)</span>
+<span class="n">rho0</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2], [2]], shape = (2, 2), type = oper, isherm = True\begin{equation*}\left(\begin{array}{*{11}c}1.0 &amp; 0.0\\0.0 &amp; 0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">qutip</span><span class="o">.</span><span class="n">ket2dm</span><span class="p">(</span><span class="n">q0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mf">0.1</span><span class="n">j</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2], [2]], shape = (2, 2), type = oper, isherm = True\begin{equation*}\left(\begin{array}{*{11}c}1.0 &amp; 0.0\\0.0 &amp; 0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">q0</span> <span class="o">*</span> <span class="n">q0</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span>  <span class="c1"># global phases cancel</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2], [2]], shape = (2, 2), type = oper, isherm = True\begin{equation*}\left(\begin{array}{*{11}c}1.0 &amp; 0.0\\0.0 &amp; 0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rho</span> <span class="o">=</span> <span class="n">q0</span> <span class="o">*</span> <span class="n">q0</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">+</span> <span class="n">q1</span> <span class="o">*</span> <span class="n">q1</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span>
+<span class="n">rho</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2], [2]], shape = (2, 2), type = oper, isherm = True\begin{equation*}\left(\begin{array}{*{11}c}1.0 &amp; 0.0\\0.0 &amp; 1.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rho</span><span class="o">.</span><span class="n">norm</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2.0
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rho</span> <span class="o">=</span> <span class="n">rho</span><span class="o">.</span><span class="n">unit</span><span class="p">()</span>
+<span class="n">rho</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2], [2]], shape = (2, 2), type = oper, isherm = True\begin{equation*}\left(\begin{array}{*{11}c}0.500 &amp; 0.0\\0.0 &amp; 0.500\\\end{array}\right)\end{equation*}\end{split}\]</div>
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bloch</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">Bloch</span><span class="p">()</span>
+
+<span class="n">bloch</span><span class="o">.</span><span class="n">add_states</span><span class="p">([</span><span class="n">qutip</span><span class="o">.</span><span class="n">ket2dm</span><span class="p">(</span><span class="n">q0</span><span class="p">),</span> <span class="n">qutip</span><span class="o">.</span><span class="n">ket2dm</span><span class="p">(</span><span class="n">q1</span><span class="p">)])</span>
+<span class="n">bloch</span><span class="o">.</span><span class="n">add_states</span><span class="p">([</span><span class="n">rho</span><span class="p">])</span>
+
+<span class="n">bloch</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/00-qutip-intro_57_0.png" src="../_images/00-qutip-intro_57_0.png" />
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># p = 0.5 * (I + n . (sx, sy, sz))</span>
+<span class="c1"># if p == 0.5 I, then n = (0, 0, 0)</span>
+<span class="n">rho</span> <span class="o">==</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">qutip</span><span class="o">.</span><span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>True
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">basis</span> <span class="o">=</span> <span class="p">[</span><span class="n">qutip</span><span class="o">.</span><span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">sx</span><span class="p">,</span> <span class="n">sy</span><span class="p">,</span> <span class="n">sz</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">basis</span><span class="p">:</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">basis</span><span class="p">:</span>
+    <span class="k">assert</span> <span class="p">(</span><span class="n">v</span> <span class="o">*</span> <span class="n">v</span><span class="p">)</span><span class="o">.</span><span class="n">tr</span><span class="p">()</span> <span class="o">==</span> <span class="mf">2.0</span>
+<span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">basis</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">basis</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">v</span> <span class="o">!=</span> <span class="n">w</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="p">(</span><span class="n">v</span> <span class="o">*</span> <span class="n">w</span><span class="p">)</span><span class="o">.</span><span class="n">tr</span><span class="p">()</span> <span class="o">==</span> <span class="mf">0.0</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2], [2]], shape = (2, 2), type = oper, isherm = True\begin{equation*}\left(\begin{array}{*{11}c}1.0 &amp; 0.0\\0.0 &amp; 1.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2], [2]], shape = (2, 2), type = oper, isherm = True\begin{equation*}\left(\begin{array}{*{11}c}0.0 &amp; 1.0\\1.0 &amp; 0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2], [2]], shape = (2, 2), type = oper, isherm = True\begin{equation*}\left(\begin{array}{*{11}c}0.0 &amp; -1.0j\\1.0j &amp; 0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2], [2]], shape = (2, 2), type = oper, isherm = True\begin{equation*}\left(\begin{array}{*{11}c}1.0 &amp; 0.0\\0.0 &amp; -1.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+</div>
+</div>
+</section>
+<section id="time-dependent-operators">
+<h2>Time-dependent operators<a class="headerlink" href="#time-dependent-operators" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>Create a time-dependent operator</p></li>
+<li><p>What is a QobjEvo?</p></li>
+<li><p>Adding arguments</p></li>
+</ul>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a simple quantum object that represents sx * t</span>
+<span class="n">sigmax_t</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">QobjEvo</span><span class="p">([[</span><span class="n">sx</span><span class="p">,</span> <span class="s2">&quot;t&quot;</span><span class="p">]])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">display</span><span class="p">(</span><span class="n">sigmax_t</span><span class="p">)</span>
+<span class="n">display_list</span><span class="p">([</span>
+    <span class="n">sigmax_t</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]</span>
+<span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;qutip.qobjevo.QobjEvo at 0x7f4b30b71720&gt;
+</pre></div>
+</div>
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2], [2]], shape = (2, 2), type = oper, isherm = True\begin{equation*}\left(\begin{array}{*{11}c}0.0 &amp; 0.0\\0.0 &amp; 0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2], [2]], shape = (2, 2), type = oper, isherm = True\begin{equation*}\left(\begin{array}{*{11}c}0.0 &amp; 0.250\\0.250 &amp; 0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2], [2]], shape = (2, 2), type = oper, isherm = True\begin{equation*}\left(\begin{array}{*{11}c}0.0 &amp; 0.500\\0.500 &amp; 0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2], [2]], shape = (2, 2), type = oper, isherm = True\begin{equation*}\left(\begin{array}{*{11}c}0.0 &amp; 1.0\\1.0 &amp; 0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Multiplication:</span>
+<span class="n">display_list</span><span class="p">([</span>
+    <span class="p">(</span><span class="mf">0.1</span> <span class="o">*</span> <span class="n">sigmax_t</span><span class="p">)(</span><span class="mf">1.0</span><span class="p">),</span>
+    <span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">sigmax_t</span><span class="p">)(</span><span class="mf">1.0</span><span class="p">),</span>
+<span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2], [2]], shape = (2, 2), type = oper, isherm = True\begin{equation*}\left(\begin{array}{*{11}c}0.0 &amp; 0.100\\0.100 &amp; 0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2], [2]], shape = (2, 2), type = oper, isherm = True\begin{equation*}\left(\begin{array}{*{11}c}0.0 &amp; 0.500\\0.500 &amp; 0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Addition:</span>
+<span class="n">sigmay_t</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">QobjEvo</span><span class="p">([[</span><span class="n">sy</span><span class="p">,</span> <span class="s2">&quot;t&quot;</span><span class="p">]])</span>
+<span class="n">display_list</span><span class="p">([</span>
+    <span class="p">(</span><span class="n">sigmax_t</span> <span class="o">*</span> <span class="n">sigmay_t</span><span class="p">)(</span><span class="mf">1.0</span><span class="p">),</span>
+<span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2], [2]], shape = (2, 2), type = oper, isherm = False\begin{equation*}\left(\begin{array}{*{11}c}1.0j &amp; 0.0\\0.0 &amp; -1.0j\\\end{array}\right)\end{equation*}\end{split}\]</div>
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Take the conjugate and the adjoint:</span>
+<span class="n">display_list</span><span class="p">([</span>
+    <span class="n">sigmay_t</span><span class="o">.</span><span class="n">conj</span><span class="p">()(</span><span class="mf">0.5</span><span class="p">),</span>
+    <span class="n">sigmay_t</span><span class="o">.</span><span class="n">dag</span><span class="p">()(</span><span class="mf">0.5</span><span class="p">),</span>
+<span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2], [2]], shape = (2, 2), type = oper, isherm = True\begin{equation*}\left(\begin{array}{*{11}c}0.0 &amp; 0.500j\\-0.500j &amp; 0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2], [2]], shape = (2, 2), type = oper, isherm = True\begin{equation*}\left(\begin{array}{*{11}c}0.0 &amp; -0.500j\\0.500j &amp; 0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plotting the evolution under sigmax_t</span>
+<span class="n">states</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">sigmax_t</span><span class="p">(</span><span class="n">t</span><span class="p">))</span><span class="o">.</span><span class="n">expm</span><span class="p">()</span> <span class="o">*</span> <span class="n">q0</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">10</span><span class="p">)]</span>
+<span class="n">show_bloch</span><span class="p">(</span><span class="n">states</span><span class="p">,</span> <span class="n">vector_color</span><span class="o">=</span><span class="s2">&quot;rb&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/00-qutip-intro_66_0.png" src="../_images/00-qutip-intro_66_0.png" />
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Including a constant term</span>
+<span class="n">sz_plus_sy_t</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">QobjEvo</span><span class="p">([</span><span class="n">sz</span><span class="p">,</span> <span class="p">[</span><span class="n">sy</span><span class="p">,</span> <span class="s2">&quot;t&quot;</span><span class="p">]])</span>
+<span class="n">display_list</span><span class="p">([</span>
+    <span class="n">sz_plus_sy_t</span><span class="p">(</span><span class="mf">0.1</span><span class="p">),</span>
+    <span class="n">sz_plus_sy_t</span><span class="p">(</span><span class="mf">1.0</span><span class="p">),</span>
+<span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2], [2]], shape = (2, 2), type = oper, isherm = True\begin{equation*}\left(\begin{array}{*{11}c}1.0 &amp; -0.100j\\0.100j &amp; -1.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2], [2]], shape = (2, 2), type = oper, isherm = True\begin{equation*}\left(\begin{array}{*{11}c}1.0 &amp; -1.0j\\1.0j &amp; -1.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Using a function like sin()</span>
+<span class="n">sz_sin_t</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">QobjEvo</span><span class="p">([[</span><span class="n">sz</span><span class="p">,</span> <span class="s2">&quot;sin(t)&quot;</span><span class="p">]])</span>
+<span class="n">display_list</span><span class="p">([</span>
+    <span class="n">sz_sin_t</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2], [2]], shape = (2, 2), type = oper, isherm = True\begin{equation*}\left(\begin{array}{*{11}c}0.0 &amp; 0.0\\0.0 &amp; 0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2], [2]], shape = (2, 2), type = oper, isherm = True\begin{equation*}\left(\begin{array}{*{11}c}0.500 &amp; 0.0\\0.0 &amp; -0.500\\\end{array}\right)\end{equation*}\end{split}\]</div>
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2], [2]], shape = (2, 2), type = oper, isherm = True\begin{equation*}\left(\begin{array}{*{11}c}0.866 &amp; 0.0\\0.0 &amp; -0.866\\\end{array}\right)\end{equation*}\end{split}\]</div>
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2], [2]], shape = (2, 2), type = oper, isherm = True\begin{equation*}\left(\begin{array}{*{11}c}1.0 &amp; 0.0\\0.0 &amp; -1.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Supplying arguments other than time</span>
+<span class="n">sz_g_sin_t</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">QobjEvo</span><span class="p">([[</span><span class="n">sz</span><span class="p">,</span> <span class="s2">&quot;g * sin(t)&quot;</span><span class="p">]],</span> <span class="n">args</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;g&quot;</span><span class="p">:</span> <span class="mf">2.0</span><span class="p">})</span>
+<span class="n">display_list</span><span class="p">([</span>
+    <span class="n">sz_g_sin_t</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;g&quot;</span> <span class="p">:</span> <span class="n">g</span><span class="p">})</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">]</span>
+<span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2], [2]], shape = (2, 2), type = oper, isherm = True\begin{equation*}\left(\begin{array}{*{11}c}0.0 &amp; 0.0\\0.0 &amp; 0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2], [2]], shape = (2, 2), type = oper, isherm = True\begin{equation*}\left(\begin{array}{*{11}c}0.200 &amp; 0.0\\0.0 &amp; -0.200\\\end{array}\right)\end{equation*}\end{split}\]</div>
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2], [2]], shape = (2, 2), type = oper, isherm = True\begin{equation*}\left(\begin{array}{*{11}c}0.400 &amp; 0.0\\0.0 &amp; -0.400\\\end{array}\right)\end{equation*}\end{split}\]</div>
+</div>
+</div>
+</section>
+<section id="tensor-products-and-partial-traces">
+<h2>Tensor products and partial traces<a class="headerlink" href="#tensor-products-and-partial-traces" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>Construct a state with two or three qubits</p></li>
+<li><p>Construct an operator on multiple qubits</p></li>
+<li><p>Construct an entangled state</p></li>
+<li><p>Take the partial trace of a product state</p></li>
+<li><p>Take the partial trace of an entangled state</p></li>
+</ul>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">q00</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="n">q0</span><span class="p">,</span> <span class="n">q0</span><span class="p">])</span>
+<span class="n">q00</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2, 2], [1, 1]], shape = (4, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}1.0\\0.0\\0.0\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pt_q0</span> <span class="o">=</span> <span class="n">q00</span><span class="o">.</span><span class="n">ptrace</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">pt_q0</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2], [2]], shape = (2, 2), type = oper, isherm = True\begin{equation*}\left(\begin{array}{*{11}c}1.0 &amp; 0.0\\0.0 &amp; 0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">q01</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="n">q0</span><span class="p">,</span> <span class="n">q1</span><span class="p">])</span>
+<span class="n">q01</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2, 2], [1, 1]], shape = (4, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\1.0\\0.0\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">display_list</span><span class="p">([</span>
+    <span class="n">q01</span><span class="o">.</span><span class="n">ptrace</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
+    <span class="n">q01</span><span class="o">.</span><span class="n">ptrace</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+<span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2], [2]], shape = (2, 2), type = oper, isherm = True\begin{equation*}\left(\begin{array}{*{11}c}1.0 &amp; 0.0\\0.0 &amp; 0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[2], [2]], shape = (2, 2), type = oper, isherm = True\begin{equation*}\left(\begin{array}{*{11}c}0.0 &amp; 0.0\\0.0 &amp; 1.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+</div>
+</div>
+</section>
+<section id="hamiltonians">
+<h2>Hamiltonians<a class="headerlink" href="#hamiltonians" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>Building Hamiltonians</p></li>
+<li><p>Plotting eigenvalues</p></li>
+</ul>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">H</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">QobjEvo</span><span class="p">([[</span><span class="n">sx</span><span class="p">,</span> <span class="s2">&quot;a * cos(t)&quot;</span><span class="p">],</span> <span class="p">[</span><span class="n">sy</span><span class="p">,</span> <span class="s2">&quot;b * sin(t)&quot;</span><span class="p">]],</span> <span class="n">args</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tlist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">40</span><span class="p">)</span>
+<span class="n">evals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">H</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">.</span><span class="n">eigenenergies</span><span class="p">()</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tlist</span><span class="p">])</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tlist</span><span class="p">,</span> <span class="n">evals</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tlist</span><span class="p">,</span> <span class="n">evals</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Energy level&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;t&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/00-qutip-intro_77_0.png" src="../_images/00-qutip-intro_77_0.png" />
+</div>
+</div>
+</section>
+<section id="solving-the-schrodinger-equation-using-sesolve">
+<h2>Solving the Schrödinger Equation using sesolve<a class="headerlink" href="#solving-the-schrodinger-equation-using-sesolve" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>Plotting the states</p></li>
+<li><p>Plotting the states on the Bloch sphere</p></li>
+<li><p>Plotting expectation values</p></li>
+</ul>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tlist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">40</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">sesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">q0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">show_bloch</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">states</span><span class="p">,</span> <span class="n">vector_color</span><span class="o">=</span><span class="s2">&quot;rb&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/00-qutip-intro_80_0.png" src="../_images/00-qutip-intro_80_0.png" />
+</div>
+</div>
+</section>
+<section id="using-functions-to-make-your-notebooks-neater">
+<h2>Using functions to make your notebooks neater<a class="headerlink" href="#using-functions-to-make-your-notebooks-neater" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>Write a function for displaying the eigenstates of an operator</p></li>
+<li><p>Write a function for displaying states on the Bloch sphere</p></li>
+</ul>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># See the helper functions at the top for examples.</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./tutorials"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="../intro.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Overview</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="../build-stats.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Build information</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Simon Cross<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>
