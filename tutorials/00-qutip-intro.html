@@ -54,7 +54,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Build information" href="../build-stats.html" />
+    <link rel="next" title="01: Quantum Information Processing in QuTiP I" href="01-qutip-qip-i.html" />
     <link rel="prev" title="Overview" href="../intro.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -124,6 +124,16 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
    00: Introduction to QuTiP
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="01-qutip-qip-i.html">
+   01: Quantum Information Processing in QuTiP I
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="02-qutip-qip-ii.html">
+   02: Quantum Information Processing in QuTiP II
   </a>
  </li>
 </ul>
@@ -537,6 +547,19 @@ title="Print to PDF"
                 
   <section class="tex2jax_ignore mathjax_ignore" id="introduction-to-qutip">
 <h1>00: Introduction to QuTiP<a class="headerlink" href="#introduction-to-qutip" title="Permalink to this headline">#</a></h1>
+<p>In this first tutorial, you’ll play around with the core of QuTiP.</p>
+<p>This includes constructing quantum states (e.g. qubits), quantum operators (e.g.
+gates in a quantum circuit), Hamiltonians, and density matrices. Near the end
+you’ll simulate the evolution of a quantum system using QuTiP’s numerical solver
+for the Schrödinger equation and visualize the result. Along the way you’ll find
+eigenvalues and eigenvectors and plot states on the Bloch sphere.</p>
+<p>Individually none of the tasks should require more than a few lines of code, but
+there is a lot to explore. Take your time. Tackle individual steps in multiple
+ways. Read the documentation on the functions you’re using. Explore the objects
+you’re creating. Ask questions.</p>
+<p>The topics covered in this tutorial will form the foundation we use during the
+rest of the week – and that you’ll use when using QuTiP yourself once the
+Summer school is over.</p>
 <section id="tasks">
 <h2>Tasks<a class="headerlink" href="#tasks" title="Permalink to this headline">#</a></h2>
 <ul class="simple">
@@ -921,7 +944,7 @@ q0 · q1: 0j
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/00-qutip-intro_28_0.png" src="../_images/00-qutip-intro_28_0.png" />
+<img alt="../_images/00-qutip-intro_29_0.png" src="../_images/00-qutip-intro_29_0.png" />
 </div>
 </div>
 <div class="cell tag_hide-cell docutils container">
@@ -932,7 +955,7 @@ q0 · q1: 0j
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/00-qutip-intro_29_0.png" src="../_images/00-qutip-intro_29_0.png" />
+<img alt="../_images/00-qutip-intro_30_0.png" src="../_images/00-qutip-intro_30_0.png" />
 </div>
 </div>
 <div class="cell tag_hide-cell docutils container">
@@ -946,7 +969,7 @@ q0 · q1: 0j
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/00-qutip-intro_30_0.png" src="../_images/00-qutip-intro_30_0.png" />
+<img alt="../_images/00-qutip-intro_31_0.png" src="../_images/00-qutip-intro_31_0.png" />
 </div>
 </div>
 <div class="cell tag_hide-cell docutils container">
@@ -960,7 +983,7 @@ q0 · q1: 0j
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/00-qutip-intro_31_0.png" src="../_images/00-qutip-intro_31_0.png" />
+<img alt="../_images/00-qutip-intro_32_0.png" src="../_images/00-qutip-intro_32_0.png" />
 </div>
 </div>
 <div class="cell tag_hide-cell docutils container">
@@ -975,7 +998,7 @@ q0 · q1: 0j
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/00-qutip-intro_32_0.png" src="../_images/00-qutip-intro_32_0.png" />
+<img alt="../_images/00-qutip-intro_33_0.png" src="../_images/00-qutip-intro_33_0.png" />
 </div>
 </div>
 <div class="cell tag_hide-cell docutils container">
@@ -989,7 +1012,7 @@ q0 · q1: 0j
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/00-qutip-intro_33_0.png" src="../_images/00-qutip-intro_33_0.png" />
+<img alt="../_images/00-qutip-intro_34_0.png" src="../_images/00-qutip-intro_34_0.png" />
 </div>
 </div>
 </section>
@@ -1305,7 +1328,7 @@ Eigenstates
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/00-qutip-intro_57_0.png" src="../_images/00-qutip-intro_57_0.png" />
+<img alt="../_images/00-qutip-intro_58_0.png" src="../_images/00-qutip-intro_58_0.png" />
 </div>
 </div>
 <div class="cell tag_hide-cell docutils container">
@@ -1373,7 +1396,7 @@ Eigenstates
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;qutip.qobjevo.QobjEvo at 0x7f28bc3d74c0&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;qutip.qobjevo.QobjEvo at 0x7f889fe450f0&gt;
 </pre></div>
 </div>
 <div class="output text_latex math notranslate nohighlight">
@@ -1444,7 +1467,7 @@ Eigenstates
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/00-qutip-intro_66_0.png" src="../_images/00-qutip-intro_66_0.png" />
+<img alt="../_images/00-qutip-intro_67_0.png" src="../_images/00-qutip-intro_67_0.png" />
 </div>
 </div>
 <div class="cell tag_hide-cell docutils container">
@@ -1594,7 +1617,7 @@ Eigenstates
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/00-qutip-intro_77_0.png" src="../_images/00-qutip-intro_77_0.png" />
+<img alt="../_images/00-qutip-intro_78_0.png" src="../_images/00-qutip-intro_78_0.png" />
 </div>
 </div>
 </section>
@@ -1620,7 +1643,7 @@ Eigenstates
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/00-qutip-intro_80_0.png" src="../_images/00-qutip-intro_80_0.png" />
+<img alt="../_images/00-qutip-intro_81_0.png" src="../_images/00-qutip-intro_81_0.png" />
 </div>
 </div>
 </section>
@@ -1674,10 +1697,10 @@ Eigenstates
             <p class="prev-next-title">Overview</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="../build-stats.html" title="next page">
+    <a class='right-next' id="next-link" href="01-qutip-qip-i.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Build information</p>
+        <p class="prev-next-title">01: Quantum Information Processing in QuTiP I</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

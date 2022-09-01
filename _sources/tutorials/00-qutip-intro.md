@@ -16,6 +16,25 @@ kernelspec:
 
 +++
 
+In this first tutorial, you'll play around with the core of QuTiP.
+
+This includes constructing quantum states (e.g. qubits), quantum operators (e.g.
+gates in a quantum circuit), Hamiltonians, and density matrices. Near the end
+you'll simulate the evolution of a quantum system using QuTiP's numerical solver
+for the Schrödinger equation and visualize the result. Along the way you'll find
+eigenvalues and eigenvectors and plot states on the Bloch sphere.
+
+Individually none of the tasks should require more than a few lines of code, but
+there is a lot to explore. Take your time. Tackle individual steps in multiple
+ways. Read the documentation on the functions you're using. Explore the objects
+you're creating. Ask questions.
+
+The topics covered in this tutorial will form the foundation we use during the
+rest of the week -- and that you'll use when using QuTiP yourself once the
+Summer school is over.
+
++++
+
 ## Tasks
 
 - [Pre-flight check](#pre-flight-check)

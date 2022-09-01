@@ -6,8 +6,8 @@
 
 ## Quantum information processing
 
-- QIP I
-- QIP II
+- [QIP I](./tutorials/01-qutip-qip-i)
+- [QIP II](./tutorials/02-qutip-qip-ii)
 
 ## Jaynes-Cummings model
 
