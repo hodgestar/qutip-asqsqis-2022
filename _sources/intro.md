@@ -11,9 +11,9 @@
 
 ## Jaynes-Cummings model
 
-- JC I
-- JC II
-- JC III
+- [JCM I](./tutorials/03-qutip-jcm-i)
+- JCM II
+- JCM III
 
 ## Capstone project: Simulating a Neutral Atom Quantum Device
 

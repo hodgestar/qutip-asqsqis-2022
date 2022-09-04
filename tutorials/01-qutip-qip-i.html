@@ -136,6 +136,11 @@ const thebe_selector_output = ".output, .cell_output"
    02: Quantum Information Processing in QuTiP II
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="03-qutip-jcm-i.html">
+   03: Jaynes-Cummings Model and the Rotating Wave Approximation
+  </a>
+ </li>
 </ul>
 <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
@@ -591,6 +596,7 @@ title="Print to PDF"
 <li><p>Displaying a gate should print a nice circuit diagram in your notebook</p></li>
 <li><p>When you get stuck try <code class="docutils literal notranslate"><span class="pre">qip_circuit.QubitCircuit?</span></code> in a new notebook cell – this will show the documentation!</p></li>
 <li><p>The <code class="docutils literal notranslate"><span class="pre">?</span></code> also works for any other class, object or method.</p></li>
+<li><p>Once you’ve built the circuit, call <code class="docutils literal notranslate"><span class="pre">.run(...)</span></code> to try it out on the two basis states.</p></li>
 </ul>
 <div class="cell tag_hide-cell docutils container">
 <div class="cell_input docutils container">
@@ -636,7 +642,7 @@ title="Print to PDF"
 <li><p>This circuit should have two qubits.</p></li>
 <li><p>Used |00&gt; as your initial state.</p></li>
 <li><p>Run the circuit and check the result.</p></li>
-<li><p>Start by making a circuit that <em>does not</em> prepare the Bell state.</p></li>
+<li><p>Start with a simple circuit with no gates and then modify it. Run different versions to see what they do.</p></li>
 <li><p>Then modify it step by step making it a bit less wrong each time.</p></li>
 <li><p>You can create the state |00&gt; using <code class="docutils literal notranslate"><span class="pre">qutip.ket(&quot;00&quot;)</span></code>, but feel free to try other ways too.</p></li>
 </ul>
@@ -685,6 +691,7 @@ title="Print to PDF"
 \[ |\Psi ^{-}\rangle ={\frac {1}{{\sqrt {2}}}}(|0\rangle _{A}\otimes |1\rangle _{B}-|1\rangle _{A}\otimes |0\rangle _{B}) \]</div>
 <p>Use |00&gt; as your initial state again.</p>
 <p>If you get stuck, think about how to modify the circuits you’ve used already to get the desired state.</p>
+<p>Some other gates you might need are <code class="docutils literal notranslate"><span class="pre">CSIGN</span></code> and <code class="docutils literal notranslate"><span class="pre">X</span></code>.</p>
 <div class="cell tag_hide-cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Phi+: The first Bell basis state that we&#39;ve already prepared</span>

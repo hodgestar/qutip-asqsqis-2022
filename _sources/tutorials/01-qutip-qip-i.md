@@ -103,6 +103,7 @@ def display_circuit_statistics(qc, state, ptrace=None):
 - Displaying a gate should print a nice circuit diagram in your notebook
 - When you get stuck try `qip_circuit.QubitCircuit?` in a new notebook cell -- this will show the documentation!
 - The `?` also works for any other class, object or method.
+- Once you've built the circuit, call `.run(...)` to try it out on the two basis states.
 
 ```{code-cell} ipython3
 :tags: [hide-cell]
@@ -132,7 +133,7 @@ qc.run(state=q1)
 - This circuit should have two qubits.
 - Used |00> as your initial state.
 - Run the circuit and check the result.
-- Start by making a circuit that *does not* prepare the Bell state.
+- Start with a simple circuit with no gates and then modify it. Run different versions to see what they do.
 - Then modify it step by step making it a bit less wrong each time.
 - You can create the state |00> using `qutip.ket("00")`, but feel free to try other ways too.
 
@@ -172,6 +173,8 @@ $$ |\Psi ^{-}\rangle ={\frac {1}{{\sqrt {2}}}}(|0\rangle _{A}\otimes |1\rangle _
 Use |00> as your initial state again.
 
 If you get stuck, think about how to modify the circuits you've used already to get the desired state.
+
+Some other gates you might need are `CSIGN` and `X`.
 
 ```{code-cell} ipython3
 :tags: [hide-cell]

@@ -1,0 +1,267 @@
+---
+jupytext:
+  formats: md:myst,ipynb
+  text_representation:
+    extension: .md
+    format_name: myst
+    format_version: 0.13
+    jupytext_version: 1.14.1
+kernelspec:
+  display_name: Python 3 (ipykernel)
+  language: python
+  name: python3
+---
+
+# 03: Jaynes-Cummings Model and the Rotating Wave Approximation
+
++++
+
+In this tutorial we will construct the Jaynes-Cummings Hamiltonian (with and without the RWA) and see how the system evolves under the Schrodinger equation (that is, without dissipation) . 
+We will use this to investigate the limits of the RWA in the JCM.
+
++++
+
+The Jaynes-Cumming model is the simplest possible model of quantum mechanical light-matter interaction, describing a single two-level atom interacting with a single electromagnetic cavity mode. The Hamiltonian for this system is (in dipole interaction form)
+
+$H = \hbar \omega_c a^\dagger a + \frac{1}{2}\hbar\omega_a\sigma_z + \hbar g(a^\dagger + a)(\sigma_- + \sigma_+)$
+
+or with the rotating-wave approximation
+
+$H_{\rm RWA} = \hbar \omega_c a^\dagger a + \frac{1}{2}\hbar\omega_a\sigma_z + \hbar g(a^\dagger\sigma_- + a\sigma_+)$
+
+where $\omega_c$ and $\omega_a$ are the frequencies of the cavity and atom, respectively, and $g$ is the interaction strength.
+
++++
+
+## Tasks
+
+- [Construct the Hamiltonian](#construct-the-hamiltonian)
+- [Solve the Schrodinger equation](#solve-the-schrodinger-equation)
+- [Visualise the evolution](#visualise-the-evolution)
+- [Compare the RWA and non-RWA](#compare-the-rwa-and-non-rwa)
+
++++
+
+## Imports
+
+```{code-cell} ipython3
+%matplotlib inline
+import matplotlib.pyplot as plt
+```
+
+```{code-cell} ipython3
+import qutip
+import numpy as np
+```
+
++++ {"tags": ["hide-cell"]}
+
+## Helper functions
+
+```{code-cell} ipython3
+:tags: [hide-cell]
+
+def display_eigenstates(op):
+    """ Display the eigenvalues and eigenstates of an operator. """
+    evals, evecs = op.eigenstates()
+    print("Eigenvalues:", evals)
+    print()
+    print("Eigenstates")
+    print("===========")
+    for v in evecs:
+        display(v)
+```
+
+```{code-cell} ipython3
+:tags: [hide-cell]
+
+def jmc_h(wc, wa, g, N):
+    """ Construct the Jaynes-Cummings Hamiltonian (non-RWA). """
+    a = qutip.tensor(qutip.destroy(N), qutip.qeye(2))
+    sm = qutip.tensor(qutip.qeye(N), qutip.destroy(2))
+
+    H = wc * a.dag() * a + wa * sm.dag() * sm + g * (a.dag() + a) * (sm + sm.dag())
+    return H
+```
+
+```{code-cell} ipython3
+:tags: [hide-cell]
+
+def jmc_rwa_h(wc, wa, g, N):
+    """ Construct the Jaynes-Cummings Hamiltonian (RWA). """
+    a = qutip.tensor(qutip.destroy(N), qutip.qeye(2))
+    sm = qutip.tensor(qutip.qeye(N), qutip.destroy(2))
+
+    H = wc * a.dag() * a + wa * sm.dag() * sm + g * (a.dag() * sm + a * sm.dag())
+    return H
+```
+
+## Construct the Hamiltonian
+
+- add variables for the atom and cavity parameters
+- create the operators for the JCM Hamiltonian
+- combine into the JCM Hamiltonian (no RWA)
+- look at the energy eigenvalues and eigenstates of the Hamiltonian
+
+Here are some example parameter values to start with:
+
+$
+  \omega_c = 2 \pi \\
+  \omega_a = 2 \pi \\
+  g = 0.05 \cdot 2 \pi \\
+$
+
+```{code-cell} ipython3
+:tags: [hide-cell]
+
+# system parameters
+wc = 1.0 * 2 * np.pi  # cavity frequency
+wa = 1.0 * 2 * np.pi  # atom frequency
+g = 0.05 * 2 * np.pi # 0.05 * 2 * np.pi  # coupling strength
+N = 15  # number of cavity fock states
+```
+
+```{code-cell} ipython3
+:tags: [hide-cell]
+
+# operators
+a = qutip.tensor(qutip.destroy(N), qutip.qeye(2))
+sm = qutip.tensor(qutip.qeye(N), qutip.destroy(2))
+```
+
+```{code-cell} ipython3
+:tags: [hide-cell]
+
+# hamiltonian (non-rwa)
+H = wc * a.dag() * a + wa * sm.dag() * sm + g * (a.dag() + a) * (sm + sm.dag())
+```
+
+```{code-cell} ipython3
+:tags: [hide-cell]
+
+display_eigenstates(H)
+```
+
+## Solve the Schrodinger equation
+
+- create the initial state of the system (use the state with no photons and the spin system in its excited state)
+- evolve the system for some time, saving the result.
+
+If you need to remind yourself of how sesolve, remember that you can type `qutip.sesolve?` into a notebook cell to bring up the documentation.
+
+```{code-cell} ipython3
+:tags: [hide-cell]
+
+# initial state
+psi0 = qutip.basis([N, 2], [0, 1])  # start with an excited atom
+psi0
+```
+
+```{code-cell} ipython3
+:tags: [hide-cell]
+
+# Solve using sesolve
+tlist = np.linspace(0, 25, 101)
+result = qutip.sesolve(H, psi0, tlist)
+```
+
+## Visualise the evolution
+
+- create expectation operators for observing the state of the system.
+- add these to sesolve
+- plot the expectation values together on a set of axes
+- change the value of g and see how it affects the period
+
+Two good expectation operators to use are the projectors on the light and matter sub-systems.
+
+```{code-cell} ipython3
+:tags: [hide-cell]
+
+# Operators to determine the expectation values of:
+eop_a = a.dag() * a  # light
+eop_sm = sm.dag() * sm  # matter
+```
+
+```{code-cell} ipython3
+:tags: [hide-cell]
+
+# Solve using sesolve
+tlist = np.linspace(0, 25, 101)
+result = qutip.sesolve(H, psi0, tlist, e_ops=[eop_a, eop_sm])
+```
+
+```{code-cell} ipython3
+:tags: [hide-cell]
+
+plt.plot(tlist, result.expect[0], label="Light")
+plt.plot(tlist, result.expect[1], label="matter")
+plt.legend();
+```
+
+```{code-cell} ipython3
+:tags: [hide-cell]
+
+# vary g
+tlist = np.linspace(0, 25, 101)
+result = qutip.sesolve(jmc_h(wc, wa, 0.1 * 2 * np.pi, N), psi0, tlist, e_ops=[eop_a, eop_sm])
+plt.plot(tlist, result.expect[0], label="Light")
+plt.plot(tlist, result.expect[1], label="matter")
+plt.legend();
+```
+
+## Compare the RWA and non-RWA
+
+- construct another Hamiltonian that uses the RWA
+- evolve the system under the RWA Hamiltonian.
+- add the results to the plot
+- experiment with parameters to determine where the RWA non-RWA diverges
+
+```{code-cell} ipython3
+:tags: [hide-cell]
+
+# Construct the RWA Hamiltonian
+H_RWA = jmc_rwa_h(wc, wa, g, N)
+```
+
+```{code-cell} ipython3
+:tags: [hide-cell]
+
+# Hmm. The results look the same.
+tlist = np.linspace(0, 25, 101)
+
+result = qutip.sesolve(H, psi0, tlist, e_ops=[eop_a, eop_sm])
+plt.plot(tlist, result.expect[0], label="Light")
+plt.plot(tlist, result.expect[1], label="matter")
+
+result_rwa = qutip.sesolve(H_RWA, psi0, tlist, e_ops=[eop_a, eop_sm])
+plt.plot(tlist, result_rwa.expect[0], label="Light (RWA)")
+plt.plot(tlist, result_rwa.expect[1], label="matter (RWA)")
+
+plt.legend();
+```
+
+```{code-cell} ipython3
+:tags: [hide-cell]
+
+# Try with different frequencies w_c and w_a:
+tlist = np.linspace(0, 25, 101)
+f = 0.9
+
+result = qutip.sesolve(jmc_h(wc, f * wa, g, N), psi0, tlist, e_ops=[eop_a, eop_sm])
+plt.plot(tlist, result.expect[0], label="Light")
+plt.plot(tlist, result.expect[1], label="matter")
+
+result_rwa = qutip.sesolve(jmc_rwa_h(wc, f * wa, g, N), psi0, tlist, e_ops=[eop_a, eop_sm])
+plt.plot(tlist, result_rwa.expect[0], label="Light (RWA)")
+plt.plot(tlist, result_rwa.expect[1], label="matter (RWA)")
+
+plt.legend();
+```
+
+## Links for further study
+
+There is an excellent paper [The Jaynes-Cummings model and its descendants](https://arxiv.org/abs/2202.00330) by Larson and Mavrogordatos, that reviews the Jaynes-Cummings model and its many variations. You can try reading this paper and implementing some of the simpler variants in QuTiP.
+
+If you do, please consider polishing your notebook, adding good explanations to it and submitting it as an example for others by opening a pull request for it at https://github.com/qutip/qutip-tutorials/.
+
+This paper covers a *lot* of work, so don't expect to understand all of it quickly. Start with the earlier sections. We will explore the Jaynes-Cumming model more in the remaining tutorials.

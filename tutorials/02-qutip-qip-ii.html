@@ -50,9 +50,11 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Build information" href="../build-stats.html" />
+    <link rel="next" title="03: Jaynes-Cummings Model and the Rotating Wave Approximation" href="03-qutip-jcm-i.html" />
     <link rel="prev" title="01: Quantum Information Processing in QuTiP I" href="01-qutip-qip-i.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -132,6 +134,11 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
    02: Quantum Information Processing in QuTiP II
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="03-qutip-jcm-i.html">
+   03: Jaynes-Cummings Model and the Rotating Wave Approximation
   </a>
  </li>
 </ul>
@@ -385,18 +392,43 @@ title="Print to PDF"
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#helper-functions">
-   Helper functions
+  <a class="reference internal nav-link" href="#linear-spin-chain-qubits">
+   Linear spin chain qubits
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#task-1">
-   Task 1
+  <a class="reference internal nav-link" href="#create-a-simple-circuit-to-translate">
+   Create a simple circuit to translate
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#using-functions-to-make-your-notebooks-neater">
-   Using functions to make your notebooks neater
+  <a class="reference internal nav-link" href="#add-swap-gates-by-hand">
+   Add swap gates by hand
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#add-swap-gates-automatically">
+   Add swap gates automatically
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#translate-to-native-gates">
+   Translate to native gates
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#turn-gates-into-pulses">
+   Turn gates into pulses
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#run-the-pulses-on-the-device">
+   Run the pulses on the device
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#links-for-further-study">
+   Links for further study
   </a>
  </li>
 </ul>
@@ -429,18 +461,43 @@ title="Print to PDF"
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#helper-functions">
-   Helper functions
+  <a class="reference internal nav-link" href="#linear-spin-chain-qubits">
+   Linear spin chain qubits
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#task-1">
-   Task 1
+  <a class="reference internal nav-link" href="#create-a-simple-circuit-to-translate">
+   Create a simple circuit to translate
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#using-functions-to-make-your-notebooks-neater">
-   Using functions to make your notebooks neater
+  <a class="reference internal nav-link" href="#add-swap-gates-by-hand">
+   Add swap gates by hand
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#add-swap-gates-automatically">
+   Add swap gates automatically
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#translate-to-native-gates">
+   Translate to native gates
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#turn-gates-into-pulses">
+   Turn gates into pulses
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#run-the-pulses-on-the-device">
+   Run the pulses on the device
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#links-for-further-study">
+   Links for further study
   </a>
  </li>
 </ul>
@@ -456,10 +513,29 @@ title="Print to PDF"
   <section class="tex2jax_ignore mathjax_ignore" id="quantum-information-processing-in-qutip-ii">
 <h1>02: Quantum Information Processing in QuTiP II<a class="headerlink" href="#quantum-information-processing-in-qutip-ii" title="Permalink to this headline">#</a></h1>
 <p>In the previous tutorial, we looked at how to create and run circuits. In this tutorial we’ll look at how circuits are implemented on real quantum devices and how we can use QuTiP to simulate the <em>quantum hardware</em> itself.</p>
+<p>Quite a few steps are needed to translate a quantum circuit into actions for robots to perform on the real apparatus:</p>
+<ol class="simple">
+<li><p>Optimize the assignment of qubits to the device.</p></li>
+<li><p>Add swap gates to allow operations between device qubits that cannot directly interact.</p></li>
+<li><p>Replace the circuit gates with gates the device can perform.</p></li>
+<li><p>Translate the gates into control pulses for the device.</p></li>
+<li><p>Send the pulses to the device.</p></li>
+</ol>
+<p>The steps above are just one example of a translation process. The details will vary between different kinds of quantum hardware. In a neutral atom device, one would choose how to layout the neutral atoms for the circuit. The pulses themselves will need to be optimized for the circuit. Some pulses will be performed simultaneously. Others will need to be performed one after the other. Pulses and gates could be combined. Extra pulses might be added to perform dynamic decoupling.</p>
+<p>QuTiP’s QIP module provides the means to perform all of the steps above and to run the resulting pulses on a <em>simulated</em> hardware device.</p>
+<p>A simulated hardware device is a time-dependented Hamiltonian (or Liouvillian) that describes the physics of the system (e.g. interactions between atoms or qubits) and the actions of the control pulses. Typically the control pulses define the time-dependent amplitude of an oscillating term in the Hamiltonian.</p>
+<p>Let’s try all the steps out in QuTiP.</p>
 <section id="tasks">
 <h2>Tasks<a class="headerlink" href="#tasks" title="Permalink to this headline">#</a></h2>
 <ul class="simple">
 <li><p><a class="reference external" href="#imports">Import qutip and qutip.qip</a></p></li>
+<li><p><a class="reference external" href="#spin-chain-qubits">Spin chain qubits</a></p></li>
+<li><p><a class="reference external" href="#create-a-simple-circuit-to-translate">Create a simple circuit to translate</a></p></li>
+<li><p><a class="reference external" href="#add-swap-gates-by-hand">Add swap gates by hand</a></p></li>
+<li><p><a class="reference external" href="#add-swap-gates-automatically">Add swap gates automatically</a></p></li>
+<li><p><a class="reference external" href="#translate-to-native-gates">Translate to native gates</a></p></li>
+<li><p><a class="reference external" href="#turn-gates-into-pulses">Turn gates into pulses</a></p></li>
+<li><p><a class="reference external" href="#run-the-pulses-on-the-device">Run the pulses on the device</a></p></li>
 </ul>
 </section>
 <section id="imports">
@@ -475,97 +551,250 @@ title="Print to PDF"
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">qutip</span>
+<span class="kn">from</span> <span class="nn">qutip_qip.circuit</span> <span class="kn">import</span> <span class="n">QubitCircuit</span>
+<span class="kn">from</span> <span class="nn">qutip_qip.device</span> <span class="kn">import</span> <span class="n">LinearSpinChain</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 </pre></div>
 </div>
 </div>
 </div>
 </section>
-<section id="helper-functions">
-<h2>Helper functions<a class="headerlink" href="#helper-functions" title="Permalink to this headline">#</a></h2>
-<div class="cell tag_hide-cell docutils container">
+<section id="linear-spin-chain-qubits">
+<h2>Linear spin chain qubits<a class="headerlink" href="#linear-spin-chain-qubits" title="Permalink to this headline">#</a></h2>
+<p>Before we begin, we need to pick what kind of hardware device we will translate to. We’ll choose a linear spin chain with three qubits:</p>
+<p><img alt="02-spin-chain.png" src="../_images/02-spin-chain.png" /></p>
+<p>The nodes are the three qubits. The lines are the interactions between them. Note that each qubit can only interact with the two next to it in the chain. Qubits 0 and 2 cannot interact directly.</p>
+<p>Each qubit can be controlled by rotations around the <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Z\)</span> axis. The corresponding Hamiltonian for qubit <span class="math notranslate nohighlight">\(j\)</span> is:</p>
+<div class="math notranslate nohighlight">
+\[
+    \Omega^x_{j}(t) \sigma^x_{j} + \Omega^z_{j}(t) \sigma^z_{j}
+\]</div>
+<p><span class="math notranslate nohighlight">\( \Omega^x_{j}(t) \)</span> and <span class="math notranslate nohighlight">\( \Omega^z_{j}(t) \)</span> are coefficients that are functions of time and which we can control in the real device by, e.g., firing a microwave pulse towards qubit <span class="math notranslate nohighlight">\(j\)</span>.</p>
+<p>The interactive between qubits <span class="math notranslate nohighlight">\(j\)</span> and <span class="math notranslate nohighlight">\(j + 1\)</span> is described by the Hamiltonian:</p>
+<div class="math notranslate nohighlight">
+\[
+    g_{j}(t) (\sigma^x_{j}\sigma^x_{j+1} + \sigma^y_{j}\sigma^y_{j+1})
+\]</div>
+<p>Where here <span class="math notranslate nohighlight">\(g_{j}(t)\)</span> is the time-dependent coefficient function that we can use to control the interaction.</p>
+<p>Putting all Hamiltonians for all of the qubits and interaction together, we get the full Hamiltonian for the system:</p>
+<div class="math notranslate nohighlight">
+\[
+H = \sum_{j=0}^{N-1}
+        \Omega^x_{j}(t) \sigma^x_{j} +
+        \Omega^z_{j}(t) \sigma^z_{j} +
+    \sum_{j=0}^{N-2}
+        g_{j}(t)
+        (\sigma^x_{j}\sigma^x_{j+1}+
+        \sigma^y_{j}\sigma^y_{j+1})
+\]</div>
+<p>Don’t worry about understanding the Hamiltonian fully. The point is to have a general model of how a linear spin chain interacts and can be controlled that you keep in your head during the rest of this tutorial.</p>
+<p>QuTiP has a prebuilt version of this model. You can great an instance of it with:</p>
+<div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">display_list</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Display a list of items using Jupyter&#39;s display function. &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">title</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">title</span><span class="p">))</span>
-    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">a</span><span class="p">:</span>
-        <span class="n">display</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell tag_hide-cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">print_attrs</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Print the listed attributes of an object. &quot;&quot;&quot;</span>
-    <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="n">attrs</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">attr</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell tag_hide-cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">show_bloch</span><span class="p">(</span><span class="n">states</span><span class="p">,</span> <span class="n">vector_color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vector_alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Show states or density matrices on the Bloch sphere. &quot;&quot;&quot;</span>
-    <span class="n">bloch</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">Bloch</span><span class="p">()</span>
-    <span class="n">bloch</span><span class="o">.</span><span class="n">add_states</span><span class="p">(</span><span class="n">states</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">vector_color</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">vector_color</span> <span class="o">==</span> <span class="s2">&quot;rb&quot;</span><span class="p">:</span>
-            <span class="n">vector_color</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">states</span><span class="p">))</span>
-            <span class="p">]</span>
-        <span class="n">bloch</span><span class="o">.</span><span class="n">vector_color</span> <span class="o">=</span> <span class="n">vector_color</span>
-    <span class="k">if</span> <span class="n">vector_alpha</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">bloch</span><span class="o">.</span><span class="n">vector_alpha</span> <span class="o">=</span> <span class="n">vector_alpha</span>
-    <span class="n">bloch</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell tag_hide-cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">display_eigenstates</span><span class="p">(</span><span class="n">op</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Display the eigenvalues and eigenstates of an operator. &quot;&quot;&quot;</span>
-    <span class="n">evals</span><span class="p">,</span> <span class="n">evecs</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">eigenstates</span><span class="p">()</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Eigenvalues:&quot;</span><span class="p">,</span> <span class="n">evals</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">()</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Eigenstates&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;===========&quot;</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">evecs</span><span class="p">:</span>
-        <span class="n">display</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">processor</span> <span class="o">=</span> <span class="n">LinearSpinChain</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 </section>
-<section id="task-1">
-<h2>Task 1<a class="headerlink" href="#task-1" title="Permalink to this headline">#</a></h2>
-<ul class="simple">
-<li><p>Sub-task 1</p></li>
-</ul>
+<section id="create-a-simple-circuit-to-translate">
+<h2>Create a simple circuit to translate<a class="headerlink" href="#create-a-simple-circuit-to-translate" title="Permalink to this headline">#</a></h2>
+<p>Create this simple circuit to translate:</p>
+<p><img alt="02-circuit.png" src="../_images/02-circuit.png" /></p>
+<p>It doesn’t perform any specific useful operation. It’s just a very simple example that will allow us to focus on what is happening during translation rather than what the circuit does.</p>
 <div class="cell tag_hide-cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># sub-task 1</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">qc</span> <span class="o">=</span> <span class="n">QubitCircuit</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="n">qc</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="s2">&quot;SNOT&quot;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="s2">&quot;CNOT&quot;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">controls</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">qc</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="s2">&quot;SNOT&quot;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="s2">&quot;CNOT&quot;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">controls</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">qc</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/02-qutip-qip-ii_9_0.png" src="../_images/02-qutip-qip-ii_9_0.png" />
+</div>
+</div>
+</section>
+<section id="add-swap-gates-by-hand">
+<h2>Add swap gates by hand<a class="headerlink" href="#add-swap-gates-by-hand" title="Permalink to this headline">#</a></h2>
+<p>The circuit above can’t be implemened directly on the device because the first CNOT operates on qubits 0 and 2 which are not next to each other in the spin chain and so can’t interact.</p>
+<p>By hand, add some swap gates around the first CNOT gate so that the result circuit performs the same operation but could be executed on our spin chain.</p>
+<p>Could you have added different swap gates? Can you think of some reasons why some choices might be better than others? What about in bigger circuits with more gates?</p>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">qc_swap</span> <span class="o">=</span> <span class="n">QubitCircuit</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">input_states</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;0&quot;</span><span class="p">,</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">])</span>
+
+<span class="n">qc_swap</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="s2">&quot;SNOT&quot;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">qc_swap</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="s2">&quot;SWAP&quot;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="n">qc_swap</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="s2">&quot;CNOT&quot;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">controls</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">qc_swap</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="s2">&quot;SWAP&quot;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+
+<span class="n">qc_swap</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="s2">&quot;SNOT&quot;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">qc_swap</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="s2">&quot;CNOT&quot;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">controls</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">qc_swap</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/02-qutip-qip-ii_11_0.png" src="../_images/02-qutip-qip-ii_11_0.png" />
+</div>
+</div>
+</section>
+<section id="add-swap-gates-automatically">
+<h2>Add swap gates automatically<a class="headerlink" href="#add-swap-gates-automatically" title="Permalink to this headline">#</a></h2>
+<p>QuTiP’s processors have a built-in method for performing the swaps – <code class="docutils literal notranslate"><span class="pre">processor.topology_map(qc)</span></code>. It takes in a circuit and returns a new circuit with the swaps added.</p>
+<p>It has a small bug that means we have to fix the labels for the input states afterwards by doing <code class="docutils literal notranslate"><span class="pre">qc_swapped.input_states</span> <span class="pre">=</span> <span class="pre">qc.input_states</span></code>. If you are feeling adventurous later this week, we’d love a pull request to fix this bug. The issue is described in more detail at <a class="reference external" href="https://github.com/qutip/qutip-qip/issues/165">https://github.com/qutip/qutip-qip/issues/165</a>.</p>
+<p>Compare the resulting circuit below to the swaps you used.</p>
+<p>Spend some time thinking about how you might write a general algorithm like this which can apply the appropriate swaps to <em>any</em> circuit. How would you make such an algorithm optimal? What does optimal mean for this problem? Would it help to be able to reorder the qubits at the start?</p>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">qc_auto_swap</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">topology_map</span><span class="p">(</span><span class="n">qc</span><span class="p">)</span>
+<span class="n">qc_auto_swap</span><span class="o">.</span><span class="n">input_states</span> <span class="o">=</span> <span class="n">qc</span><span class="o">.</span><span class="n">input_states</span>
+<span class="n">qc_auto_swap</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/02-qutip-qip-ii_13_0.png" src="../_images/02-qutip-qip-ii_13_0.png" />
+</div>
+</div>
+</section>
+<section id="translate-to-native-gates">
+<h2>Translate to native gates<a class="headerlink" href="#translate-to-native-gates" title="Permalink to this headline">#</a></h2>
+<p>Now that we have the swaps in place, the next step is to translate the gates our device can implement – i.e. ones that can be turned into control pulses to send to our spin chain device.</p>
+<p>You can list the native gates for the device using:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">processor</span><span class="o">.</span><span class="n">native_gates</span>
+</pre></div>
+</div>
+<p>They are native single qubit gates are <code class="docutils literal notranslate"><span class="pre">RX</span></code> and <code class="docutils literal notranslate"><span class="pre">RZ</span></code>. They rotate the qubit around the <code class="docutils literal notranslate"><span class="pre">X</span></code> and <code class="docutils literal notranslate"><span class="pre">Z</span></code> axes. Each takes an angle to rotate through as a parameter. They are performed using the <span class="math notranslate nohighlight">\(\Omega^x_{j}(t)\)</span> and <span class="math notranslate nohighlight">\(\Omega^z_{j}(t)\)</span> pulses from the Hamiltonian.</p>
+<p>The native two qubit gates are <code class="docutils literal notranslate"><span class="pre">ISWAP</span></code> and <code class="docutils literal notranslate"><span class="pre">SQRTISWAP</span></code>. They are performed using the interaction pulse <span class="math notranslate nohighlight">\(g_{j}(t)\)</span> plus some additional control pulses on the individual qubits involved.</p>
+<p>Use <code class="docutils literal notranslate"><span class="pre">processor.transpile(qc)</span></code> to transform the gates into native gates. Whoa! It’s complicated. Try to figure out what sequence of gates each of the individual gates was translated too. Use <code class="docutils literal notranslate"><span class="pre">.transpile</span></code> on simpler circuits with just one gate if you get stuck or to check your findings.</p>
+<p>What are the strange giant <span class="math notranslate nohighlight">\(Ph(\pi /2)\)</span> gates? How are they implemented?</p>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">processor</span><span class="o">.</span><span class="n">native_gates</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;SQRTISWAP&#39;, &#39;ISWAP&#39;, &#39;RX&#39;, &#39;RZ&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">qc_native</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">transpile</span><span class="p">(</span><span class="n">qc</span><span class="p">)</span>
+<span class="n">qc_native</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/02-qutip-qip-ii_16_0.png" src="../_images/02-qutip-qip-ii_16_0.png" />
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">qc_snot</span> <span class="o">=</span> <span class="n">QubitCircuit</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">qc_snot</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="s2">&quot;SNOT&quot;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">processor</span><span class="o">.</span><span class="n">transpile</span><span class="p">(</span><span class="n">qc_snot</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/02-qutip-qip-ii_17_0.png" src="../_images/02-qutip-qip-ii_17_0.png" />
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">qc_cnot</span> <span class="o">=</span> <span class="n">QubitCircuit</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">qc_cnot</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="s2">&quot;CNOT&quot;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">controls</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">processor</span><span class="o">.</span><span class="n">transpile</span><span class="p">(</span><span class="n">qc_cnot</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/02-qutip-qip-ii_18_0.png" src="../_images/02-qutip-qip-ii_18_0.png" />
+</div>
+</div>
+</section>
+<section id="turn-gates-into-pulses">
+<h2>Turn gates into pulses<a class="headerlink" href="#turn-gates-into-pulses" title="Permalink to this headline">#</a></h2>
+<p>The compiled coefficients are square pulses and the control coefficients on 𝜎𝑧 and 𝜎𝑥 are also different, resulting in different gate times.</p>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">processor</span><span class="o">.</span><span class="n">load_circuit</span><span class="p">(</span><span class="n">qc</span><span class="p">)</span>
+<span class="n">processor</span><span class="o">.</span><span class="n">plot_pulses</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Control pulse of Spin chain&quot;</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">100</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/02-qutip-qip-ii_20_0.png" src="../_images/02-qutip-qip-ii_20_0.png" />
+</div>
+</div>
+</section>
+<section id="run-the-pulses-on-the-device">
+<h2>Run the pulses on the device<a class="headerlink" href="#run-the-pulses-on-the-device" title="Permalink to this headline">#</a></h2>
+<p>QuTiP’s processor provides a method <code class="docutils literal notranslate"><span class="pre">.run_state(...)</span></code> for executing the pulses. Under the hood, this runs one of the QuTiP solvers, typically either <code class="docutils literal notranslate"><span class="pre">sesolve</span></code> or <code class="docutils literal notranslate"><span class="pre">mesolve</span></code>, and returns the result.</p>
+<p>Use <code class="docutils literal notranslate"><span class="pre">run_state(init_state=psi0)</span></code> to determine the effect of the pulses on <code class="docutils literal notranslate"><span class="pre">psi0</span></code>. What do the dimensions of <code class="docutils literal notranslate"><span class="pre">psi0</span></code> have to be? Do the results match what you expect? Try a few different values for <code class="docutils literal notranslate"><span class="pre">psi0</span></code>.</p>
+<p>By setting the decoherence times <code class="docutils literal notranslate"><span class="pre">t1</span></code> and <code class="docutils literal notranslate"><span class="pre">t2</span></code> on the processor using:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">processor</span><span class="o">.</span><span class="n">t1</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">processor</span><span class="o">.</span><span class="n">t2</span> <span class="o">=</span> <span class="mi">30</span>
+</pre></div>
+</div>
+<p>we can simulate the loss of information to the environment on the circuit.</p>
+<p>If we add decoherence, what happens to the outcomes?</p>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">processor</span><span class="o">.</span><span class="n">t1</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">processor</span><span class="o">.</span><span class="n">t2</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="n">psi0</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">basis</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">proj0</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">ket</span><span class="p">(</span><span class="s2">&quot;0&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">proj</span><span class="p">()</span>
+<span class="n">proj1</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">ket</span><span class="p">(</span><span class="s2">&quot;1&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">proj</span><span class="p">()</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">run_state</span><span class="p">(</span><span class="n">init_state</span><span class="o">=</span><span class="n">psi0</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Probability of measuring qubit 0 in state 0:&quot;</span><span class="p">,</span> <span class="n">qutip</span><span class="o">.</span><span class="n">expect</span><span class="p">(</span><span class="n">proj0</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">ptrace</span><span class="p">(</span><span class="mi">0</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Probability of measuring qubit 0 in state 1:&quot;</span><span class="p">,</span> <span class="n">qutip</span><span class="o">.</span><span class="n">expect</span><span class="p">(</span><span class="n">proj1</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">ptrace</span><span class="p">(</span><span class="mi">0</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Probability of measuring qubit 0 in state 0: 0.4999898121058108
+Probability of measuring qubit 0 in state 1: 0.5000101878941889
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">processor</span><span class="o">.</span><span class="n">t1</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">processor</span><span class="o">.</span><span class="n">t2</span> <span class="o">=</span> <span class="mi">30</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">run_state</span><span class="p">(</span><span class="n">init_state</span><span class="o">=</span><span class="n">psi0</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Probability of measuring qubit 0 in state 0:&quot;</span><span class="p">,</span> <span class="n">qutip</span><span class="o">.</span><span class="n">expect</span><span class="p">(</span><span class="n">proj0</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">ptrace</span><span class="p">(</span><span class="mi">0</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Probability of measuring qubit 0 in state 1:&quot;</span><span class="p">,</span> <span class="n">qutip</span><span class="o">.</span><span class="n">expect</span><span class="p">(</span><span class="n">proj1</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">ptrace</span><span class="p">(</span><span class="mi">0</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Probability of measuring qubit 0 in state 0: 0.5816168440850089
+Probability of measuring qubit 0 in state 1: 0.4183831559149921
 </pre></div>
 </div>
 </div>
 </div>
 </section>
-<section id="using-functions-to-make-your-notebooks-neater">
-<h2>Using functions to make your notebooks neater<a class="headerlink" href="#using-functions-to-make-your-notebooks-neater" title="Permalink to this headline">#</a></h2>
-<ul class="simple">
-<li><p>XXX</p></li>
-</ul>
-<div class="cell tag_hide-cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># See the helper functions at the top for examples.</span>
-</pre></div>
-</div>
-</div>
-</div>
+<section id="links-for-further-study">
+<h2>Links for further study<a class="headerlink" href="#links-for-further-study" title="Permalink to this headline">#</a></h2>
+<p>Boxi Li wrote an excellent example of simulating the entire Deutsch-Jozsa algorithm on a spin chain in QuTiP. You can find it with the other QuTiP tutorials at <a class="reference external" href="https://qutip.org/tutorials.html">qutip.org</a> under the title <em>Simulating the Deutsch–Jozsa algorithm with noise</em>.</p>
 </section>
 </section>
 
@@ -603,10 +832,10 @@ title="Print to PDF"
             <p class="prev-next-title">01: Quantum Information Processing in QuTiP I</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="../build-stats.html" title="next page">
+    <a class='right-next' id="next-link" href="03-qutip-jcm-i.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Build information</p>
+        <p class="prev-next-title">03: Jaynes-Cummings Model and the Rotating Wave Approximation</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
