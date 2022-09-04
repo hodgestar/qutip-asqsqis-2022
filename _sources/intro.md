@@ -17,4 +17,5 @@
 
 ## Capstone project: Simulating a Neutral Atom Quantum Device
 
-- TODO: Links to the material
+- [Neutral Atom Devices](./capstone/00-neutral-atom-devices)
+- [A Single Atom](./capstone/01-a-single-atom)

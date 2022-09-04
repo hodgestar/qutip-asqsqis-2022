@@ -16,7 +16,7 @@ kernelspec:
 
 +++
 
-In this tutorial we will construct the Jaynes-Cummings Hamiltonian (with and without the RWA) and see how the system evolves under the Schrodinger equation (that is, without dissipation) . 
+In this tutorial we will construct the Jaynes-Cummings Hamiltonian (with and without the RWA) and see how the system evolves under the Schrodinger equation (that is, without dissipation) .
 We will use this to investigate the limits of the RWA in the JCM.
 
 +++
@@ -75,7 +75,7 @@ def display_eigenstates(op):
 ```{code-cell} ipython3
 :tags: [hide-cell]
 
-def jmc_h(wc, wa, g, N):
+def jcm_h(wc, wa, g, N):
     """ Construct the Jaynes-Cummings Hamiltonian (non-RWA). """
     a = qutip.tensor(qutip.destroy(N), qutip.qeye(2))
     sm = qutip.tensor(qutip.qeye(N), qutip.destroy(2))
@@ -87,7 +87,7 @@ def jmc_h(wc, wa, g, N):
 ```{code-cell} ipython3
 :tags: [hide-cell]
 
-def jmc_rwa_h(wc, wa, g, N):
+def jcm_rwa_h(wc, wa, g, N):
     """ Construct the Jaynes-Cummings Hamiltonian (RWA). """
     a = qutip.tensor(qutip.destroy(N), qutip.qeye(2))
     sm = qutip.tensor(qutip.qeye(N), qutip.destroy(2))
@@ -203,7 +203,7 @@ plt.legend();
 
 # vary g
 tlist = np.linspace(0, 25, 101)
-result = qutip.sesolve(jmc_h(wc, wa, 0.1 * 2 * np.pi, N), psi0, tlist, e_ops=[eop_a, eop_sm])
+result = qutip.sesolve(jcm_h(wc, wa, 0.1 * 2 * np.pi, N), psi0, tlist, e_ops=[eop_a, eop_sm])
 plt.plot(tlist, result.expect[0], label="Light")
 plt.plot(tlist, result.expect[1], label="matter")
 plt.legend();
@@ -220,7 +220,7 @@ plt.legend();
 :tags: [hide-cell]
 
 # Construct the RWA Hamiltonian
-H_RWA = jmc_rwa_h(wc, wa, g, N)
+H_RWA = jcm_rwa_h(wc, wa, g, N)
 ```
 
 ```{code-cell} ipython3
@@ -247,11 +247,11 @@ plt.legend();
 tlist = np.linspace(0, 25, 101)
 f = 0.9
 
-result = qutip.sesolve(jmc_h(wc, f * wa, g, N), psi0, tlist, e_ops=[eop_a, eop_sm])
+result = qutip.sesolve(jcm_h(wc, f * wa, g, N), psi0, tlist, e_ops=[eop_a, eop_sm])
 plt.plot(tlist, result.expect[0], label="Light")
 plt.plot(tlist, result.expect[1], label="matter")
 
-result_rwa = qutip.sesolve(jmc_rwa_h(wc, f * wa, g, N), psi0, tlist, e_ops=[eop_a, eop_sm])
+result_rwa = qutip.sesolve(jcm_rwa_h(wc, f * wa, g, N), psi0, tlist, e_ops=[eop_a, eop_sm])
 plt.plot(tlist, result_rwa.expect[0], label="Light (RWA)")
 plt.plot(tlist, result_rwa.expect[1], label="matter (RWA)")
 
