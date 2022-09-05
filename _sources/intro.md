@@ -1,5 +1,8 @@
 # Overview
 
+You can download a zip file with all the tutorials
+<a href="./_static/student-tutorials.zip">here</a>.
+
 ## Introduction to QuTiP
 
 - [QuTiP Intro](./student-tutorials/00-qutip-intro)
