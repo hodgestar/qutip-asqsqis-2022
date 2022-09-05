@@ -27,6 +27,8 @@ each tutorial yourself. It will hurt your own learning. Please also do not
 consider these answers canonical -- they are just one possible way to do things.
 
 ```{admonition} Worked solutions. Reveal at your peril!
+:class: dropdown
+
 - [QuTiP Intro](./tutorials/00-qutip-intro)
 - [QIP I](./tutorials/01-qutip-qip-i)
 - [QIP II](./tutorials/02-qutip-qip-ii)
