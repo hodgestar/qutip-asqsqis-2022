@@ -18,6 +18,8 @@ kernelspec:
 
 In this tutorial we will add interactions with the environment to the Jaynes-Cummings model in the form of dissipation from the atom and the cavity. We will use the Wigner function to visualise the modes of the cavity certain times in the evolution to see how these evolve over time.
 
+As in the previous tutorial we will use $\sigma_- \sigma_-^{\dagger}$ to more simply show the oscillations in the matter and light states.
+
 +++
 
 ## Tasks
@@ -48,24 +50,26 @@ import numpy as np
 ```{code-cell} ipython3
 :tags: [hide-cell]
 
-def jcm_h(wc, wa, g, N):
+def jcm_h(wc, wa, g, N, atom):
     """ Construct the Jaynes-Cummings Hamiltonian (non-RWA). """
     a = qutip.tensor(qutip.destroy(N), qutip.qeye(2))
     sm = qutip.tensor(qutip.qeye(N), qutip.destroy(2))
-
-    H = wc * a.dag() * a + wa * sm.dag() * sm + g * (a.dag() + a) * (sm + sm.dag())
+    atom = qutip.tensor(qutip.qeye(N), atom)
+    
+    H = wc * a.dag() * a + wa * atom + g * (a.dag() + a) * (sm + sm.dag())
     return H
 ```
 
 ```{code-cell} ipython3
 :tags: [hide-cell]
 
-def jcm_rwa_h(wc, wa, g, N):
+def jcm_rwa_h(wc, wa, g, N, atom):
     """ Construct the Jaynes-Cummings Hamiltonian (RWA). """
     a = qutip.tensor(qutip.destroy(N), qutip.qeye(2))
     sm = qutip.tensor(qutip.qeye(N), qutip.destroy(2))
+    atom = qutip.tensor(qutip.qeye(N), atom)
 
-    H = wc * a.dag() * a + wa * sm.dag() * sm + g * (a.dag() * sm + a * sm.dag())
+    H = wc * a.dag() * a + wa * atom + g * (a.dag() * sm + a * sm.dag())
     return H
 ```
 
@@ -111,10 +115,13 @@ n_th_a = 5.0  # avg number of thermal bath excitation
 # system parameters
 wc = 1.0 * 2 * np.pi  # cavity frequency
 wa = 1.0 * 2 * np.pi  # atom frequency
-g = 0.05 * 2 * np.pi # 0.05 * 2 * np.pi  # coupling strength
+g = 0.05 * 2 * np.pi  # coupling strength
 N = 15  # number of cavity fock states
 
-H = jcm_h(wc, wa, g, N)
+# Atom hamiltonian
+H_atom = qutip.sigmam() * qutip.sigmam().dag()
+
+H = jcm_h(wc, wa, g, N, H_atom)
 ```
 
 ```{code-cell} ipython3

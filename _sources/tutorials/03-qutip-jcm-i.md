@@ -31,6 +31,10 @@ $H_{\rm RWA} = \hbar \omega_c a^\dagger a + \frac{1}{2}\hbar\omega_a\sigma_z + \
 
 where $\omega_c$ and $\omega_a$ are the frequencies of the cavity and atom, respectively, and $g$ is the interaction strength.
 
+Note that the Hamiltonian for the atom, $\frac{1}{2}\hbar\omega_a\sigma_z$, may take numerous forms. Any Hermitean operator on a two-level state is possible, but it is useful to nomalize the operator so that the difference between its eigenvalues is $1$ so that $\omega_a$ has consistent units.
+
+In this notebook we will use $\sigma_- \sigma_-^{\dagger}$ to more simply show the oscillations in the occupations of the matter and light states in this tutorial.
+
 +++
 
 ## Tasks
@@ -75,24 +79,26 @@ def display_eigenstates(op):
 ```{code-cell} ipython3
 :tags: [hide-cell]
 
-def jcm_h(wc, wa, g, N):
+def jcm_h(wc, wa, g, N, atom):
     """ Construct the Jaynes-Cummings Hamiltonian (non-RWA). """
     a = qutip.tensor(qutip.destroy(N), qutip.qeye(2))
     sm = qutip.tensor(qutip.qeye(N), qutip.destroy(2))
-
-    H = wc * a.dag() * a + wa * sm.dag() * sm + g * (a.dag() + a) * (sm + sm.dag())
+    atom = qutip.tensor(qutip.qeye(N), atom)
+    
+    H = wc * a.dag() * a + wa * atom + g * (a.dag() + a) * (sm + sm.dag())
     return H
 ```
 
 ```{code-cell} ipython3
 :tags: [hide-cell]
 
-def jcm_rwa_h(wc, wa, g, N):
+def jcm_rwa_h(wc, wa, g, N, atom):
     """ Construct the Jaynes-Cummings Hamiltonian (RWA). """
     a = qutip.tensor(qutip.destroy(N), qutip.qeye(2))
     sm = qutip.tensor(qutip.qeye(N), qutip.destroy(2))
+    atom = qutip.tensor(qutip.qeye(N), atom)
 
-    H = wc * a.dag() * a + wa * sm.dag() * sm + g * (a.dag() * sm + a * sm.dag())
+    H = wc * a.dag() * a + wa * atom + g * (a.dag() * sm + a * sm.dag())
     return H
 ```
 
@@ -127,6 +133,12 @@ N = 15  # number of cavity fock states
 # operators
 a = qutip.tensor(qutip.destroy(N), qutip.qeye(2))
 sm = qutip.tensor(qutip.qeye(N), qutip.destroy(2))
+```
+
+```{code-cell} ipython3
+# hamiltonian of atom
+# Note: The H_atom below is equivalent to qutip.destroy(2).dag() * qutip.destroy(2)
+H_atom = qutip.sigmam() * qutip.sigmam().dag()
 ```
 
 ```{code-cell} ipython3
@@ -202,8 +214,12 @@ plt.legend();
 :tags: [hide-cell]
 
 # vary g
+H = jcm_h(wc, wa, 0.1 * 2 * np.pi, N, H_atom)
+
 tlist = np.linspace(0, 25, 101)
-result = qutip.sesolve(jcm_h(wc, wa, 0.1 * 2 * np.pi, N), psi0, tlist, e_ops=[eop_a, eop_sm])
+
+result = qutip.sesolve(H, psi0, tlist, e_ops=[eop_a, eop_sm])
+
 plt.plot(tlist, result.expect[0], label="Light")
 plt.plot(tlist, result.expect[1], label="matter")
 plt.legend();
@@ -220,7 +236,8 @@ plt.legend();
 :tags: [hide-cell]
 
 # Construct the RWA Hamiltonian
-H_RWA = jcm_rwa_h(wc, wa, g, N)
+H = jcm_h(wc, wa, g, N, H_atom)
+H_RWA = jcm_rwa_h(wc, wa, g, N, H_atom)
 ```
 
 ```{code-cell} ipython3
@@ -247,11 +264,14 @@ plt.legend();
 tlist = np.linspace(0, 25, 101)
 f = 0.9
 
-result = qutip.sesolve(jcm_h(wc, f * wa, g, N), psi0, tlist, e_ops=[eop_a, eop_sm])
+H = jcm_h(wc, f * wa, g, N, H_atom)
+H_RWA = jcm_rwa_h(wc, f * wa, g, N, H_atom)
+
+result = qutip.sesolve(H, psi0, tlist, e_ops=[eop_a, eop_sm])
 plt.plot(tlist, result.expect[0], label="Light")
 plt.plot(tlist, result.expect[1], label="matter")
 
-result_rwa = qutip.sesolve(jcm_rwa_h(wc, f * wa, g, N), psi0, tlist, e_ops=[eop_a, eop_sm])
+result_rwa = qutip.sesolve(H_RWA, psi0, tlist, e_ops=[eop_a, eop_sm])
 plt.plot(tlist, result_rwa.expect[0], label="Light (RWA)")
 plt.plot(tlist, result_rwa.expect[1], label="matter (RWA)")
 

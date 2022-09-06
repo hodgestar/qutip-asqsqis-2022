@@ -543,6 +543,8 @@ We will use this to investigate the limits of the RWA in the JCM.</p>
 <p>or with the rotating-wave approximation</p>
 <p><span class="math notranslate nohighlight">\(H_{\rm RWA} = \hbar \omega_c a^\dagger a + \frac{1}{2}\hbar\omega_a\sigma_z + \hbar g(a^\dagger\sigma_- + a\sigma_+)\)</span></p>
 <p>where <span class="math notranslate nohighlight">\(\omega_c\)</span> and <span class="math notranslate nohighlight">\(\omega_a\)</span> are the frequencies of the cavity and atom, respectively, and <span class="math notranslate nohighlight">\(g\)</span> is the interaction strength.</p>
+<p>Note that the Hamiltonian for the atom, <span class="math notranslate nohighlight">\(\frac{1}{2}\hbar\omega_a\sigma_z\)</span>, may take numerous forms. Any Hermitean operator on a two-level state is possible, but it is useful to nomalize the operator so that the difference between its eigenvalues is <span class="math notranslate nohighlight">\(1\)</span> so that <span class="math notranslate nohighlight">\(\omega_a\)</span> has consistent units.</p>
+<p>In this notebook we will use <span class="math notranslate nohighlight">\(\sigma_- \sigma_-^{\dagger}\)</span> to more simply show the oscillations in the occupations of the matter and light states in this tutorial.</p>
 <section id="tasks">
 <h2>Tasks<a class="headerlink" href="#tasks" title="Permalink to this headline">#</a></h2>
 <ul class="simple">
@@ -585,6 +587,15 @@ We will use this to investigate the limits of the RWA in the JCM.</p>
   \omega_a = 2 \pi \\
   g = 0.05 \cdot 2 \pi \\
 \)</span></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># hamiltonian of atom</span>
+<span class="c1"># Note: The H_atom below is equivalent to qutip.destroy(2).dag() * qutip.destroy(2)</span>
+<span class="n">H_atom</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">sigmam</span><span class="p">()</span> <span class="o">*</span> <span class="n">qutip</span><span class="o">.</span><span class="n">sigmam</span><span class="p">()</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
 </section>
 <section id="solve-the-schrodinger-equation">
 <h2>Solve the Schrodinger equation<a class="headerlink" href="#solve-the-schrodinger-equation" title="Permalink to this headline">#</a></h2>

@@ -31,6 +31,10 @@ $H_{\rm RWA} = \hbar \omega_c a^\dagger a + \frac{1}{2}\hbar\omega_a\sigma_z + \
 
 where $\omega_c$ and $\omega_a$ are the frequencies of the cavity and atom, respectively, and $g$ is the interaction strength.
 
+Note that the Hamiltonian for the atom, $\frac{1}{2}\hbar\omega_a\sigma_z$, may take numerous forms. Any Hermitean operator on a two-level state is possible, but it is useful to nomalize the operator so that the difference between its eigenvalues is $1$ so that $\omega_a$ has consistent units.
+
+In this notebook we will use $\sigma_- \sigma_-^{\dagger}$ to more simply show the oscillations in the occupations of the matter and light states in this tutorial.
+
 +++
 
 ## Tasks
@@ -71,6 +75,12 @@ $
 
 ```{code-cell}
 
+```
+
+```{code-cell}
+# hamiltonian of atom
+# Note: The H_atom below is equivalent to qutip.destroy(2).dag() * qutip.destroy(2)
+H_atom = qutip.sigmam() * qutip.sigmam().dag()
 ```
 
 ## Solve the Schrodinger equation

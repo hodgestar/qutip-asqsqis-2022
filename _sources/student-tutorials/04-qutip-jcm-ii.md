@@ -18,6 +18,8 @@ kernelspec:
 
 In this tutorial we will add interactions with the environment to the Jaynes-Cummings model in the form of dissipation from the atom and the cavity. We will use the Wigner function to visualise the modes of the cavity certain times in the evolution to see how these evolve over time.
 
+As in the previous tutorial we will use $\sigma_- \sigma_-^{\dagger}$ to more simply show the oscillations in the matter and light states.
+
 +++
 
 ## Tasks

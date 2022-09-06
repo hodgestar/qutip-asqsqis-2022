@@ -553,6 +553,8 @@ We will use this to investigate the limits of the RWA in the JCM.</p>
 <p>or with the rotating-wave approximation</p>
 <p><span class="math notranslate nohighlight">\(H_{\rm RWA} = \hbar \omega_c a^\dagger a + \frac{1}{2}\hbar\omega_a\sigma_z + \hbar g(a^\dagger\sigma_- + a\sigma_+)\)</span></p>
 <p>where <span class="math notranslate nohighlight">\(\omega_c\)</span> and <span class="math notranslate nohighlight">\(\omega_a\)</span> are the frequencies of the cavity and atom, respectively, and <span class="math notranslate nohighlight">\(g\)</span> is the interaction strength.</p>
+<p>Note that the Hamiltonian for the atom, <span class="math notranslate nohighlight">\(\frac{1}{2}\hbar\omega_a\sigma_z\)</span>, may take numerous forms. Any Hermitean operator on a two-level state is possible, but it is useful to nomalize the operator so that the difference between its eigenvalues is <span class="math notranslate nohighlight">\(1\)</span> so that <span class="math notranslate nohighlight">\(\omega_a\)</span> has consistent units.</p>
+<p>In this notebook we will use <span class="math notranslate nohighlight">\(\sigma_- \sigma_-^{\dagger}\)</span> to more simply show the oscillations in the occupations of the matter and light states in this tutorial.</p>
 <section id="tasks">
 <h2>Tasks<a class="headerlink" href="#tasks" title="Permalink to this headline">#</a></h2>
 <ul class="simple">
@@ -600,12 +602,13 @@ We will use this to investigate the limits of the RWA in the JCM.</p>
 </div>
 <div class="cell tag_hide-cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">jcm_h</span><span class="p">(</span><span class="n">wc</span><span class="p">,</span> <span class="n">wa</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">jcm_h</span><span class="p">(</span><span class="n">wc</span><span class="p">,</span> <span class="n">wa</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">atom</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Construct the Jaynes-Cummings Hamiltonian (non-RWA). &quot;&quot;&quot;</span>
     <span class="n">a</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">qutip</span><span class="o">.</span><span class="n">destroy</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">qutip</span><span class="o">.</span><span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
     <span class="n">sm</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">qutip</span><span class="o">.</span><span class="n">qeye</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">qutip</span><span class="o">.</span><span class="n">destroy</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
-
-    <span class="n">H</span> <span class="o">=</span> <span class="n">wc</span> <span class="o">*</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span> <span class="o">+</span> <span class="n">wa</span> <span class="o">*</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span> <span class="o">+</span> <span class="n">g</span> <span class="o">*</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">+</span> <span class="n">a</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">sm</span> <span class="o">+</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">())</span>
+    <span class="n">atom</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">qutip</span><span class="o">.</span><span class="n">qeye</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">atom</span><span class="p">)</span>
+    
+    <span class="n">H</span> <span class="o">=</span> <span class="n">wc</span> <span class="o">*</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span> <span class="o">+</span> <span class="n">wa</span> <span class="o">*</span> <span class="n">atom</span> <span class="o">+</span> <span class="n">g</span> <span class="o">*</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">+</span> <span class="n">a</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">sm</span> <span class="o">+</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">())</span>
     <span class="k">return</span> <span class="n">H</span>
 </pre></div>
 </div>
@@ -613,12 +616,13 @@ We will use this to investigate the limits of the RWA in the JCM.</p>
 </div>
 <div class="cell tag_hide-cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">jcm_rwa_h</span><span class="p">(</span><span class="n">wc</span><span class="p">,</span> <span class="n">wa</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">jcm_rwa_h</span><span class="p">(</span><span class="n">wc</span><span class="p">,</span> <span class="n">wa</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">atom</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Construct the Jaynes-Cummings Hamiltonian (RWA). &quot;&quot;&quot;</span>
     <span class="n">a</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">qutip</span><span class="o">.</span><span class="n">destroy</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">qutip</span><span class="o">.</span><span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
     <span class="n">sm</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">qutip</span><span class="o">.</span><span class="n">qeye</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">qutip</span><span class="o">.</span><span class="n">destroy</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+    <span class="n">atom</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">qutip</span><span class="o">.</span><span class="n">qeye</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">atom</span><span class="p">)</span>
 
-    <span class="n">H</span> <span class="o">=</span> <span class="n">wc</span> <span class="o">*</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span> <span class="o">+</span> <span class="n">wa</span> <span class="o">*</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span> <span class="o">+</span> <span class="n">g</span> <span class="o">*</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span> <span class="o">+</span> <span class="n">a</span> <span class="o">*</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">())</span>
+    <span class="n">H</span> <span class="o">=</span> <span class="n">wc</span> <span class="o">*</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span> <span class="o">+</span> <span class="n">wa</span> <span class="o">*</span> <span class="n">atom</span> <span class="o">+</span> <span class="n">g</span> <span class="o">*</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span> <span class="o">+</span> <span class="n">a</span> <span class="o">*</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">())</span>
     <span class="k">return</span> <span class="n">H</span>
 </pre></div>
 </div>
@@ -655,6 +659,15 @@ We will use this to investigate the limits of the RWA in the JCM.</p>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># operators</span>
 <span class="n">a</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">qutip</span><span class="o">.</span><span class="n">destroy</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">qutip</span><span class="o">.</span><span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
 <span class="n">sm</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">qutip</span><span class="o">.</span><span class="n">qeye</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">qutip</span><span class="o">.</span><span class="n">destroy</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># hamiltonian of atom</span>
+<span class="c1"># Note: The H_atom below is equivalent to qutip.destroy(2).dag() * qutip.destroy(2)</span>
+<span class="n">H_atom</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">sigmam</span><span class="p">()</span> <span class="o">*</span> <span class="n">qutip</span><span class="o">.</span><span class="n">sigmam</span><span class="p">()</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -816,14 +829,18 @@ Eigenstates
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/03-qutip-jcm-i_22_0.png" src="../_images/03-qutip-jcm-i_22_0.png" />
+<img alt="../_images/03-qutip-jcm-i_23_0.png" src="../_images/03-qutip-jcm-i_23_0.png" />
 </div>
 </div>
 <div class="cell tag_hide-cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># vary g</span>
+<span class="n">H</span> <span class="o">=</span> <span class="n">jcm_h</span><span class="p">(</span><span class="n">wc</span><span class="p">,</span> <span class="n">wa</span><span class="p">,</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">H_atom</span><span class="p">)</span>
+
 <span class="n">tlist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">101</span><span class="p">)</span>
-<span class="n">result</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">sesolve</span><span class="p">(</span><span class="n">jcm_h</span><span class="p">(</span><span class="n">wc</span><span class="p">,</span> <span class="n">wa</span><span class="p">,</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">N</span><span class="p">),</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="p">[</span><span class="n">eop_a</span><span class="p">,</span> <span class="n">eop_sm</span><span class="p">])</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">sesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="p">[</span><span class="n">eop_a</span><span class="p">,</span> <span class="n">eop_sm</span><span class="p">])</span>
+
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tlist</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Light&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tlist</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;matter&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span>
@@ -831,7 +848,7 @@ Eigenstates
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/03-qutip-jcm-i_23_0.png" src="../_images/03-qutip-jcm-i_23_0.png" />
+<img alt="../_images/03-qutip-jcm-i_24_0.png" src="../_images/03-qutip-jcm-i_24_0.png" />
 </div>
 </div>
 </section>
@@ -846,7 +863,8 @@ Eigenstates
 <div class="cell tag_hide-cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Construct the RWA Hamiltonian</span>
-<span class="n">H_RWA</span> <span class="o">=</span> <span class="n">jcm_rwa_h</span><span class="p">(</span><span class="n">wc</span><span class="p">,</span> <span class="n">wa</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+<span class="n">H</span> <span class="o">=</span> <span class="n">jcm_h</span><span class="p">(</span><span class="n">wc</span><span class="p">,</span> <span class="n">wa</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">H_atom</span><span class="p">)</span>
+<span class="n">H_RWA</span> <span class="o">=</span> <span class="n">jcm_rwa_h</span><span class="p">(</span><span class="n">wc</span><span class="p">,</span> <span class="n">wa</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">H_atom</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -869,7 +887,7 @@ Eigenstates
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/03-qutip-jcm-i_26_0.png" src="../_images/03-qutip-jcm-i_26_0.png" />
+<img alt="../_images/03-qutip-jcm-i_27_0.png" src="../_images/03-qutip-jcm-i_27_0.png" />
 </div>
 </div>
 <div class="cell tag_hide-cell docutils container">
@@ -878,11 +896,14 @@ Eigenstates
 <span class="n">tlist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">101</span><span class="p">)</span>
 <span class="n">f</span> <span class="o">=</span> <span class="mf">0.9</span>
 
-<span class="n">result</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">sesolve</span><span class="p">(</span><span class="n">jcm_h</span><span class="p">(</span><span class="n">wc</span><span class="p">,</span> <span class="n">f</span> <span class="o">*</span> <span class="n">wa</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">N</span><span class="p">),</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="p">[</span><span class="n">eop_a</span><span class="p">,</span> <span class="n">eop_sm</span><span class="p">])</span>
+<span class="n">H</span> <span class="o">=</span> <span class="n">jcm_h</span><span class="p">(</span><span class="n">wc</span><span class="p">,</span> <span class="n">f</span> <span class="o">*</span> <span class="n">wa</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">H_atom</span><span class="p">)</span>
+<span class="n">H_RWA</span> <span class="o">=</span> <span class="n">jcm_rwa_h</span><span class="p">(</span><span class="n">wc</span><span class="p">,</span> <span class="n">f</span> <span class="o">*</span> <span class="n">wa</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">H_atom</span><span class="p">)</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">sesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="p">[</span><span class="n">eop_a</span><span class="p">,</span> <span class="n">eop_sm</span><span class="p">])</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tlist</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Light&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tlist</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;matter&quot;</span><span class="p">)</span>
 
-<span class="n">result_rwa</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">sesolve</span><span class="p">(</span><span class="n">jcm_rwa_h</span><span class="p">(</span><span class="n">wc</span><span class="p">,</span> <span class="n">f</span> <span class="o">*</span> <span class="n">wa</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">N</span><span class="p">),</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="p">[</span><span class="n">eop_a</span><span class="p">,</span> <span class="n">eop_sm</span><span class="p">])</span>
+<span class="n">result_rwa</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">sesolve</span><span class="p">(</span><span class="n">H_RWA</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="p">[</span><span class="n">eop_a</span><span class="p">,</span> <span class="n">eop_sm</span><span class="p">])</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tlist</span><span class="p">,</span> <span class="n">result_rwa</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Light (RWA)&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tlist</span><span class="p">,</span> <span class="n">result_rwa</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;matter (RWA)&quot;</span><span class="p">)</span>
 
@@ -891,7 +912,7 @@ Eigenstates
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/03-qutip-jcm-i_27_0.png" src="../_images/03-qutip-jcm-i_27_0.png" />
+<img alt="../_images/03-qutip-jcm-i_28_0.png" src="../_images/03-qutip-jcm-i_28_0.png" />
 </div>
 </div>
 </section>
