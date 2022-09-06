@@ -26,6 +26,9 @@ To get set up you'll need to do the following:
 3. Check that everything is working by running the `smoke-test.ipynb`
    Jupyter notebook.
 
+4. If you need to view QuTiP circuits, follow the instructions for installing
+   TeX and ImageMagick at the end.
+
 There are instructions for what to do if you get stuck further down.
 
 Don't panic, have fun and see you in Kigali!
@@ -88,6 +91,47 @@ Or by using [Google Colab](https://colab.research.google.com/github/hodgestar/qu
 
 If you are using Google Colab, you'll need to first install QuTiP by running
 the command `!pip install 'qutip[full]'` in a cell by itself.
+
+
+## Installing LaTeX and ImageMagick to view quantum circuit diagrams
+
+### Ubuntu
+
+On Ubuntu, you need to install TeX Live and ImageMagick using:
+
+```
+sudo apt-get install texlive-full imagemagick
+```
+
+You might also need to edit the ImageMagick policy file to give ImageMagick
+permission to convert PDF files:
+
+```
+sudo nano /etc/ImageMagick-6/policy.xml
+```
+
+And change the lines at the end that refer to `domain="coder"` to:
+
+```
+<!--
+  <policy domain="coder" rights="none" pattern="PS" />
+  <policy domain="coder" rights="none" pattern="PS2" />
+  <policy domain="coder" rights="none" pattern="PS3" />
+  <policy domain="coder" rights="none" pattern="EPS" />
+  <policy domain="coder" rights="none" pattern="PDF" />
+  <policy domain="coder" rights="none" pattern="XPS" />
+  -->
+  <policy domain="coder" rights="read|write" pattern="PDF,PS" />
+```
+
+### Windows
+
+On Windows, you need to install MikTeX, Perl, and ImageMagick by downloading
+and running the three Windows installers below:
+
+- MikTex: https://miktex.org/
+- Perl: For Perl: https://strawberryperl.com/
+- ImageMagick: https://imagemagick.org/script/download.php
 
 
 ## Testing your installation
