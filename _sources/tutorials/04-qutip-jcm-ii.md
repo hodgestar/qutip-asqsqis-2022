@@ -41,13 +41,9 @@ import qutip
 import numpy as np
 ```
 
-+++ {"tags": ["hide-cell"]}
-
 ## Helper functions
 
 ```{code-cell} ipython3
-:tags: [hide-cell]
-
 def jcm_h(wc, wa, g, N, atom):
     """ Construct the Jaynes-Cummings Hamiltonian (non-RWA). """
     a = qutip.tensor(qutip.destroy(N), qutip.qeye(2))
@@ -59,8 +55,6 @@ def jcm_h(wc, wa, g, N, atom):
 ```
 
 ```{code-cell} ipython3
-:tags: [hide-cell]
-
 def jcm_rwa_h(wc, wa, g, N, atom):
     """ Construct the Jaynes-Cummings Hamiltonian (RWA). """
     a = qutip.tensor(qutip.destroy(N), qutip.qeye(2))
@@ -69,6 +63,52 @@ def jcm_rwa_h(wc, wa, g, N, atom):
 
     H = wc * a.dag() * a + wa * atom + g * (a.dag() * sm + a * sm.dag())
     return H
+```
+
+## Re-cap of solving without dissipation
+
+Let's re-cap what we did in the previous tutorial and solve the Schrödinger equation for the Jaynes-Cummings Hamiltonian without dissipation.
+
+```{code-cell} ipython3
+# Jaynes-Cummings parameters
+# system parameters
+wc = 1.0 * 2 * np.pi  # cavity frequency
+wa = 1.0 * 2 * np.pi  # atom frequency
+g = 0.05 * 2 * np.pi  # coupling strength
+N = 15  # number of cavity fock states
+
+# Atom hamiltonian
+H_atom = 0.5 * qutip.sigmaz()
+
+H = jcm_h(wc, wa, g, N, H_atom)
+```
+
+```{code-cell} ipython3
+# system operators
+a = qutip.tensor(qutip.destroy(N), qutip.qeye(2))
+sm = qutip.tensor(qutip.qeye(N), qutip.sigmam())
+
+# relaxation operators
+a  # cavity relaxation
+a.dag()  # cavity excitation
+sm = sm # qubit relaxation
+```
+
+```{code-cell} ipython3
+# Operators to determine the expectation values of:
+eop_a = a.dag() * a  # light
+eop_sm = sm.dag() * sm  # matter
+```
+
+```{code-cell} ipython3
+psi0 = qutip.basis([N, 2], [0, 0])  # start with an excited atom
+tlist = np.linspace(0, 50, 101)
+
+result = qutip.sesolve(H, psi0, tlist, e_ops=[eop_a, eop_sm])
+
+plt.plot(tlist, result.expect[0], label="Light")
+plt.plot(tlist, result.expect[1], label="matter")
+plt.legend();
 ```
 
 ## Construct collapse operators
@@ -109,35 +149,6 @@ n_th_a = 5.0  # avg number of thermal bath excitation
 ```{code-cell} ipython3
 :tags: [hide-cell]
 
-# Jaynes-Cummings parameters
-# system parameters
-wc = 1.0 * 2 * np.pi  # cavity frequency
-wa = 1.0 * 2 * np.pi  # atom frequency
-g = 0.05 * 2 * np.pi  # coupling strength
-N = 15  # number of cavity fock states
-
-# Atom hamiltonian
-H_atom = 0.5 * qutip.sigmaz()
-
-H = jcm_h(wc, wa, g, N, H_atom)
-```
-
-```{code-cell} ipython3
-:tags: [hide-cell]
-
-# system operators
-a = qutip.tensor(qutip.destroy(N), qutip.qeye(2))
-sm = qutip.tensor(qutip.qeye(N), qutip.sigmam())
-
-# relaxation operators
-a  # cavity relaxation
-a.dag()  # cavity excitation
-sm = sm # qubit relaxation
-```
-
-```{code-cell} ipython3
-:tags: [hide-cell]
-
 c_ops = []
 
 # cavity relaxation
@@ -163,14 +174,6 @@ if rate > 0.0:
 - Plot the expectation values for the atom and cavity excitations.
 
 - What happens if you extent the evolution time?
-
-```{code-cell} ipython3
-:tags: [hide-cell]
-
-# Operators to determine the expectation values of:
-eop_a = a.dag() * a  # light
-eop_sm = sm.dag() * sm  # matter
-```
 
 ```{code-cell} ipython3
 :tags: [hide-cell]

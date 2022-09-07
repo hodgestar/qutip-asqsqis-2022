@@ -461,6 +461,16 @@ title="Print to PDF"
     </a>
    </li>
    <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#helper-functions">
+     Helper functions
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#re-cap-of-solving-without-dissipation">
+     Re-cap of solving without dissipation
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
     <a class="reference internal nav-link" href="#construct-collapse-operators">
      Construct collapse operators
     </a>
@@ -521,6 +531,16 @@ title="Print to PDF"
    <li class="toc-h2 nav-item toc-entry">
     <a class="reference internal nav-link" href="#imports">
      Imports
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#helper-functions">
+     Helper functions
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#re-cap-of-solving-without-dissipation">
+     Re-cap of solving without dissipation
     </a>
    </li>
    <li class="toc-h2 nav-item toc-entry">
@@ -590,6 +610,98 @@ title="Print to PDF"
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 </pre></div>
 </div>
+</div>
+</div>
+</section>
+<section id="helper-functions">
+<h2>Helper functions<a class="headerlink" href="#helper-functions" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">jcm_h</span><span class="p">(</span><span class="n">wc</span><span class="p">,</span> <span class="n">wa</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">atom</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Construct the Jaynes-Cummings Hamiltonian (non-RWA). &quot;&quot;&quot;</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">qutip</span><span class="o">.</span><span class="n">destroy</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">qutip</span><span class="o">.</span><span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+    <span class="n">sm</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">qutip</span><span class="o">.</span><span class="n">qeye</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">qutip</span><span class="o">.</span><span class="n">sigmam</span><span class="p">())</span>
+    <span class="n">atom</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">qutip</span><span class="o">.</span><span class="n">qeye</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">atom</span><span class="p">)</span>
+    
+    <span class="n">H</span> <span class="o">=</span> <span class="n">wc</span> <span class="o">*</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span> <span class="o">+</span> <span class="n">wa</span> <span class="o">*</span> <span class="n">atom</span> <span class="o">+</span> <span class="n">g</span> <span class="o">*</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">+</span> <span class="n">a</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">sm</span> <span class="o">+</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">())</span>
+    <span class="k">return</span> <span class="n">H</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">jcm_rwa_h</span><span class="p">(</span><span class="n">wc</span><span class="p">,</span> <span class="n">wa</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">atom</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Construct the Jaynes-Cummings Hamiltonian (RWA). &quot;&quot;&quot;</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">qutip</span><span class="o">.</span><span class="n">destroy</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">qutip</span><span class="o">.</span><span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+    <span class="n">sm</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">qutip</span><span class="o">.</span><span class="n">qeye</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">qutip</span><span class="o">.</span><span class="n">sigmam</span><span class="p">())</span>
+    <span class="n">atom</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">qutip</span><span class="o">.</span><span class="n">qeye</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">atom</span><span class="p">)</span>
+
+    <span class="n">H</span> <span class="o">=</span> <span class="n">wc</span> <span class="o">*</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span> <span class="o">+</span> <span class="n">wa</span> <span class="o">*</span> <span class="n">atom</span> <span class="o">+</span> <span class="n">g</span> <span class="o">*</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span> <span class="o">+</span> <span class="n">a</span> <span class="o">*</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">())</span>
+    <span class="k">return</span> <span class="n">H</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="re-cap-of-solving-without-dissipation">
+<h2>Re-cap of solving without dissipation<a class="headerlink" href="#re-cap-of-solving-without-dissipation" title="Permalink to this headline">#</a></h2>
+<p>Let’s re-cap what we did in the previous tutorial and solve the Schrödinger equation for the Jaynes-Cummings Hamiltonian without dissipation.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Jaynes-Cummings parameters</span>
+<span class="c1"># system parameters</span>
+<span class="n">wc</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>  <span class="c1"># cavity frequency</span>
+<span class="n">wa</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>  <span class="c1"># atom frequency</span>
+<span class="n">g</span> <span class="o">=</span> <span class="mf">0.05</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>  <span class="c1"># coupling strength</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">15</span>  <span class="c1"># number of cavity fock states</span>
+
+<span class="c1"># Atom hamiltonian</span>
+<span class="n">H_atom</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">qutip</span><span class="o">.</span><span class="n">sigmaz</span><span class="p">()</span>
+
+<span class="n">H</span> <span class="o">=</span> <span class="n">jcm_h</span><span class="p">(</span><span class="n">wc</span><span class="p">,</span> <span class="n">wa</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">H_atom</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># system operators</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">qutip</span><span class="o">.</span><span class="n">destroy</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">qutip</span><span class="o">.</span><span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+<span class="n">sm</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">qutip</span><span class="o">.</span><span class="n">qeye</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">qutip</span><span class="o">.</span><span class="n">sigmam</span><span class="p">())</span>
+
+<span class="c1"># relaxation operators</span>
+<span class="n">a</span>  <span class="c1"># cavity relaxation</span>
+<span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span>  <span class="c1"># cavity excitation</span>
+<span class="n">sm</span> <span class="o">=</span> <span class="n">sm</span> <span class="c1"># qubit relaxation</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Operators to determine the expectation values of:</span>
+<span class="n">eop_a</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span>  <span class="c1"># light</span>
+<span class="n">eop_sm</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span>  <span class="c1"># matter</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">psi0</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">basis</span><span class="p">([</span><span class="n">N</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>  <span class="c1"># start with an excited atom</span>
+<span class="n">tlist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">101</span><span class="p">)</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">sesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="p">[</span><span class="n">eop_a</span><span class="p">,</span> <span class="n">eop_sm</span><span class="p">])</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tlist</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Light&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tlist</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;matter&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/04-qutip-jcm-ii_13_0.png" src="../_images/04-qutip-jcm-ii_13_0.png" />
 </div>
 </div>
 </section>
