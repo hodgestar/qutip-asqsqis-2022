@@ -146,6 +146,11 @@ const thebe_selector_output = ".output, .cell_output"
    04: Adding dissipation to the Jaynes-Cummings model
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="05-qutip-jcm-iii.html">
+   05: Jaynes-Cummings Ultra-strong Coupling
+  </a>
+ </li>
 </ul>
 <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
@@ -193,6 +198,11 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="../tutorials/04-qutip-jcm-ii.html">
    04: Adding dissipation to the Jaynes-Cummings model
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../tutorials/05-qutip-jcm-iii.html">
+   05: Jaynes-Cummings Ultra-strong Coupling
   </a>
  </li>
 </ul>
@@ -608,6 +618,21 @@ title="Print to PDF"
 <span class="kn">from</span> <span class="nn">qutip_qip.circuit</span> <span class="kn">import</span> <span class="n">QubitCircuit</span>
 <span class="kn">from</span> <span class="nn">qutip_qip.device</span> <span class="kn">import</span> <span class="n">LinearSpinChain</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">re</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">orig_latex_code</span> <span class="o">=</span> <span class="n">QubitCircuit</span><span class="o">.</span><span class="n">latex_code</span>
+
+<span class="k">def</span> <span class="nf">fix_swap</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="n">tex</span> <span class="o">=</span> <span class="n">orig_latex_code</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+    <span class="n">tex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;( </span><span class="se">\\</span><span class="s2">qwx\[)(\d+)(\] )&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;\1-\2\3&quot;</span><span class="p">,</span> <span class="n">tex</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">tex</span>
+
+<span class="n">QubitCircuit</span><span class="o">.</span><span class="n">latex_code</span> <span class="o">=</span> <span class="n">fix_swap</span>
 </pre></div>
 </div>
 </div>

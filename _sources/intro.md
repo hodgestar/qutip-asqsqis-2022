@@ -16,7 +16,7 @@ You can download a zip file with all the tutorials
 
 - [JCM I](./student-tutorials/03-qutip-jcm-i)
 - [JCM II](./student-tutorials/04-qutip-jcm-ii)
-- JCM III
+- [JCM II](./student-tutorials/05-qutip-jcm-iii)
 
 ## Capstone project: Simulating a Neutral Atom Quantum Device
 
@@ -37,5 +37,5 @@ consider these answers canonical -- they are just one possible way to do things.
 - [QIP II](./tutorials/02-qutip-qip-ii)
 - [JCM I](./tutorials/03-qutip-jcm-i)
 - [JCM II](./tutorials/04-qutip-jcm-ii)
-- JCM III
+- [JCM III](./tutorials/05-qutip-jcm-iii)
 ```

@@ -61,6 +61,18 @@ import qutip
 from qutip_qip.circuit import QubitCircuit
 from qutip_qip.device import LinearSpinChain
 import numpy as np
+import re
+```
+
+```{code-cell} ipython3
+orig_latex_code = QubitCircuit.latex_code
+
+def fix_swap(self):
+    tex = orig_latex_code(self)
+    tex = re.sub(r"( \\qwx\[)(\d+)(\] )", r"\1-\2\3", tex)
+    return tex
+
+QubitCircuit.latex_code = fix_swap
 ```
 
 ## Linear spin chain qubits
@@ -186,7 +198,7 @@ The native two qubit gates are `ISWAP` and `SQRTISWAP`. They are performed using
 
 Use `processor.transpile(qc)` to transform the gates into native gates. Whoa! It's complicated. Try to figure out what sequence of gates each of the individual gates was translated too. Use `.transpile` on simpler circuits with just one gate if you get stuck or to check your findings.
 
-What are the strange giant $Ph(\pi /2)$ gates? How are they implemented? 
+What are the strange giant $Ph(\pi /2)$ gates? How are they implemented?
 
 ```{code-cell} ipython3
 :tags: [hide-cell]
