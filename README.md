@@ -10,6 +10,9 @@ Institutions:
 - **[Aberystwyth University](https://www.aber.ac.uk/en/about-us/faculties/business-physical-sciences/)**
 - **[QuTiP](https://qutip.org)**
 
+Tutorials:
+- **[Tutorials](https://hodgestar.github.io/qutip-asqsqis-2022/)**
+
 ## Hello!
 
 If you're attending the African School on Quantum Simulation and Quantum
