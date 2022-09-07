@@ -558,13 +558,26 @@ title="Print to PDF"
 <h1>03: Jaynes-Cummings Model and the Rotating Wave Approximation<a class="headerlink" href="#jaynes-cummings-model-and-the-rotating-wave-approximation" title="Permalink to this headline">#</a></h1>
 <p>In this tutorial we will construct the Jaynes-Cummings Hamiltonian (with and without the RWA) and see how the system evolves under the Schrodinger equation (that is, without dissipation) .
 We will use this to investigate the limits of the RWA in the JCM.</p>
-<p>The Jaynes-Cumming model is the simplest possible model of quantum mechanical light-matter interaction, describing a single two-level atom interacting with a single electromagnetic cavity mode. The Hamiltonian for this system is (in dipole interaction form)</p>
-<p><span class="math notranslate nohighlight">\(H = \hbar \omega_c a^\dagger a + \frac{1}{2}\hbar\omega_a\sigma_z + \hbar g(a^\dagger + a)(\sigma_- + \sigma_+)\)</span></p>
+<p>The Jaynes-Cumming model is the simplest possible model of quantum mechanical light-matter interaction, describing a single two-level atom interacting with a single electromagnetic cavity mode. The full Hamiltonian for the system (in dipole interaction form) is given by</p>
+<div class="math notranslate nohighlight">
+\[H = H_{\rm atom} + H_{\rm cavity} + H_{\rm interact}\]</div>
+<p>The atom Hamiltonian we use in this case is</p>
+<div class="math notranslate nohighlight">
+\[\frac{1}{2} \hbar \omega_{a} \sigma_z\]</div>
+<p>where <span class="math notranslate nohighlight">\(\omega_a\)</span> is the system frequency.</p>
+<p>Note that the Hamiltonian for the atom may take numerous forms. Any Hermitean operator on a two-level state is possible, but it is useful to nomalize the operator so that the difference between its eigenvalues is <span class="math notranslate nohighlight">\(1\)</span> so that <span class="math notranslate nohighlight">\(\omega_a\)</span> has consistent units.</p>
+<p>The cavity Hamiltonian is given by</p>
+<div class="math notranslate nohighlight">
+\[H_{\rm cavity} = \hbar \omega_c a^\dagger a\]</div>
+<p>where <span class="math notranslate nohighlight">\(\omega_c\)</span> is <span class="math notranslate nohighlight">\(\omega_a\)</span> is the frequencies of the cavity and <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(a^\dagger\)</span> are the annihilation and creation operators of the cavity respectively.</p>
+<p>The interaction Hamiltonian is given by</p>
+<div class="math notranslate nohighlight">
+\[H_{\rm interact} = \hbar g(a^\dagger + a)(\sigma_- + \sigma_+)\]</div>
 <p>or with the rotating-wave approximation</p>
-<p><span class="math notranslate nohighlight">\(H_{\rm RWA} = \hbar \omega_c a^\dagger a + \frac{1}{2}\hbar\omega_a\sigma_z + \hbar g(a^\dagger\sigma_- + a\sigma_+)\)</span></p>
-<p>where <span class="math notranslate nohighlight">\(\omega_c\)</span> and <span class="math notranslate nohighlight">\(\omega_a\)</span> are the frequencies of the cavity and atom, respectively, and <span class="math notranslate nohighlight">\(g\)</span> is the interaction strength.</p>
-<p>Note that the Hamiltonian for the atom, <span class="math notranslate nohighlight">\(\frac{1}{2}\hbar\omega_a\sigma_z\)</span>, may take numerous forms. Any Hermitean operator on a two-level state is possible, but it is useful to nomalize the operator so that the difference between its eigenvalues is <span class="math notranslate nohighlight">\(1\)</span> so that <span class="math notranslate nohighlight">\(\omega_a\)</span> has consistent units.</p>
-<p>In this notebook we will use <span class="math notranslate nohighlight">\(\sigma_- \sigma_-^{\dagger}\)</span> to more simply show the oscillations in the occupations of the matter and light states in this tutorial.</p>
+<div class="math notranslate nohighlight">
+\[H_{\rm interact-RWA} = \hbar g(a^\dagger\sigma_- + a\sigma_+)\]</div>
+<p>where <span class="math notranslate nohighlight">\(\sigma_-\)</span> and <span class="math notranslate nohighlight">\(\sigma_+\)</span> are the annihilation and creation operators for the atom respectively.</p>
+<p>Note that in this notebook we will work in units where <span class="math notranslate nohighlight">\(\hbar=1\)</span>.</p>
 <section id="tasks">
 <h2>Tasks<a class="headerlink" href="#tasks" title="Permalink to this headline">#</a></h2>
 <ul class="simple">
@@ -615,7 +628,7 @@ We will use this to investigate the limits of the RWA in the JCM.</p>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">jcm_h</span><span class="p">(</span><span class="n">wc</span><span class="p">,</span> <span class="n">wa</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">atom</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Construct the Jaynes-Cummings Hamiltonian (non-RWA). &quot;&quot;&quot;</span>
     <span class="n">a</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">qutip</span><span class="o">.</span><span class="n">destroy</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">qutip</span><span class="o">.</span><span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
-    <span class="n">sm</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">qutip</span><span class="o">.</span><span class="n">qeye</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">qutip</span><span class="o">.</span><span class="n">destroy</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+    <span class="n">sm</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">qutip</span><span class="o">.</span><span class="n">qeye</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">qutip</span><span class="o">.</span><span class="n">sigmam</span><span class="p">())</span>
     <span class="n">atom</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">qutip</span><span class="o">.</span><span class="n">qeye</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">atom</span><span class="p">)</span>
     
     <span class="n">H</span> <span class="o">=</span> <span class="n">wc</span> <span class="o">*</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span> <span class="o">+</span> <span class="n">wa</span> <span class="o">*</span> <span class="n">atom</span> <span class="o">+</span> <span class="n">g</span> <span class="o">*</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">+</span> <span class="n">a</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">sm</span> <span class="o">+</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">())</span>
@@ -629,7 +642,7 @@ We will use this to investigate the limits of the RWA in the JCM.</p>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">jcm_rwa_h</span><span class="p">(</span><span class="n">wc</span><span class="p">,</span> <span class="n">wa</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">atom</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Construct the Jaynes-Cummings Hamiltonian (RWA). &quot;&quot;&quot;</span>
     <span class="n">a</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">qutip</span><span class="o">.</span><span class="n">destroy</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">qutip</span><span class="o">.</span><span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
-    <span class="n">sm</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">qutip</span><span class="o">.</span><span class="n">qeye</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">qutip</span><span class="o">.</span><span class="n">destroy</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+    <span class="n">sm</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">qutip</span><span class="o">.</span><span class="n">qeye</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">qutip</span><span class="o">.</span><span class="n">sigmam</span><span class="p">())</span>
     <span class="n">atom</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">qutip</span><span class="o">.</span><span class="n">qeye</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">atom</span><span class="p">)</span>
 
     <span class="n">H</span> <span class="o">=</span> <span class="n">wc</span> <span class="o">*</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span> <span class="o">+</span> <span class="n">wa</span> <span class="o">*</span> <span class="n">atom</span> <span class="o">+</span> <span class="n">g</span> <span class="o">*</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span> <span class="o">+</span> <span class="n">a</span> <span class="o">*</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">())</span>
@@ -666,18 +679,21 @@ We will use this to investigate the limits of the RWA in the JCM.</p>
 </div>
 <div class="cell tag_hide-cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># operators</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># operators for the JCM</span>
+<span class="c1"># this is the annihilation operator for the cavity (note it acts trivally on the atom) </span>
 <span class="n">a</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">qutip</span><span class="o">.</span><span class="n">destroy</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">qutip</span><span class="o">.</span><span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
-<span class="n">sm</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">qutip</span><span class="o">.</span><span class="n">qeye</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">qutip</span><span class="o">.</span><span class="n">destroy</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+<span class="c1"># note the creation operator for the cavity is given by a.dag() - that is a &quot;dagger&quot;</span>
+
+<span class="c1"># this is annihilation operator for the atom (note it acts trivally on the cavity)</span>
+<span class="n">sm</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">qutip</span><span class="o">.</span><span class="n">qeye</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">qutip</span><span class="o">.</span><span class="n">sigmam</span><span class="p">())</span>
 </pre></div>
 </div>
 </div>
 </div>
-<div class="cell docutils container">
+<div class="cell tag_hide-cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># hamiltonian of atom</span>
-<span class="c1"># Note: The H_atom below is equivalent to qutip.destroy(2).dag() * qutip.destroy(2)</span>
-<span class="n">H_atom</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">sigmam</span><span class="p">()</span> <span class="o">*</span> <span class="n">qutip</span><span class="o">.</span><span class="n">sigmam</span><span class="p">()</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span>
+<span class="n">H_atom</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">qutip</span><span class="o">.</span><span class="n">sigmaz</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -711,65 +727,65 @@ Eigenstates
 </pre></div>
 </div>
 <div class="output text_latex math notranslate nohighlight">
-\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}1.000\\0.0\\0.0\\-0.025\\8.844\times10^{-04}\\\vdots\\0.0\\0.0\\0.0\\0.0\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\-1.000\\0.025\\0.0\\0.0\\\vdots\\0.0\\0.0\\0.0\\0.0\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
 <div class="output text_latex math notranslate nohighlight">
-\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\0.698\\-0.715\\0.0\\0.0\\\vdots\\0.0\\0.0\\0.0\\0.0\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.698\\0.0\\0.0\\-0.715\\0.025\\\vdots\\0.0\\0.0\\0.0\\0.0\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
 <div class="output text_latex math notranslate nohighlight">
-\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\-0.716\\-0.698\\0.0\\0.0\\\vdots\\0.0\\0.0\\0.0\\0.0\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.716\\0.0\\0.0\\0.698\\-0.025\\\vdots\\0.0\\0.0\\0.0\\0.0\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
 <div class="output text_latex math notranslate nohighlight">
-\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}-0.018\\0.0\\0.0\\-0.694\\0.719\\\vdots\\0.0\\0.0\\0.0\\0.0\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\-0.018\\-0.694\\0.0\\0.0\\\vdots\\0.0\\0.0\\0.0\\0.0\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
 <div class="output text_latex math notranslate nohighlight">
-\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}-0.017\\0.0\\0.0\\-0.719\\-0.694\\\vdots\\0.0\\0.0\\0.0\\0.0\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\0.017\\0.719\\0.0\\0.0\\\vdots\\0.0\\0.0\\0.0\\0.0\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
 <div class="output text_latex math notranslate nohighlight">
-\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\-6.687\times10^{-04}\\-0.026\\0.0\\0.0\\\vdots\\0.0\\0.0\\0.0\\0.0\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}6.687\times10^{-04}\\0.0\\0.0\\0.026\\0.691\\\vdots\\0.0\\0.0\\0.0\\0.0\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
 <div class="output text_latex math notranslate nohighlight">
-\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\-5.872\times10^{-04}\\-0.024\\0.0\\0.0\\\vdots\\0.0\\0.0\\0.0\\0.0\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}5.872\times10^{-04}\\0.0\\0.0\\0.024\\0.722\\\vdots\\0.0\\0.0\\0.0\\0.0\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
 <div class="output text_latex math notranslate nohighlight">
-\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}-1.502\times10^{-05}\\0.0\\0.0\\-0.001\\-0.031\\\vdots\\0.0\\0.0\\0.0\\0.0\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\-1.502\times10^{-05}\\-0.001\\0.0\\0.0\\\vdots\\0.0\\0.0\\0.0\\0.0\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
 <div class="output text_latex math notranslate nohighlight">
-\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}-1.230\times10^{-05}\\0.0\\0.0\\-0.001\\-0.030\\\vdots\\0.0\\0.0\\0.0\\0.0\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\1.230\times10^{-05}\\0.001\\0.0\\0.0\\\vdots\\1.015\times10^{-12}\\0.0\\0.0\\0.0\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
 <div class="output text_latex math notranslate nohighlight">
-\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\-3.916\times10^{-07}\\-3.044\times10^{-05}\\0.0\\0.0\\\vdots\\-4.997\times10^{-11}\\1.111\times10^{-12}\\0.0\\0.0\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}3.916\times10^{-07}\\0.0\\0.0\\3.044\times10^{-05}\\0.002\\\vdots\\0.0\\0.0\\-1.111\times10^{-12}\\0.0\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
 <div class="output text_latex math notranslate nohighlight">
-\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\-2.960\times10^{-07}\\-2.434\times10^{-05}\\0.0\\0.0\\\vdots\\7.327\times10^{-11}\\-1.675\times10^{-12}\\0.0\\0.0\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}2.960\times10^{-07}\\0.0\\0.0\\2.434\times10^{-05}\\0.001\\\vdots\\0.0\\0.0\\1.675\times10^{-12}\\0.0\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
 <div class="output text_latex math notranslate nohighlight">
-\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}-7.562\times10^{-09}\\0.0\\0.0\\-8.888\times10^{-07}\\-4.872\times10^{-05}\\\vdots\\0.0\\0.0\\-7.235\times10^{-11}\\1.666\times10^{-12}\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\7.562\times10^{-09}\\8.888\times10^{-07}\\0.0\\0.0\\\vdots\\-3.258\times10^{-09}\\7.235\times10^{-11}\\0.0\\0.0\\-1.666\times10^{-12}\\\end{array}\right)\end{equation*}\end{split}\]</div>
 <div class="output text_latex math notranslate nohighlight">
-\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}5.343\times10^{-09}\\0.0\\0.0\\6.541\times10^{-07}\\3.812\times10^{-05}\\\vdots\\0.0\\0.0\\-1.100\times10^{-10}\\2.613\times10^{-12}\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\-5.343\times10^{-09}\\-6.541\times10^{-07}\\0.0\\0.0\\\vdots\\-4.807\times10^{-09}\\1.100\times10^{-10}\\0.0\\0.0\\-2.613\times10^{-12}\\\end{array}\right)\end{equation*}\end{split}\]</div>
 <div class="output text_latex math notranslate nohighlight">
-\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\1.603\times10^{-10}\\1.881\times10^{-08}\\0.0\\0.0\\\vdots\\1.489\times10^{-07}\\-4.379\times10^{-09}\\0.0\\0.0\\1.007\times10^{-10}\\\end{array}\right)\end{equation*}\end{split}\]</div>
+\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}1.603\times10^{-10}\\0.0\\0.0\\1.881\times10^{-08}\\1.561\times10^{-06}\\\vdots\\0.0\\0.0\\-4.379\times10^{-09}\\1.007\times10^{-10}\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
 <div class="output text_latex math notranslate nohighlight">
-\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\-1.054\times10^{-10}\\-1.293\times10^{-08}\\0.0\\0.0\\\vdots\\2.168\times10^{-07}\\-6.665\times10^{-09}\\0.0\\0.0\\1.585\times10^{-10}\\\end{array}\right)\end{equation*}\end{split}\]</div>
+\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}-1.054\times10^{-10}\\0.0\\0.0\\-1.293\times10^{-08}\\-1.121\times10^{-06}\\\vdots\\0.0\\0.0\\-6.665\times10^{-09}\\1.585\times10^{-10}\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
 <div class="output text_latex math notranslate nohighlight">
-\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}-2.744\times10^{-12}\\0.0\\0.0\\-4.312\times10^{-10}\\-3.572\times10^{-08}\\\vdots\\0.0\\0.0\\-1.876\times10^{-07}\\5.715\times10^{-09}\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\-2.744\times10^{-12}\\-4.312\times10^{-10}\\0.0\\0.0\\\vdots\\6.387\times10^{-06}\\-1.876\times10^{-07}\\0.0\\0.0\\5.715\times10^{-09}\\\end{array}\right)\end{equation*}\end{split}\]</div>
 <div class="output text_latex math notranslate nohighlight">
-\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}1.692\times10^{-12}\\0.0\\0.0\\2.754\times10^{-10}\\2.391\times10^{-08}\\\vdots\\0.0\\0.0\\-2.805\times10^{-07}\\8.954\times10^{-09}\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\1.692\times10^{-12}\\2.754\times10^{-10}\\0.0\\0.0\\\vdots\\9.109\times10^{-06}\\-2.805\times10^{-07}\\0.0\\0.0\\8.954\times10^{-09}\\\end{array}\right)\end{equation*}\end{split}\]</div>
 <div class="output text_latex math notranslate nohighlight">
-\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\0.0\\-7.889\times10^{-12}\\0.0\\0.0\\\vdots\\-1.749\times10^{-04}\\7.605\times10^{-06}\\0.0\\0.0\\-2.313\times10^{-07}\\\end{array}\right)\end{equation*}\end{split}\]</div>
+\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\0.0\\0.0\\7.889\times10^{-12}\\8.757\times10^{-10}\\\vdots\\0.0\\0.0\\-7.605\times10^{-06}\\2.313\times10^{-07}\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
 <div class="output text_latex math notranslate nohighlight">
-\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\0.0\\4.723\times10^{-12}\\0.0\\0.0\\\vdots\\-2.364\times10^{-04}\\1.108\times10^{-05}\\0.0\\0.0\\-3.543\times10^{-07}\\\end{array}\right)\end{equation*}\end{split}\]</div>
+\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\0.0\\0.0\\-4.723\times10^{-12}\\-5.443\times10^{-10}\\\vdots\\0.0\\0.0\\-1.108\times10^{-05}\\3.543\times10^{-07}\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
 <div class="output text_latex math notranslate nohighlight">
-\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\0.0\\0.0\\0.0\\-1.700\times10^{-11}\\\vdots\\0.0\\0.0\\-1.980\times10^{-04}\\8.907\times10^{-06}\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\0.0\\0.0\\0.0\\0.0\\\vdots\\-0.005\\1.980\times10^{-04}\\0.0\\0.0\\-8.907\times10^{-06}\\\end{array}\right)\end{equation*}\end{split}\]</div>
 <div class="output text_latex math notranslate nohighlight">
-\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\0.0\\0.0\\0.0\\9.899\times10^{-12}\\\vdots\\0.0\\0.0\\-2.722\times10^{-04}\\1.325\times10^{-05}\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\0.0\\0.0\\0.0\\0.0\\\vdots\\0.006\\-2.722\times10^{-04}\\0.0\\0.0\\1.325\times10^{-05}\\\end{array}\right)\end{equation*}\end{split}\]</div>
 <div class="output text_latex math notranslate nohighlight">
-\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\0.0\\0.0\\0.0\\0.0\\\vdots\\0.059\\-0.005\\0.0\\0.0\\2.214\times10^{-04}\\\end{array}\right)\end{equation*}\end{split}\]</div>
+\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\0.0\\0.0\\0.0\\0.0\\\vdots\\0.0\\0.0\\0.005\\-2.214\times10^{-04}\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
 <div class="output text_latex math notranslate nohighlight">
-\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\0.0\\0.0\\0.0\\0.0\\\vdots\\0.064\\-0.006\\0.0\\0.0\\3.091\times10^{-04}\\\end{array}\right)\end{equation*}\end{split}\]</div>
+\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\0.0\\0.0\\0.0\\0.0\\\vdots\\0.0\\0.0\\-0.006\\3.091\times10^{-04}\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
 <div class="output text_latex math notranslate nohighlight">
-\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\0.0\\0.0\\0.0\\0.0\\\vdots\\0.0\\0.0\\0.061\\-0.005\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\0.0\\0.0\\0.0\\0.0\\\vdots\\-0.734\\0.061\\0.0\\0.0\\-0.005\\\end{array}\right)\end{equation*}\end{split}\]</div>
 <div class="output text_latex math notranslate nohighlight">
-\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\0.0\\0.0\\0.0\\0.0\\\vdots\\0.0\\0.0\\-0.067\\0.007\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\0.0\\0.0\\0.0\\0.0\\\vdots\\-0.673\\0.067\\0.0\\0.0\\-0.007\\\end{array}\right)\end{equation*}\end{split}\]</div>
 <div class="output text_latex math notranslate nohighlight">
-\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\0.0\\0.0\\0.0\\0.0\\\vdots\\0.672\\-0.735\\0.0\\0.0\\0.063\\\end{array}\right)\end{equation*}\end{split}\]</div>
+\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\0.0\\0.0\\0.0\\0.0\\\vdots\\0.0\\0.0\\-0.735\\0.063\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
 <div class="output text_latex math notranslate nohighlight">
-\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\0.0\\0.0\\0.0\\0.0\\\vdots\\-0.736\\-0.671\\0.0\\0.0\\0.069\\\end{array}\right)\end{equation*}\end{split}\]</div>
+\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\0.0\\0.0\\0.0\\0.0\\\vdots\\0.0\\0.0\\-0.671\\0.069\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
 <div class="output text_latex math notranslate nohighlight">
-\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\0.0\\0.0\\0.0\\0.0\\\vdots\\0.0\\0.0\\-0.688\\0.722\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\0.0\\0.0\\0.0\\0.0\\\vdots\\-0.069\\-0.688\\0.0\\0.0\\0.722\\\end{array}\right)\end{equation*}\end{split}\]</div>
 <div class="output text_latex math notranslate nohighlight">
-\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\0.0\\0.0\\0.0\\0.0\\\vdots\\0.0\\0.0\\0.720\\0.692\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\0.0\\0.0\\0.0\\0.0\\\vdots\\-0.059\\-0.720\\0.0\\0.0\\-0.692\\\end{array}\right)\end{equation*}\end{split}\]</div>
 <div class="output text_latex math notranslate nohighlight">
-\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\0.0\\0.0\\0.0\\0.0\\\vdots\\-0.008\\-0.093\\0.0\\0.0\\-0.996\\\end{array}\right)\end{equation*}\end{split}\]</div>
+\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\0.0\\0.0\\0.0\\0.0\\\vdots\\0.0\\0.0\\-0.093\\-0.996\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
 </div>
 </div>
 </section>
@@ -783,14 +799,14 @@ Eigenstates
 <div class="cell tag_hide-cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># initial state</span>
-<span class="n">psi0</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">basis</span><span class="p">([</span><span class="n">N</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>  <span class="c1"># start with an excited atom</span>
+<span class="n">psi0</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">basis</span><span class="p">([</span><span class="n">N</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>  <span class="c1"># start with an excited atom</span>
 <span class="n">psi0</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
 <div class="output text_latex math notranslate nohighlight">
-\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\1.0\\0.0\\0.0\\0.0\\\vdots\\0.0\\0.0\\0.0\\0.0\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+\[\begin{split}Quantum object: dims = [[15, 2], [1, 1]], shape = (30, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}1.0\\0.0\\0.0\\0.0\\0.0\\\vdots\\0.0\\0.0\\0.0\\0.0\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
 </div>
 </div>
 <div class="cell tag_hide-cell docutils container">

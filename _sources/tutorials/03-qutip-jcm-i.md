@@ -21,19 +21,35 @@ We will use this to investigate the limits of the RWA in the JCM.
 
 +++
 
-The Jaynes-Cumming model is the simplest possible model of quantum mechanical light-matter interaction, describing a single two-level atom interacting with a single electromagnetic cavity mode. The Hamiltonian for this system is (in dipole interaction form)
+The Jaynes-Cumming model is the simplest possible model of quantum mechanical light-matter interaction, describing a single two-level atom interacting with a single electromagnetic cavity mode. The full Hamiltonian for the system (in dipole interaction form) is given by
 
-$H = \hbar \omega_c a^\dagger a + \frac{1}{2}\hbar\omega_a\sigma_z + \hbar g(a^\dagger + a)(\sigma_- + \sigma_+)$
+$$H = H_{\rm atom} + H_{\rm cavity} + H_{\rm interact}$$
+
+The atom Hamiltonian we use in this case is
+
+$$\frac{1}{2} \hbar \omega_{a} \sigma_z$$
+
+where $\omega_a$ is the system frequency.
+
+Note that the Hamiltonian for the atom may take numerous forms. Any Hermitean operator on a two-level state is possible, but it is useful to nomalize the operator so that the difference between its eigenvalues is $1$ so that $\omega_a$ has consistent units.
+
+The cavity Hamiltonian is given by
+
+$$H_{\rm cavity} = \hbar \omega_c a^\dagger a$$
+
+where $\omega_c$ is $\omega_a$ is the frequencies of the cavity and $a$ and $a^\dagger$ are the annihilation and creation operators of the cavity respectively.
+
+The interaction Hamiltonian is given by
+
+$$H_{\rm interact} = \hbar g(a^\dagger + a)(\sigma_- + \sigma_+)$$
 
 or with the rotating-wave approximation
 
-$H_{\rm RWA} = \hbar \omega_c a^\dagger a + \frac{1}{2}\hbar\omega_a\sigma_z + \hbar g(a^\dagger\sigma_- + a\sigma_+)$
+$$H_{\rm interact-RWA} = \hbar g(a^\dagger\sigma_- + a\sigma_+)$$
 
-where $\omega_c$ and $\omega_a$ are the frequencies of the cavity and atom, respectively, and $g$ is the interaction strength.
+where $\sigma_-$ and $\sigma_+$ are the annihilation and creation operators for the atom respectively.
 
-Note that the Hamiltonian for the atom, $\frac{1}{2}\hbar\omega_a\sigma_z$, may take numerous forms. Any Hermitean operator on a two-level state is possible, but it is useful to nomalize the operator so that the difference between its eigenvalues is $1$ so that $\omega_a$ has consistent units.
-
-In this notebook we will use $\sigma_- \sigma_-^{\dagger}$ to more simply show the oscillations in the occupations of the matter and light states in this tutorial.
+Note that in this notebook we will work in units where $\hbar=1$.
 
 +++
 
@@ -82,7 +98,7 @@ def display_eigenstates(op):
 def jcm_h(wc, wa, g, N, atom):
     """ Construct the Jaynes-Cummings Hamiltonian (non-RWA). """
     a = qutip.tensor(qutip.destroy(N), qutip.qeye(2))
-    sm = qutip.tensor(qutip.qeye(N), qutip.destroy(2))
+    sm = qutip.tensor(qutip.qeye(N), qutip.sigmam())
     atom = qutip.tensor(qutip.qeye(N), atom)
     
     H = wc * a.dag() * a + wa * atom + g * (a.dag() + a) * (sm + sm.dag())
@@ -95,7 +111,7 @@ def jcm_h(wc, wa, g, N, atom):
 def jcm_rwa_h(wc, wa, g, N, atom):
     """ Construct the Jaynes-Cummings Hamiltonian (RWA). """
     a = qutip.tensor(qutip.destroy(N), qutip.qeye(2))
-    sm = qutip.tensor(qutip.qeye(N), qutip.destroy(2))
+    sm = qutip.tensor(qutip.qeye(N), qutip.sigmam())
     atom = qutip.tensor(qutip.qeye(N), atom)
 
     H = wc * a.dag() * a + wa * atom + g * (a.dag() * sm + a * sm.dag())
@@ -130,15 +146,20 @@ N = 15  # number of cavity fock states
 ```{code-cell} ipython3
 :tags: [hide-cell]
 
-# operators
+# operators for the JCM
+# this is the annihilation operator for the cavity (note it acts trivally on the atom) 
 a = qutip.tensor(qutip.destroy(N), qutip.qeye(2))
-sm = qutip.tensor(qutip.qeye(N), qutip.destroy(2))
+# note the creation operator for the cavity is given by a.dag() - that is a "dagger"
+
+# this is annihilation operator for the atom (note it acts trivally on the cavity)
+sm = qutip.tensor(qutip.qeye(N), qutip.sigmam())
 ```
 
 ```{code-cell} ipython3
+:tags: [hide-cell]
+
 # hamiltonian of atom
-# Note: The H_atom below is equivalent to qutip.destroy(2).dag() * qutip.destroy(2)
-H_atom = qutip.sigmam() * qutip.sigmam().dag()
+H_atom = 0.5 * qutip.sigmaz()
 ```
 
 ```{code-cell} ipython3
@@ -165,7 +186,7 @@ If you need to remind yourself of how sesolve, remember that you can type `qutip
 :tags: [hide-cell]
 
 # initial state
-psi0 = qutip.basis([N, 2], [0, 1])  # start with an excited atom
+psi0 = qutip.basis([N, 2], [0, 0])  # start with an excited atom
 psi0
 ```
 

@@ -18,8 +18,6 @@ kernelspec:
 
 In this tutorial we will add interactions with the environment to the Jaynes-Cummings model in the form of dissipation from the atom and the cavity. We will use the Wigner function to visualise the modes of the cavity certain times in the evolution to see how these evolve over time.
 
-As in the previous tutorial we will use $\sigma_- \sigma_-^{\dagger}$ to more simply show the oscillations in the matter and light states.
-
 +++
 
 ## Tasks
@@ -53,7 +51,7 @@ import numpy as np
 def jcm_h(wc, wa, g, N, atom):
     """ Construct the Jaynes-Cummings Hamiltonian (non-RWA). """
     a = qutip.tensor(qutip.destroy(N), qutip.qeye(2))
-    sm = qutip.tensor(qutip.qeye(N), qutip.destroy(2))
+    sm = qutip.tensor(qutip.qeye(N), qutip.sigmam())
     atom = qutip.tensor(qutip.qeye(N), atom)
     
     H = wc * a.dag() * a + wa * atom + g * (a.dag() + a) * (sm + sm.dag())
@@ -66,7 +64,7 @@ def jcm_h(wc, wa, g, N, atom):
 def jcm_rwa_h(wc, wa, g, N, atom):
     """ Construct the Jaynes-Cummings Hamiltonian (RWA). """
     a = qutip.tensor(qutip.destroy(N), qutip.qeye(2))
-    sm = qutip.tensor(qutip.qeye(N), qutip.destroy(2))
+    sm = qutip.tensor(qutip.qeye(N), qutip.sigmam())
     atom = qutip.tensor(qutip.qeye(N), atom)
 
     H = wc * a.dag() * a + wa * atom + g * (a.dag() * sm + a * sm.dag())
@@ -119,7 +117,7 @@ g = 0.05 * 2 * np.pi  # coupling strength
 N = 15  # number of cavity fock states
 
 # Atom hamiltonian
-H_atom = qutip.sigmam() * qutip.sigmam().dag()
+H_atom = 0.5 * qutip.sigmaz()
 
 H = jcm_h(wc, wa, g, N, H_atom)
 ```
@@ -129,7 +127,7 @@ H = jcm_h(wc, wa, g, N, H_atom)
 
 # system operators
 a = qutip.tensor(qutip.destroy(N), qutip.qeye(2))
-sm = qutip.tensor(qutip.qeye(N), qutip.destroy(2))
+sm = qutip.tensor(qutip.qeye(N), qutip.sigmam())
 
 # relaxation operators
 a  # cavity relaxation
@@ -177,7 +175,7 @@ eop_sm = sm.dag() * sm  # matter
 ```{code-cell} ipython3
 :tags: [hide-cell]
 
-psi0 = qutip.basis([N, 2], [0, 1])  # start with an excited atom
+psi0 = qutip.basis([N, 2], [0, 0])  # start with an excited atom
 tlist = np.linspace(0, 50, 101)
 
 result = qutip.mesolve(H, psi0, tlist, c_ops, [eop_a, eop_sm])
@@ -200,7 +198,7 @@ plt.legend();
 
 # Find the times of the minima and maxima:
 
-psi0 = qutip.basis([N, 2], [0, 1])  # start with an excited atom
+psi0 = qutip.basis([N, 2], [0, 0])  # start with an excited atom
 tlist = np.linspace(0, 25, 101)
 
 result = qutip.mesolve(H, psi0, tlist, c_ops, e_ops=[eop_a, eop_sm])

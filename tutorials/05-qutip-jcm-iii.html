@@ -473,6 +473,13 @@ title="Print to PDF"
   <a class="reference internal nav-link" href="#xxx">
    XXX
   </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#explain-the-expectation-values-here">
+     Explain the expectation values here!
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
@@ -521,6 +528,13 @@ title="Print to PDF"
   <a class="reference internal nav-link" href="#xxx">
    XXX
   </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#explain-the-expectation-values-here">
+     Explain the expectation values here!
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
@@ -535,7 +549,6 @@ title="Print to PDF"
   <section class="tex2jax_ignore mathjax_ignore" id="jaynes-cummings-ultra-strong-coupling">
 <h1>05: Jaynes-Cummings Ultra-strong Coupling<a class="headerlink" href="#jaynes-cummings-ultra-strong-coupling" title="Permalink to this headline">#</a></h1>
 <p>XXX Description</p>
-<p>In this notebook we will use <span class="math notranslate nohighlight">\(\frac{1}{2} \sigma_z\)</span> as the Hamiltonian of the atomic state, in order to emphasise the rise and decay of the system occupancy without the distraction of atom-cavity oscillations.</p>
 <section id="tasks">
 <h2>Tasks<a class="headerlink" href="#tasks" title="Permalink to this headline">#</a></h2>
 <ul class="simple">
@@ -577,6 +590,21 @@ title="Print to PDF"
 </div>
 </div>
 </div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">display_eigenstates</span><span class="p">(</span><span class="n">op</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Display the eigenvalues and eigenstates of an operator. &quot;&quot;&quot;</span>
+    <span class="n">evals</span><span class="p">,</span> <span class="n">evecs</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">eigenstates</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Eigenvalues:&quot;</span><span class="p">,</span> <span class="n">evals</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Eigenstates&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;===========&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">evecs</span><span class="p">:</span>
+        <span class="n">display</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
 </section>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="xxx">
@@ -584,9 +612,10 @@ title="Print to PDF"
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Dissipation parameters</span>
-<span class="n">kappa</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="c1"># 0.005  # cavity dissipation rate</span>
-<span class="n">gamma</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="c1"># 0.05  # atom dissipation rate</span>
-<span class="n">n_th_a</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># 5.0  # avg number of thermal bath excitation</span>
+<span class="c1"># We use stronger dissipation to show long-term behaviour in shorter times</span>
+<span class="n">kappa</span> <span class="o">=</span> <span class="mf">0.2</span> <span class="c1"># cavity dissipation rate</span>
+<span class="n">gamma</span> <span class="o">=</span> <span class="mf">0.2</span> <span class="c1"># atom dissipation rate</span>
+<span class="n">n_th_a</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># avg number of thermal bath excitation</span>
 </pre></div>
 </div>
 </div>
@@ -598,7 +627,7 @@ title="Print to PDF"
 <span class="n">wa</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="c1">#* 2 * np.pi  # atom frequency</span>
 <span class="n">N</span> <span class="o">=</span> <span class="mi">8</span>  <span class="c1"># 15 # number of cavity fock states</span>
 <span class="c1"># g = 0.05 * 2 * np.pi  # coupling strength</span>
-<span class="n">g_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+<span class="n">g</span> <span class="o">=</span> <span class="mf">0.1</span>
 
 <span class="c1"># Atom hamiltonian</span>
 <span class="n">H_atom</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">qutip</span><span class="o">.</span><span class="n">sigmaz</span><span class="p">()</span>
@@ -637,24 +666,47 @@ title="Print to PDF"
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">jcm_mesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">kappa</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">n_th_a</span><span class="p">,</span> <span class="n">e_ops</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Solve the given Jaynes-Cummngs module using the Master Equation solver. &quot;&quot;&quot;</span>
-    <span class="n">options</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">Options</span><span class="p">(</span><span class="n">nsteps</span><span class="o">=</span><span class="mi">15000</span><span class="p">,</span> <span class="n">store_states</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">)</span>
-
-    <span class="n">c_ops</span> <span class="o">=</span> <span class="n">jcm_c_ops</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">n_th_a</span><span class="p">)</span>
-
-    <span class="n">result</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">mesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">c_ops</span><span class="o">=</span><span class="n">c_ops</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="n">e_ops</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">result</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">matrix_element</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Return &lt;a|x|b&gt;. &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">a</span> <span class="o">*</span> <span class="n">x</span> <span class="o">*</span> <span class="n">b</span><span class="p">)</span><span class="o">.</span><span class="n">norm</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">jcm_brmesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">kappa</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">e_ops</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Solve the given Jaynes-Cummings model use the Bloch-Redfield solver. &quot;&quot;&quot;</span>
-    <span class="n">options</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">Options</span><span class="p">(</span><span class="n">nsteps</span><span class="o">=</span><span class="mi">15000</span><span class="p">,</span> <span class="n">store_states</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">jcm_c_ops_from_eigenstates</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">n_th_a</span><span class="p">,</span> <span class="n">n_levels</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Return full JCM collapse operators. &quot;&quot;&quot;</span>
+    <span class="n">sx</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">qutip</span><span class="o">.</span><span class="n">qeye</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">qutip</span><span class="o">.</span><span class="n">sigmax</span><span class="p">())</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">qutip</span><span class="o">.</span><span class="n">destroy</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">qutip</span><span class="o">.</span><span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span>
 
+    <span class="n">energies</span><span class="p">,</span> <span class="n">eigenstates</span> <span class="o">=</span> <span class="n">H</span><span class="o">.</span><span class="n">eigenstates</span><span class="p">()</span>
+    <span class="n">n_energies</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">energies</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">n_levels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">n_energies</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">n_energies</span><span class="p">,</span> <span class="n">n_levels</span><span class="p">)</span>
+
+    <span class="n">c_ops</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_energies</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">n_energies</span><span class="p">):</span>
+            <span class="n">rate</span> <span class="o">=</span> <span class="n">matrix_element</span><span class="p">(</span><span class="n">eigenstates</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">dag</span><span class="p">(),</span> <span class="n">x</span><span class="p">,</span> <span class="n">eigenstates</span><span class="p">[</span><span class="n">k</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">kappa</span>
+            <span class="k">if</span> <span class="n">rate</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">:</span>
+                <span class="n">c_ops</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">rate</span><span class="p">)</span> <span class="o">*</span> <span class="n">eigenstates</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">eigenstates</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">dag</span><span class="p">())</span>
+
+            <span class="n">rate</span> <span class="o">=</span> <span class="n">matrix_element</span><span class="p">(</span><span class="n">eigenstates</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">dag</span><span class="p">(),</span> <span class="n">sx</span><span class="p">,</span> <span class="n">eigenstates</span><span class="p">[</span><span class="n">k</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">gamma</span>
+            <span class="k">if</span> <span class="n">rate</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">:</span>
+                <span class="n">c_ops</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">rate</span><span class="p">)</span> <span class="o">*</span> <span class="n">eigenstates</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">eigenstates</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">dag</span><span class="p">())</span>
+
+    <span class="k">return</span> <span class="n">c_ops</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">jcm_brmesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">kappa</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">e_ops</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Solve the given Jaynes-Cummings model use the Bloch-Redfield solver. &quot;&quot;&quot;</span>
     <span class="n">sx</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">qutip</span><span class="o">.</span><span class="n">qeye</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">qutip</span><span class="o">.</span><span class="n">sigmax</span><span class="p">())</span>
     <span class="n">a</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">qutip</span><span class="o">.</span><span class="n">destroy</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">qutip</span><span class="o">.</span><span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span>
@@ -675,32 +727,138 @@ title="Print to PDF"
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">g</span> <span class="o">=</span> <span class="mf">0.01</span>  <span class="c1"># g_values[0]</span>
+<span class="n">H</span> <span class="o">=</span> <span class="n">jcm_h</span><span class="p">(</span><span class="n">wc</span><span class="p">,</span> <span class="n">wa</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">H_atom</span><span class="p">)</span>
 
-<span class="n">tlist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span>
+<span class="n">display_eigenstates</span><span class="p">(</span><span class="n">H</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Eigenvalues: [-0.50005     0.48995012  0.50994987  1.48580821  1.51409178  2.48263013
+  2.51726985  3.47995099  3.51994899  4.47759071  4.52230927  5.47545696
+  5.52444308  6.47369407  6.52660598  7.50034999]
+
+Eigenstates
+===========
+</pre></div>
+</div>
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[8, 2], [1, 1]], shape = (16, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\-1.000\\0.005\\0.0\\0.0\\\vdots\\0.0\\0.0\\0.0\\0.0\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[8, 2], [1, 1]], shape = (16, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.705\\0.0\\0.0\\-0.709\\0.005\\\vdots\\-1.195\times10^{-09}\\4.872\times10^{-12}\\0.0\\0.0\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[8, 2], [1, 1]], shape = (16, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.709\\0.0\\0.0\\0.705\\-0.005\\\vdots\\1.226\times10^{-09}\\-5.012\times10^{-12}\\0.0\\0.0\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[8, 2], [1, 1]], shape = (16, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\-0.004\\-0.705\\0.0\\0.0\\\vdots\\0.0\\0.0\\2.060\times10^{-09}\\-9.062\times10^{-12}\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[8, 2], [1, 1]], shape = (16, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\-0.004\\-0.710\\0.0\\0.0\\\vdots\\0.0\\0.0\\-2.134\times10^{-09}\\9.432\times10^{-12}\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[8, 2], [1, 1]], shape = (16, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}2.533\times10^{-05}\\0.0\\0.0\\0.005\\0.704\\\vdots\\-7.805\times10^{-05}\\4.759\times10^{-07}\\0.0\\0.0\\-3.134\times10^{-09}\\\end{array}\right)\end{equation*}\end{split}\]</div>
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[8, 2], [1, 1]], shape = (16, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}2.468\times10^{-05}\\0.0\\0.0\\0.005\\0.710\\\vdots\\8.010\times10^{-05}\\-4.927\times10^{-07}\\0.0\\0.0\\3.273\times10^{-09}\\\end{array}\right)\end{equation*}\end{split}\]</div>
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[8, 2], [1, 1]], shape = (16, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\1.105\times10^{-07}\\4.396\times10^{-05}\\0.0\\0.0\\\vdots\\0.0\\0.0\\-9.540\times10^{-05}\\6.279\times10^{-07}\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[8, 2], [1, 1]], shape = (16, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\-1.061\times10^{-07}\\-4.266\times10^{-05}\\0.0\\0.0\\\vdots\\0.0\\0.0\\-9.831\times10^{-05}\\6.535\times10^{-07}\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[8, 2], [1, 1]], shape = (16, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}5.568\times10^{-10}\\0.0\\0.0\\2.215\times10^{-07}\\6.229\times10^{-05}\\\vdots\\-0.711\\0.009\\0.0\\0.0\\-1.127\times10^{-04}\\\end{array}\right)\end{equation*}\end{split}\]</div>
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[8, 2], [1, 1]], shape = (16, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}5.265\times10^{-10}\\0.0\\0.0\\2.118\times10^{-07}\\6.023\times10^{-05}\\\vdots\\0.703\\-0.009\\0.0\\0.0\\1.165\times10^{-04}\\\end{array}\right)\end{equation*}\end{split}\]</div>
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[8, 2], [1, 1]], shape = (16, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\2.089\times10^{-12}\\1.248\times10^{-09}\\0.0\\0.0\\\vdots\\0.0\\0.0\\-0.711\\0.009\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[8, 2], [1, 1]], shape = (16, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\-1.949\times10^{-12}\\-1.174\times10^{-09}\\0.0\\0.0\\\vdots\\0.0\\0.0\\-0.703\\0.009\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[8, 2], [1, 1]], shape = (16, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\0.0\\0.0\\-5.150\times10^{-12}\\-2.175\times10^{-09}\\\vdots\\-0.009\\-0.705\\0.0\\0.0\\0.709\\\end{array}\right)\end{equation*}\end{split}\]</div>
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[8, 2], [1, 1]], shape = (16, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\0.0\\0.0\\4.742\times10^{-12}\\2.021\times10^{-09}\\\vdots\\0.009\\0.709\\0.0\\0.0\\0.705\\\end{array}\right)\end{equation*}\end{split}\]</div>
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[8, 2], [1, 1]], shape = (16, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\0.0\\0.0\\0.0\\0.0\\\vdots\\0.0\\0.0\\-0.013\\-1.000\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">g</span> <span class="o">=</span> <span class="mf">0.5</span>
 
 <span class="n">H</span> <span class="o">=</span> <span class="n">jcm_h</span><span class="p">(</span><span class="n">wc</span><span class="p">,</span> <span class="n">wa</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">H_atom</span><span class="p">)</span>
 
+<span class="n">tlist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span>
+
 <span class="n">gnd_energy</span><span class="p">,</span> <span class="n">gnd_state</span> <span class="o">=</span> <span class="n">H</span><span class="o">.</span><span class="n">groundstate</span><span class="p">()</span>
 <span class="n">psi0</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">qutip</span><span class="o">.</span><span class="n">basis</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">qutip</span><span class="o">.</span><span class="n">basis</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+<span class="c1"># psi0 = qutip.tensor(qutip.basis(N, 0), qutip.basis(2, 1))</span>
+<span class="c1"># psi0 = gnd_state</span>
 
 <span class="n">sm</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">qutip</span><span class="o">.</span><span class="n">qeye</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">qutip</span><span class="o">.</span><span class="n">sigmam</span><span class="p">())</span>
 <span class="n">a</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">qutip</span><span class="o">.</span><span class="n">destroy</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">qutip</span><span class="o">.</span><span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
 <span class="n">e_ops</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span><span class="p">]</span>
 
-<span class="n">result_br</span> <span class="o">=</span> <span class="n">jcm_brmesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">kappa</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="n">e_ops</span><span class="p">)</span>
-<span class="n">result_me</span> <span class="o">=</span> <span class="n">jcm_mesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">kappa</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">n_th_a</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="n">e_ops</span><span class="p">)</span>
+<span class="n">c_ops_simple</span> <span class="o">=</span> <span class="n">jcm_c_ops</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">n_th_a</span><span class="p">)</span>
+<span class="n">c_ops_better</span> <span class="o">=</span> <span class="n">jcm_c_ops_from_eigenstates</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">n_th_a</span><span class="p">)</span>
+<span class="n">c_ops_better_fewer</span> <span class="o">=</span> <span class="n">jcm_c_ops_from_eigenstates</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">n_th_a</span><span class="p">,</span> <span class="n">n_levels</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 
+<span class="n">options</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">Options</span><span class="p">(</span><span class="n">nsteps</span><span class="o">=</span><span class="mi">15000</span><span class="p">,</span> <span class="n">store_states</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">)</span>
 
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tlist</span><span class="p">,</span> <span class="n">result_br</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;BR&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tlist</span><span class="p">,</span> <span class="n">result_me</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;ME&quot;</span><span class="p">)</span>
+<span class="n">result_br</span> <span class="o">=</span> <span class="n">jcm_brmesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">kappa</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="n">e_ops</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+<span class="n">result_me_simple</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">mesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">c_ops</span><span class="o">=</span><span class="n">c_ops_simple</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="n">e_ops</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+<span class="n">result_me_better</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">mesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">c_ops</span><span class="o">=</span><span class="n">c_ops_better</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="n">e_ops</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+<span class="n">result_me_better_fewer</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">mesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">c_ops</span><span class="o">=</span><span class="n">c_ops_better_fewer</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="n">e_ops</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tlist</span><span class="p">,</span> <span class="n">result_me_simple</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;ME (simple c_ops)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tlist</span><span class="p">,</span> <span class="n">result_me_better</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;ME (better c_ops)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tlist</span><span class="p">,</span> <span class="n">result_me_better_fewer</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;ME (better c_ops fewer)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tlist</span><span class="p">,</span> <span class="n">result_br</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;-.&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;BR&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;t&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Cavity occupation&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/05-qutip-jcm-iii_14_01.png" src="../_images/05-qutip-jcm-iii_14_01.png" />
+<img alt="../_images/05-qutip-jcm-iii_17_01.png" src="../_images/05-qutip-jcm-iii_17_01.png" />
 </div>
 </div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tlist</span><span class="p">,</span> <span class="n">result_me_simple</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;ME (simple c_ops)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tlist</span><span class="p">,</span> <span class="n">result_me_better</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;ME (better c_ops)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tlist</span><span class="p">,</span> <span class="n">result_me_better_fewer</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;ME (better c_ops small)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tlist</span><span class="p">,</span> <span class="n">result_br</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;-.&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;BR&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;t&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Atomic (bare) excited state occupation&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/05-qutip-jcm-iii_18_01.png" src="../_images/05-qutip-jcm-iii_18_01.png" />
+</div>
+</div>
+<section id="explain-the-expectation-values-here">
+<h2>Explain the expectation values here!<a class="headerlink" href="#explain-the-expectation-values-here" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[8, 2], [8, 2]], shape = (16, 16), type = oper, isherm = True\begin{equation*}\left(\begin{array}{*{11}c}0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; \cdots &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0\\0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; \cdots &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0\\0.0 &amp; 0.0 &amp; 1.0 &amp; 0.0 &amp; 0.0 &amp; \cdots &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0\\0.0 &amp; 0.0 &amp; 0.0 &amp; 1.0 &amp; 0.0 &amp; \cdots &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0\\0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 2.0 &amp; \cdots &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0\\\vdots &amp; \vdots &amp; \vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots &amp; \vdots &amp; \vdots &amp; \vdots &amp; \vdots\\0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; \cdots &amp; 5.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0\\0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; \cdots &amp; 0.0 &amp; 6.000 &amp; 0.0 &amp; 0.0 &amp; 0.0\\0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; \cdots &amp; 0.0 &amp; 0.0 &amp; 6.000 &amp; 0.0 &amp; 0.0\\0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; \cdots &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 7.0 &amp; 0.0\\0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; \cdots &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 7.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}Quantum object: dims = [[8, 2], [8, 2]], shape = (16, 16), type = oper, isherm = True\begin{equation*}\left(\begin{array}{*{11}c}1.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; \cdots &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0\\0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; \cdots &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0\\0.0 &amp; 0.0 &amp; 1.0 &amp; 0.0 &amp; 0.0 &amp; \cdots &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0\\0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; \cdots &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0\\0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 1.0 &amp; \cdots &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0\\\vdots &amp; \vdots &amp; \vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots &amp; \vdots &amp; \vdots &amp; \vdots &amp; \vdots\\0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; \cdots &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0\\0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; \cdots &amp; 0.0 &amp; 1.0 &amp; 0.0 &amp; 0.0 &amp; 0.0\\0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; \cdots &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0\\0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; \cdots &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 1.0 &amp; 0.0\\0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; \cdots &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+</div>
+</div>
+</section>
 </section>
 
     <script type="text/x-thebe-config">

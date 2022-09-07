@@ -18,8 +18,6 @@ kernelspec:
 
 XXX Description
 
-In this notebook we will use $\frac{1}{2} \sigma_z$ as the Hamiltonian of the atomic state, in order to emphasise the rise and decay of the system occupancy without the distraction of atom-cavity oscillations.
-
 +++
 
 ## Tasks
@@ -53,13 +51,26 @@ def jcm_h(wc, wa, g, N, atom):
     return H
 ```
 
+```{code-cell} ipython3
+def display_eigenstates(op):
+    """ Display the eigenvalues and eigenstates of an operator. """
+    evals, evecs = op.eigenstates()
+    print("Eigenvalues:", evals)
+    print()
+    print("Eigenstates")
+    print("===========")
+    for v in evecs:
+        display(v)
+```
+
 # XXX
 
 ```{code-cell} ipython3
 # Dissipation parameters
-kappa = 0.5 # 0.005  # cavity dissipation rate
-gamma = 0.5 # 0.05  # atom dissipation rate
-n_th_a = 0 # 5.0  # avg number of thermal bath excitation
+# We use stronger dissipation to show long-term behaviour in shorter times
+kappa = 0.2 # cavity dissipation rate
+gamma = 0.2 # atom dissipation rate
+n_th_a = 0 # avg number of thermal bath excitation
 ```
 
 ```{code-cell} ipython3
@@ -68,7 +79,7 @@ wc = 1.0 #* 2 * np.pi  # cavity frequency
 wa = 1.0 #* 2 * np.pi  # atom frequency
 N = 8  # 15 # number of cavity fock states
 # g = 0.05 * 2 * np.pi  # coupling strength
-g_values = np.linspace(0.1, 0.5, 50)
+g = 0.1
 
 # Atom hamiltonian
 H_atom = 0.5 * qutip.sigmaz()
@@ -101,21 +112,41 @@ def jcm_c_ops(N, n_th_a):
 ```
 
 ```{code-cell} ipython3
-def jcm_mesolve(H, psi0, tlist, kappa, gamma, N, n_th_a, e_ops):
-    """ Solve the given Jaynes-Cummngs module using the Master Equation solver. """
-    options = qutip.Options(nsteps=15000, store_states=True, rtol=1e-12, atol=1e-12)
-
-    c_ops = jcm_c_ops(N, n_th_a)
-
-    result = qutip.mesolve(H, psi0, tlist, c_ops=c_ops, e_ops=e_ops, options=options)
-    return result
+def matrix_element(a, x, b):
+    """ Return <a|x|b>. """
+    return (a * x * b).norm()
 ```
 
 ```{code-cell} ipython3
-def jcm_brmesolve(H, psi0, tlist, kappa, gamma, N, e_ops):
-    """ Solve the given Jaynes-Cummings model use the Bloch-Redfield solver. """
-    options = qutip.Options(nsteps=15000, store_states=True, rtol=1e-12, atol=1e-12)
+def jcm_c_ops_from_eigenstates(H, N, n_th_a, n_levels=None):
+    """ Return full JCM collapse operators. """
+    sx = qutip.tensor(qutip.qeye(N), qutip.sigmax())
+    a = qutip.tensor(qutip.destroy(N), qutip.qeye(2))
+    x = a + a.dag()
 
+    energies, eigenstates = H.eigenstates()
+    n_energies = len(energies)
+    if n_levels is not None:
+        n_energies = min(n_energies, n_levels)
+
+    c_ops = []
+
+    for j in range(n_energies):
+        for k in range(j, n_energies):
+            rate = matrix_element(eigenstates[j].dag(), x, eigenstates[k])**2 * kappa
+            if rate > 0.0:
+                c_ops.append(np.sqrt(rate) * eigenstates[j] * eigenstates[k].dag())
+
+            rate = matrix_element(eigenstates[j].dag(), sx, eigenstates[k])**2 * gamma
+            if rate > 0.0:
+                c_ops.append(np.sqrt(rate) * eigenstates[j] * eigenstates[k].dag())
+
+    return c_ops
+```
+
+```{code-cell} ipython3
+def jcm_brmesolve(H, psi0, tlist, kappa, gamma, N, e_ops, options):
+    """ Solve the given Jaynes-Cummings model use the Bloch-Redfield solver. """
     sx = qutip.tensor(qutip.qeye(N), qutip.sigmax())
     a = qutip.tensor(qutip.destroy(N), qutip.qeye(2))
     x = a + a.dag()
@@ -133,23 +164,67 @@ def jcm_brmesolve(H, psi0, tlist, kappa, gamma, N, e_ops):
 
 ```{code-cell} ipython3
 g = 0.01  # g_values[0]
+H = jcm_h(wc, wa, g, N, H_atom)
 
-tlist = np.linspace(0, 30, 500)
+display_eigenstates(H)
+```
+
+```{code-cell} ipython3
+g = 0.5
 
 H = jcm_h(wc, wa, g, N, H_atom)
 
+tlist = np.linspace(0, 100, 500)
+
 gnd_energy, gnd_state = H.groundstate()
 psi0 = qutip.tensor(qutip.basis(N, 0), qutip.basis(2, 0))
+# psi0 = qutip.tensor(qutip.basis(N, 0), qutip.basis(2, 1))
+# psi0 = gnd_state
 
 sm = qutip.tensor(qutip.qeye(N), qutip.sigmam())
 a = qutip.tensor(qutip.destroy(N), qutip.qeye(2))
 e_ops = [a.dag() * a, sm.dag() * sm]
 
-result_br = jcm_brmesolve(H, psi0, tlist, kappa, gamma, N, e_ops=e_ops)
-result_me = jcm_mesolve(H, psi0, tlist, kappa, gamma, N, n_th_a, e_ops=e_ops)
+c_ops_simple = jcm_c_ops(N, n_th_a)
+c_ops_better = jcm_c_ops_from_eigenstates(H, N, n_th_a)
+c_ops_better_fewer = jcm_c_ops_from_eigenstates(H, N, n_th_a, n_levels=5)
 
+options = qutip.Options(nsteps=15000, store_states=True, rtol=1e-12, atol=1e-12)
 
-plt.plot(tlist, result_br.expect[0], label="BR")
-plt.plot(tlist, result_me.expect[0], label="ME")
+result_br = jcm_brmesolve(H, psi0, tlist, kappa, gamma, N, e_ops=e_ops, options=options)
+result_me_simple = qutip.mesolve(H, psi0, tlist, c_ops=c_ops_simple, e_ops=e_ops, options=options)
+result_me_better = qutip.mesolve(H, psi0, tlist, c_ops=c_ops_better, e_ops=e_ops, options=options)
+result_me_better_fewer = qutip.mesolve(H, psi0, tlist, c_ops=c_ops_better_fewer, e_ops=e_ops, options=options)
+
+plt.plot(tlist, result_me_simple.expect[0], label="ME (simple c_ops)")
+plt.plot(tlist, result_me_better.expect[0], label="ME (better c_ops)")
+plt.plot(tlist, result_me_better_fewer.expect[0], label="ME (better c_ops fewer)")
+plt.plot(tlist, result_br.expect[0], "-.", label="BR")
+plt.xlabel("t")
+plt.ylabel("Cavity occupation")
 plt.legend();
+```
+
+```{code-cell} ipython3
+plt.plot(tlist, result_me_simple.expect[1], label="ME (simple c_ops)")
+plt.plot(tlist, result_me_better.expect[1], label="ME (better c_ops)")
+plt.plot(tlist, result_me_better_fewer.expect[1], label="ME (better c_ops small)")
+plt.plot(tlist, result_br.expect[1], "-.", label="BR")
+plt.xlabel("t")
+plt.ylabel("Atomic (bare) excited state occupation")
+plt.legend();
+```
+
+## Explain the expectation values here!
+
+```{code-cell} ipython3
+a.dag() * a
+```
+
+```{code-cell} ipython3
+sm.dag() * sm
+```
+
+```{code-cell} ipython3
+
 ```
