@@ -11,7 +11,8 @@ Institutions:
 - **[QuTiP](https://qutip.org)**
 
 Tutorials:
-- **[Tutorials](https://hodgestar.github.io/qutip-asqsqis-2022/)**
+- **[Tutorial website](https://hodgestar.github.io/qutip-asqsqis-2022/)**
+- **[Tutorial .zip](https://hodgestar.github.io/qutip-asqsqis-2022/_static/student-tutorials.zip)**
 
 ## Hello!
 
