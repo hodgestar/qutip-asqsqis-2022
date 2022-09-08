@@ -54,7 +54,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="01: Neutral Atom Devices" href="../capstone/00-neutral-atom-devices.html" />
+    <link rel="next" title="Capstone project: Simulating a Neutral Atom Quantum Device" href="../capstone/00-introduction.html" />
     <link rel="prev" title="04: Adding dissipation to the Jaynes-Cummings model" href="04-qutip-jcm-ii.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -159,13 +159,23 @@ const thebe_selector_output = ".output, .cell_output"
 </p>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="../capstone/00-neutral-atom-devices.html">
+  <a class="reference internal" href="../capstone/00-introduction.html">
+   Capstone project: Simulating a Neutral Atom Quantum Device
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../capstone/01-neutral-atom-devices.html">
    01: Neutral Atom Devices
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../capstone/01-a-single-atom.html">
+  <a class="reference internal" href="../capstone/02-a-single-atom.html">
    02: A Single Atom
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../capstone/03-neutral-atom-simulator.html">
+   00: A Neutral Atom Simulator Class (Empty)
   </a>
  </li>
 </ul>
@@ -445,41 +455,45 @@ title="Print to PDF"
     </div>
     <nav id="bd-toc-nav" aria-label="Page">
         <ul class="visible nav section-nav flex-column">
- <li class="toc-h1 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#">
-   05: Jaynes-Cummings Ultra-strong Coupling
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#introduction">
+   Introduction
   </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#tasks">
-     Tasks
-    </a>
-   </li>
-  </ul>
  </li>
- <li class="toc-h1 nav-item toc-entry">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#tasks">
+   Tasks
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#imports">
    Imports
   </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#helper-functions">
-     Helper functions
-    </a>
-   </li>
-  </ul>
  </li>
- <li class="toc-h1 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#xxx">
-   XXX
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#helper-functions">
+   Helper functions
   </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#explain-the-expectation-values-here">
-     Explain the expectation values here!
-    </a>
-   </li>
-  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#create-the-jcm-hamiltonian-and-usc-collapse-operators">
+   Create the JCM Hamiltonian and USC collapse operators.
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#solving-and-visualising-the-dynamics">
+   Solving and visualising the dynamics
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#reduced-level-couplings-for-collapse-operators">
+   Reduced level couplings (for collapse operators)
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#bloch-redfield-model">
+   Bloch-Redfield model
+  </a>
  </li>
 </ul>
 
@@ -500,41 +514,45 @@ title="Print to PDF"
                         </div>
                         <nav aria-label="Page">
                             <ul class="visible nav section-nav flex-column">
- <li class="toc-h1 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#">
-   05: Jaynes-Cummings Ultra-strong Coupling
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#introduction">
+   Introduction
   </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#tasks">
-     Tasks
-    </a>
-   </li>
-  </ul>
  </li>
- <li class="toc-h1 nav-item toc-entry">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#tasks">
+   Tasks
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#imports">
    Imports
   </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#helper-functions">
-     Helper functions
-    </a>
-   </li>
-  </ul>
  </li>
- <li class="toc-h1 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#xxx">
-   XXX
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#helper-functions">
+   Helper functions
   </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#explain-the-expectation-values-here">
-     Explain the expectation values here!
-    </a>
-   </li>
-  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#create-the-jcm-hamiltonian-and-usc-collapse-operators">
+   Create the JCM Hamiltonian and USC collapse operators.
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#solving-and-visualising-the-dynamics">
+   Solving and visualising the dynamics
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#reduced-level-couplings-for-collapse-operators">
+   Reduced level couplings (for collapse operators)
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#bloch-redfield-model">
+   Bloch-Redfield model
+  </a>
  </li>
 </ul>
 
@@ -548,16 +566,32 @@ title="Print to PDF"
                 
   <section class="tex2jax_ignore mathjax_ignore" id="jaynes-cummings-ultra-strong-coupling">
 <h1>05: Jaynes-Cummings Ultra-strong Coupling<a class="headerlink" href="#jaynes-cummings-ultra-strong-coupling" title="Permalink to this headline">#</a></h1>
-<p>XXX Description</p>
+<p>In this tutorial we will look at what happens when the coupling between the atom and the cavity becomes very strong. We will introduce a new model for the dissipation that more accurately describes the time evolution and compare with the standard Jaynes-Cummings dissipation model.</p>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">#</a></h2>
+<p>If the coupling strength becomes so large that it is comparable to the system frequencies, the collapse operators from the previous tutorial do not correctly model the dissipation (for instance it does not give the ground state as the steady state at zero temperature). This is because the eigenenergies of the system are significantly altered by the coupling between the atom and the cavity.</p>
+<p>We need to rederive the master equation, defining the system-environment coupling operator in terms of the true system eigenstates, in do so we arrive at a master equation of this form</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\frac{\partial}{\partial t} \rho_S(t) = -i[H_S,\rho(t)] \\
++ \sum_{\Gamma=\gamma,\kappa}\left(\sum_{j,k&gt;j}\Gamma_{j,k}n(\Delta_{j,k},T) \mathcal{D}\left[|k\rangle\langle j|\right] \rho(t) \right.\\
+\left. + \sum_{j,k&gt;j}\Gamma_{j,k}\left[1+n(\Delta_{j,k},T)\right] \mathcal{D}\left[|j\rangle\langle k|\right] \rho(t)\right)\end{split}\]</div>
+<p>Where</p>
+<p><span class="math notranslate nohighlight">\(\gamma_{j,k}= \pi J(\Delta_{j,k}) |\langle j|\sigma_x | k \rangle |^2\)</span>,</p>
+<p><span class="math notranslate nohighlight">\(\kappa_{j,k}= \pi J(\Delta_{j,k}) |\langle j|(a+a^{\dagger}) | k \rangle |^2\)</span>,</p>
+<p><span class="math notranslate nohighlight">\(\mathcal{D}\left[|j\rangle\langle k|\right]\rho(t)=2|j\rangle\langle k| \rho |k\rangle\langle j| - |k\rangle\langle k|\rho - \rho |k\rangle\langle k|\)</span>,</p>
+<p><span class="math notranslate nohighlight">\(\Delta_{j,k} = E_j - E_k\)</span>.</p>
+<p>We refer this as the ultra-strong coupling (USC) master equation</p>
+<p>We can think of this as the collapse operators coupling to all the different possible energy jumps of the combined atom-cavity system. Note that in practice, some energy states are never occupied and so we can in fact ignore these collapse operators, as we will see later.</p>
+</section>
 <section id="tasks">
 <h2>Tasks<a class="headerlink" href="#tasks" title="Permalink to this headline">#</a></h2>
+<p>Constructing the model described above is quite involved, and so that has been completed already. Our tasks will focus on analysing the output.</p>
 <ul class="simple">
-<li><p>XXX</p></li>
+<li><p>Try different values for the coupling strength (<span class="math notranslate nohighlight">\(0.01 &lt; g &lt; 0.9\)</span>) and observe how the eigenenergies change</p></li>
 </ul>
 </section>
-</section>
-<section class="tex2jax_ignore mathjax_ignore" id="imports">
-<h1>Imports<a class="headerlink" href="#imports" title="Permalink to this headline">#</a></h1>
+<section id="imports">
+<h2>Imports<a class="headerlink" href="#imports" title="Permalink to this headline">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">matplotlib</span> inline
@@ -574,6 +608,7 @@ title="Print to PDF"
 </div>
 </div>
 </div>
+</section>
 <section id="helper-functions">
 <h2>Helper functions<a class="headerlink" href="#helper-functions" title="Permalink to this headline">#</a></h2>
 <div class="cell docutils container">
@@ -606,35 +641,8 @@ title="Print to PDF"
 </div>
 </div>
 </section>
-</section>
-<section class="tex2jax_ignore mathjax_ignore" id="xxx">
-<h1>XXX<a class="headerlink" href="#xxx" title="Permalink to this headline">#</a></h1>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Dissipation parameters</span>
-<span class="c1"># We use stronger dissipation to show long-term behaviour in shorter times</span>
-<span class="n">kappa</span> <span class="o">=</span> <span class="mf">0.2</span> <span class="c1"># cavity dissipation rate</span>
-<span class="n">gamma</span> <span class="o">=</span> <span class="mf">0.2</span> <span class="c1"># atom dissipation rate</span>
-<span class="n">n_th_a</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># avg number of thermal bath excitation</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># system parameters</span>
-<span class="n">wc</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="c1">#* 2 * np.pi  # cavity frequency</span>
-<span class="n">wa</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="c1">#* 2 * np.pi  # atom frequency</span>
-<span class="n">N</span> <span class="o">=</span> <span class="mi">8</span>  <span class="c1"># 15 # number of cavity fock states</span>
-<span class="c1"># g = 0.05 * 2 * np.pi  # coupling strength</span>
-<span class="n">g</span> <span class="o">=</span> <span class="mf">0.1</span>
-
-<span class="c1"># Atom hamiltonian</span>
-<span class="n">H_atom</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">qutip</span><span class="o">.</span><span class="n">sigmaz</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-</div>
+<section id="create-the-jcm-hamiltonian-and-usc-collapse-operators">
+<h2>Create the JCM Hamiltonian and USC collapse operators.<a class="headerlink" href="#create-the-jcm-hamiltonian-and-usc-collapse-operators" title="Permalink to this headline">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">jcm_c_ops</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">n_th_a</span><span class="p">):</span>
@@ -726,7 +734,33 @@ title="Print to PDF"
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">g</span> <span class="o">=</span> <span class="mf">0.01</span>  <span class="c1"># g_values[0]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Dissipation parameters</span>
+<span class="c1"># We use stronger dissipation to show long-term behaviour in shorter times</span>
+<span class="n">kappa</span> <span class="o">=</span> <span class="mf">0.2</span> <span class="c1"># cavity dissipation rate</span>
+<span class="n">gamma</span> <span class="o">=</span> <span class="mf">0.2</span> <span class="c1"># atom dissipation rate</span>
+<span class="n">n_th_a</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># avg number of thermal bath excitation</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># system parameters</span>
+<span class="n">wc</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="c1">#* 2 * np.pi  # cavity frequency</span>
+<span class="n">wa</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="c1">#* 2 * np.pi  # atom frequency</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">8</span>  <span class="c1"># 15 # number of cavity fock states</span>
+<span class="c1"># g = 0.05 * 2 * np.pi  # coupling strength</span>
+<span class="n">g</span> <span class="o">=</span> <span class="mf">0.1</span>
+
+<span class="c1"># Atom hamiltonian</span>
+<span class="n">H_atom</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">qutip</span><span class="o">.</span><span class="n">sigmaz</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">g</span> <span class="o">=</span> <span class="mf">0.01</span>
 <span class="n">H</span> <span class="o">=</span> <span class="n">jcm_h</span><span class="p">(</span><span class="n">wc</span><span class="p">,</span> <span class="n">wa</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">H_atom</span><span class="p">)</span>
 
 <span class="n">display_eigenstates</span><span class="p">(</span><span class="n">H</span><span class="p">)</span>
@@ -776,38 +810,49 @@ Eigenstates
 \[\begin{split}Quantum object: dims = [[8, 2], [1, 1]], shape = (16, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}0.0\\0.0\\0.0\\0.0\\0.0\\\vdots\\0.0\\0.0\\-0.013\\-1.000\\0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
 </div>
 </div>
+</section>
+<section id="solving-and-visualising-the-dynamics">
+<h2>Solving and visualising the dynamics<a class="headerlink" href="#solving-and-visualising-the-dynamics" title="Permalink to this headline">#</a></h2>
+<p>The dynamics are solved here for the simple (from JCM 2 tutorial) and the USC dissipation model</p>
+<p>Try changing the coupling strength and see how the two models diverge.
+Try changing the initial state and see what happens.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">g</span> <span class="o">=</span> <span class="mf">0.5</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">g</span> <span class="o">=</span> <span class="mf">0.001</span>
 
+<span class="c1"># get the JCM Hamiltonian</span>
 <span class="n">H</span> <span class="o">=</span> <span class="n">jcm_h</span><span class="p">(</span><span class="n">wc</span><span class="p">,</span> <span class="n">wa</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">H_atom</span><span class="p">)</span>
 
+<span class="c1"># set the timespace for the simulation</span>
 <span class="n">tlist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span>
 
+<span class="c1"># get the groundstate for the full system</span>
 <span class="n">gnd_energy</span><span class="p">,</span> <span class="n">gnd_state</span> <span class="o">=</span> <span class="n">H</span><span class="o">.</span><span class="n">groundstate</span><span class="p">()</span>
-<span class="n">psi0</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">qutip</span><span class="o">.</span><span class="n">basis</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">qutip</span><span class="o">.</span><span class="n">basis</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
-<span class="c1"># psi0 = qutip.tensor(qutip.basis(N, 0), qutip.basis(2, 1))</span>
+
+<span class="c1"># set the initial state </span>
+<span class="n">psi0</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">qutip</span><span class="o">.</span><span class="n">basis</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">qutip</span><span class="o">.</span><span class="n">basis</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="c1"># atom excited</span>
+<span class="c1"># psi0 = qutip.tensor(qutip.basis(N, 0), qutip.basis(2, 1)) # atom ground state</span>
 <span class="c1"># psi0 = gnd_state</span>
 
+<span class="c1"># create the expectation operators</span>
 <span class="n">sm</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">qutip</span><span class="o">.</span><span class="n">qeye</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">qutip</span><span class="o">.</span><span class="n">sigmam</span><span class="p">())</span>
 <span class="n">a</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">qutip</span><span class="o">.</span><span class="n">destroy</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">qutip</span><span class="o">.</span><span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
-<span class="n">e_ops</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span><span class="p">]</span>
+<span class="n">e_ops</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span><span class="p">]</span> <span class="c1"># cavity and atom excited state probabilities</span>
 
-<span class="n">c_ops_simple</span> <span class="o">=</span> <span class="n">jcm_c_ops</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">n_th_a</span><span class="p">)</span>
-<span class="n">c_ops_better</span> <span class="o">=</span> <span class="n">jcm_c_ops_from_eigenstates</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">n_th_a</span><span class="p">)</span>
-<span class="n">c_ops_better_fewer</span> <span class="o">=</span> <span class="n">jcm_c_ops_from_eigenstates</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">n_th_a</span><span class="p">,</span> <span class="n">n_levels</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="c1"># generate the collapse operators</span>
+<span class="n">c_ops_simple</span> <span class="o">=</span> <span class="n">jcm_c_ops</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">n_th_a</span><span class="p">)</span> <span class="c1"># basic JCM</span>
+<span class="n">c_ops_usc</span> <span class="o">=</span> <span class="n">jcm_c_ops_from_eigenstates</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">n_th_a</span><span class="p">)</span> <span class="c1"># USC </span>
 
 <span class="n">options</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">Options</span><span class="p">(</span><span class="n">nsteps</span><span class="o">=</span><span class="mi">15000</span><span class="p">,</span> <span class="n">store_states</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">)</span>
 
-<span class="n">result_br</span> <span class="o">=</span> <span class="n">jcm_brmesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">kappa</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="n">e_ops</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
 <span class="n">result_me_simple</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">mesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">c_ops</span><span class="o">=</span><span class="n">c_ops_simple</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="n">e_ops</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
-<span class="n">result_me_better</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">mesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">c_ops</span><span class="o">=</span><span class="n">c_ops_better</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="n">e_ops</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
-<span class="n">result_me_better_fewer</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">mesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">c_ops</span><span class="o">=</span><span class="n">c_ops_better_fewer</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="n">e_ops</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+<span class="n">result_me_usc</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">mesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">c_ops</span><span class="o">=</span><span class="n">c_ops_usc</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="n">e_ops</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
 
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tlist</span><span class="p">,</span> <span class="n">result_me_simple</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;ME (simple c_ops)&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tlist</span><span class="p">,</span> <span class="n">result_me_better</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;ME (better c_ops)&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tlist</span><span class="p">,</span> <span class="n">result_me_better_fewer</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;ME (better c_ops fewer)&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tlist</span><span class="p">,</span> <span class="n">result_br</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;-.&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;BR&quot;</span><span class="p">)</span>
+<span class="c1"># set the timespace for the plot</span>
+<span class="n">tlist_plot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tlist_plot</span><span class="p">,</span> <span class="n">result_me_simple</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;ME (simple)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tlist_plot</span><span class="p">,</span> <span class="n">result_me_usc</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;ME (USC)&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;t&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Cavity occupation&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span>
@@ -815,14 +860,163 @@ Eigenstates
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/05-qutip-jcm-iii_17_0.png" src="../_images/05-qutip-jcm-iii_17_0.png" />
+<img alt="../_images/05-qutip-jcm-iii_20_0.png" src="../_images/05-qutip-jcm-iii_20_0.png" />
+</div>
+</div>
+</section>
+<section id="reduced-level-couplings-for-collapse-operators">
+<h2>Reduced level couplings (for collapse operators)<a class="headerlink" href="#reduced-level-couplings-for-collapse-operators" title="Permalink to this headline">#</a></h2>
+<p>Now we investigate how many energy levels we need to consider in order for an accurate model.</p>
+<p>You may wish to add a second plot that zooms in on the later times (t &gt; 80) and exclude the simple model plot, to see more clearly how the USC and USC limited level plots converge.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># start by copying the previous cell</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">g</span> <span class="o">=</span> <span class="mf">0.5</span>
+
+<span class="c1"># get the JCM Hamiltonian</span>
+<span class="n">H</span> <span class="o">=</span> <span class="n">jcm_h</span><span class="p">(</span><span class="n">wc</span><span class="p">,</span> <span class="n">wa</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">H_atom</span><span class="p">)</span>
+
+<span class="c1"># set the timespace for the simulation</span>
+<span class="n">tlist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span>
+
+<span class="c1"># get the groundstate for the full system</span>
+<span class="n">gnd_energy</span><span class="p">,</span> <span class="n">gnd_state</span> <span class="o">=</span> <span class="n">H</span><span class="o">.</span><span class="n">groundstate</span><span class="p">()</span>
+
+<span class="c1"># set the initial state </span>
+<span class="n">psi0</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">qutip</span><span class="o">.</span><span class="n">basis</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">qutip</span><span class="o">.</span><span class="n">basis</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="c1"># atom excited</span>
+<span class="c1"># psi0 = qutip.tensor(qutip.basis(N, 0), qutip.basis(2, 1)) # atom ground state</span>
+<span class="c1"># psi0 = gnd_state</span>
+
+<span class="c1"># create the expectation operators</span>
+<span class="n">sm</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">qutip</span><span class="o">.</span><span class="n">qeye</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">qutip</span><span class="o">.</span><span class="n">sigmam</span><span class="p">())</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">qutip</span><span class="o">.</span><span class="n">destroy</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">qutip</span><span class="o">.</span><span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+<span class="n">e_ops</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span><span class="p">]</span> <span class="c1"># cavity and atom excited state probabilities</span>
+
+<span class="c1"># generate the collapse operators</span>
+<span class="n">c_ops_simple</span> <span class="o">=</span> <span class="n">jcm_c_ops</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">n_th_a</span><span class="p">)</span> <span class="c1"># basic JCM</span>
+<span class="n">c_ops_usc</span> <span class="o">=</span> <span class="n">jcm_c_ops_from_eigenstates</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">n_th_a</span><span class="p">)</span> <span class="c1"># USC </span>
+<span class="n">c_ops_usc_levlim</span> <span class="o">=</span> <span class="n">jcm_c_ops_from_eigenstates</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">n_th_a</span><span class="p">,</span> <span class="n">n_levels</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span> <span class="c1"># USC with level limit</span>
+
+<span class="n">options</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">Options</span><span class="p">(</span><span class="n">nsteps</span><span class="o">=</span><span class="mi">15000</span><span class="p">,</span> <span class="n">store_states</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">)</span>
+
+<span class="n">result_me_simple</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">mesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">c_ops</span><span class="o">=</span><span class="n">c_ops_simple</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="n">e_ops</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+<span class="n">result_me_usc</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">mesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">c_ops</span><span class="o">=</span><span class="n">c_ops_usc</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="n">e_ops</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+<span class="n">result_me_usc_levlim</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">mesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">c_ops</span><span class="o">=</span><span class="n">c_ops_usc_levlim</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="n">e_ops</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+
+
+<span class="c1"># set the timespace for the plot</span>
+<span class="n">tlist_plot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tlist_plot</span><span class="p">,</span> <span class="n">result_me_simple</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;ME (simple)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tlist_plot</span><span class="p">,</span> <span class="n">result_me_usc</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;ME (USC)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tlist_plot</span><span class="p">,</span> <span class="n">result_me_usc_levlim</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;ME (USC limited levels)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+
+<span class="n">tlist_plot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">80</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="c1">#plt.plot(tlist_plot, result_me_simple.expect[0], label=&quot;ME (simple)&quot;)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tlist_plot</span><span class="p">,</span> <span class="n">result_me_usc</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">400</span><span class="p">:],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;ME (USC)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tlist_plot</span><span class="p">,</span> <span class="n">result_me_usc_levlim</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">400</span><span class="p">:],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;ME (USC limited levels)&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;t&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Cavity occupation&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/05-qutip-jcm-iii_23_0.png" src="../_images/05-qutip-jcm-iii_23_0.png" />
+<img alt="../_images/05-qutip-jcm-iii_23_1.png" src="../_images/05-qutip-jcm-iii_23_1.png" />
+</div>
+</div>
+</section>
+<section id="bloch-redfield-model">
+<h2>Bloch-Redfield model<a class="headerlink" href="#bloch-redfield-model" title="Permalink to this headline">#</a></h2>
+<p>Our USC dissipation is actually the Bloch-Redfield model. QuTiP has a solver built in for this.</p>
+<p>Simulate the dynamics with the Bloch-Redfield (using the helper function ‘jcm_brmesolve’)</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># start by copying the previous cell</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">g</span> <span class="o">=</span> <span class="mf">0.5</span>
+
+<span class="c1"># get the JCM Hamiltonian</span>
+<span class="n">H</span> <span class="o">=</span> <span class="n">jcm_h</span><span class="p">(</span><span class="n">wc</span><span class="p">,</span> <span class="n">wa</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">H_atom</span><span class="p">)</span>
+
+<span class="c1"># set the timespace for the simulation</span>
+<span class="n">tlist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span>
+
+<span class="c1"># get the groundstate for the full system</span>
+<span class="n">gnd_energy</span><span class="p">,</span> <span class="n">gnd_state</span> <span class="o">=</span> <span class="n">H</span><span class="o">.</span><span class="n">groundstate</span><span class="p">()</span>
+
+<span class="c1"># set the initial state </span>
+<span class="n">psi0</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">qutip</span><span class="o">.</span><span class="n">basis</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">qutip</span><span class="o">.</span><span class="n">basis</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="c1"># atom excited</span>
+<span class="c1"># psi0 = qutip.tensor(qutip.basis(N, 0), qutip.basis(2, 1)) # atom ground state</span>
+<span class="c1"># psi0 = gnd_state</span>
+
+<span class="c1"># create the expectation operators</span>
+<span class="n">sm</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">qutip</span><span class="o">.</span><span class="n">qeye</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">qutip</span><span class="o">.</span><span class="n">sigmam</span><span class="p">())</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">qutip</span><span class="o">.</span><span class="n">destroy</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">qutip</span><span class="o">.</span><span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+<span class="n">e_ops</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span><span class="p">]</span> <span class="c1"># cavity and atom excited state probabilities</span>
+
+<span class="c1"># generate the collapse operators</span>
+<span class="n">c_ops_simple</span> <span class="o">=</span> <span class="n">jcm_c_ops</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">n_th_a</span><span class="p">)</span> <span class="c1"># basic JCM</span>
+<span class="n">c_ops_usc</span> <span class="o">=</span> <span class="n">jcm_c_ops_from_eigenstates</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">n_th_a</span><span class="p">)</span> <span class="c1"># USC </span>
+<span class="n">c_ops_usc_levlim</span> <span class="o">=</span> <span class="n">jcm_c_ops_from_eigenstates</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">n_th_a</span><span class="p">,</span> <span class="n">n_levels</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span> <span class="c1"># USC with level limit</span>
+
+<span class="n">options</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">Options</span><span class="p">(</span><span class="n">nsteps</span><span class="o">=</span><span class="mi">15000</span><span class="p">,</span> <span class="n">store_states</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">)</span>
+
+<span class="n">result_me_simple</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">mesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">c_ops</span><span class="o">=</span><span class="n">c_ops_simple</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="n">e_ops</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+<span class="n">result_me_usc</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">mesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">c_ops</span><span class="o">=</span><span class="n">c_ops_usc</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="n">e_ops</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+<span class="n">result_me_usc_levlim</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">mesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">c_ops</span><span class="o">=</span><span class="n">c_ops_usc_levlim</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="n">e_ops</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+<span class="n">result_br</span> <span class="o">=</span> <span class="n">jcm_brmesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">kappa</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="n">e_ops</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+
+
+<span class="c1"># set the timespace for the plot</span>
+<span class="n">tlist_plot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tlist_plot</span><span class="p">,</span> <span class="n">result_me_simple</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;ME (simple)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tlist_plot</span><span class="p">,</span> <span class="n">result_me_usc</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;ME (USC)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tlist_plot</span><span class="p">,</span> <span class="n">result_me_usc_levlim</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;ME (USC limited levels)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tlist_plot</span><span class="p">,</span> <span class="n">result_br</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;BR&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+
+<span class="n">tlist_plot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">80</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="c1">#plt.plot(tlist_plot, result_me_simple.expect[0], label=&quot;ME (simple)&quot;)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tlist_plot</span><span class="p">,</span> <span class="n">result_me_usc</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">400</span><span class="p">:],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;ME (USC)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tlist_plot</span><span class="p">,</span> <span class="n">result_me_usc_levlim</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">400</span><span class="p">:],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;ME (USC limited levels)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tlist_plot</span><span class="p">,</span> <span class="n">result_br</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">400</span><span class="p">:],</span> <span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;BR&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;t&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Cavity occupation&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/05-qutip-jcm-iii_26_0.png" src="../_images/05-qutip-jcm-iii_26_0.png" />
+<img alt="../_images/05-qutip-jcm-iii_26_1.png" src="../_images/05-qutip-jcm-iii_26_1.png" />
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tlist</span><span class="p">,</span> <span class="n">result_me_simple</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;ME (simple c_ops)&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tlist</span><span class="p">,</span> <span class="n">result_me_better</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;ME (better c_ops)&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tlist</span><span class="p">,</span> <span class="n">result_me_better_fewer</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;ME (better c_ops small)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tlist</span><span class="p">,</span> <span class="n">result_me_usc</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;ME (better c_ops)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tlist</span><span class="p">,</span> <span class="n">result_me_usc_levlim</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;ME (better c_ops small)&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tlist</span><span class="p">,</span> <span class="n">result_br</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;-.&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;BR&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;t&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Atomic (bare) excited state occupation&quot;</span><span class="p">)</span>
@@ -831,31 +1025,7 @@ Eigenstates
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/05-qutip-jcm-iii_18_0.png" src="../_images/05-qutip-jcm-iii_18_0.png" />
-</div>
-</div>
-<section id="explain-the-expectation-values-here">
-<h2>Explain the expectation values here!<a class="headerlink" href="#explain-the-expectation-values-here" title="Permalink to this headline">#</a></h2>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_latex math notranslate nohighlight">
-\[\begin{split}Quantum object: dims = [[8, 2], [8, 2]], shape = (16, 16), type = oper, isherm = True\begin{equation*}\left(\begin{array}{*{11}c}0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; \cdots &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0\\0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; \cdots &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0\\0.0 &amp; 0.0 &amp; 1.0 &amp; 0.0 &amp; 0.0 &amp; \cdots &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0\\0.0 &amp; 0.0 &amp; 0.0 &amp; 1.0 &amp; 0.0 &amp; \cdots &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0\\0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 2.0 &amp; \cdots &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0\\\vdots &amp; \vdots &amp; \vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots &amp; \vdots &amp; \vdots &amp; \vdots &amp; \vdots\\0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; \cdots &amp; 5.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0\\0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; \cdots &amp; 0.0 &amp; 6.000 &amp; 0.0 &amp; 0.0 &amp; 0.0\\0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; \cdots &amp; 0.0 &amp; 0.0 &amp; 6.000 &amp; 0.0 &amp; 0.0\\0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; \cdots &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 7.0 &amp; 0.0\\0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; \cdots &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 7.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_latex math notranslate nohighlight">
-\[\begin{split}Quantum object: dims = [[8, 2], [8, 2]], shape = (16, 16), type = oper, isherm = True\begin{equation*}\left(\begin{array}{*{11}c}1.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; \cdots &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0\\0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; \cdots &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0\\0.0 &amp; 0.0 &amp; 1.0 &amp; 0.0 &amp; 0.0 &amp; \cdots &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0\\0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; \cdots &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0\\0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 1.0 &amp; \cdots &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0\\\vdots &amp; \vdots &amp; \vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots &amp; \vdots &amp; \vdots &amp; \vdots &amp; \vdots\\0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; \cdots &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0\\0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; \cdots &amp; 0.0 &amp; 1.0 &amp; 0.0 &amp; 0.0 &amp; 0.0\\0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; \cdots &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0\\0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; \cdots &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 1.0 &amp; 0.0\\0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; \cdots &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0 &amp; 0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
+<img alt="../_images/05-qutip-jcm-iii_27_0.png" src="../_images/05-qutip-jcm-iii_27_0.png" />
 </div>
 </div>
 </section>
@@ -895,10 +1065,10 @@ Eigenstates
             <p class="prev-next-title">04: Adding dissipation to the Jaynes-Cummings model</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="../capstone/00-neutral-atom-devices.html" title="next page">
+    <a class='right-next' id="next-link" href="../capstone/00-introduction.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">01: Neutral Atom Devices</p>
+        <p class="prev-next-title">Capstone project: Simulating a Neutral Atom Quantum Device</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

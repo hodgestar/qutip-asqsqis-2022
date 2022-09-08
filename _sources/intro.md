@@ -16,12 +16,14 @@ You can download a zip file with all the tutorials
 
 - [JCM I](./student-tutorials/03-qutip-jcm-i)
 - [JCM II](./student-tutorials/04-qutip-jcm-ii)
-- [JCM II](./student-tutorials/05-qutip-jcm-iii)
+- [JCM III](./student-tutorials/05-qutip-jcm-iii)
 
 ## Capstone project: Simulating a Neutral Atom Quantum Device
 
-- [Neutral Atom Devices](./capstone/00-neutral-atom-devices)
-- [A Single Atom](./capstone/01-a-single-atom)
+- [Introduction](./capstone/00-introduction)
+- [Neutral Atom Devices](./capstone/01-neutral-atom-devices)
+- [A Single Atom](./capstone/02-a-single-atom)
+- [Solution Outline](./capstone/03-neutral-atom-simulator)
 
 ## Worked tutorial solutions
 
