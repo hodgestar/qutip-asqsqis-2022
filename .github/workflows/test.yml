@@ -14,6 +14,7 @@ jobs:
     - name: "Install texlive"
       run: |
         sudo apt install texlive-latex-extra
+        sudo sed -i 's/^.*policy.*coder.*none.*PDF.*//' /etc/ImageMagick-6/policy.xml
     - uses: conda-incubator/setup-miniconda@v2
       with:
           environment-file: environment.yml
