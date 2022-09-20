@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>00: A Neutral Atom Simulator Class (Empty) &#8212; ASQSQIS Tutorials with QuTiP</title>
+    <title>03: Neutral Atom Simulator (Outline) &#8212; ASQSQIS Tutorials with QuTiP</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -52,7 +52,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="00: Introduction to QuTiP" href="../tutorials/00-qutip-intro.html" />
+    <link rel="next" title="04: Neutral Atom Simulator Class (Exploration)" href="04-neutral-atom-simulator-exploration.html" />
     <link rel="prev" title="02: A Single Atom" href="02-a-single-atom.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -173,7 +173,17 @@ const thebe_selector_output = ".output, .cell_output"
  </li>
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
-   00: A Neutral Atom Simulator Class (Empty)
+   03: Neutral Atom Simulator (Outline)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="04-neutral-atom-simulator-exploration.html">
+   04: Neutral Atom Simulator Class (Exploration)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="05-neutral-atom-simulator-worked-solution.html">
+   05: Neutral Atom Simulator (Worked Solution)
   </a>
  </li>
 </ul>
@@ -455,8 +465,20 @@ title="Print to PDF"
         <ul class="visible nav section-nav flex-column">
  <li class="toc-h1 nav-item toc-entry">
   <a class="reference internal nav-link" href="#">
-   00: A Neutral Atom Simulator Class (Empty)
+   03: Neutral Atom Simulator (Outline)
   </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#imports">
+     Imports
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#outline-of-an-implementation">
+     Outline of an implementation
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toc-h1 nav-item toc-entry">
   <a class="reference internal nav-link" href="#implementation">
@@ -477,7 +499,7 @@ title="Print to PDF"
         <div class="col pl-md-3 pl-lg-5 content-container">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>00: A Neutral Atom Simulator Class (Empty)</h1>
+                <h1>03: Neutral Atom Simulator (Outline)</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
@@ -489,8 +511,20 @@ title="Print to PDF"
                             <ul class="visible nav section-nav flex-column">
  <li class="toc-h1 nav-item toc-entry">
   <a class="reference internal nav-link" href="#">
-   00: A Neutral Atom Simulator Class (Empty)
+   03: Neutral Atom Simulator (Outline)
   </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#imports">
+     Imports
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#outline-of-an-implementation">
+     Outline of an implementation
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toc-h1 nav-item toc-entry">
   <a class="reference internal nav-link" href="#implementation">
@@ -512,7 +546,11 @@ title="Print to PDF"
                 
               <div>
                 
-  <div class="cell docutils container">
+  <section class="tex2jax_ignore mathjax_ignore" id="neutral-atom-simulator-outline">
+<h1>03: Neutral Atom Simulator (Outline)<a class="headerlink" href="#neutral-atom-simulator-outline" title="Permalink to this headline">#</a></h1>
+<section id="imports">
+<h2>Imports<a class="headerlink" href="#imports" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">qutip</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -528,8 +566,9 @@ title="Print to PDF"
 </div>
 </div>
 </div>
-<section class="tex2jax_ignore mathjax_ignore" id="a-neutral-atom-simulator-class-empty">
-<h1>00: A Neutral Atom Simulator Class (Empty)<a class="headerlink" href="#a-neutral-atom-simulator-class-empty" title="Permalink to this headline">#</a></h1>
+</section>
+<section id="outline-of-an-implementation">
+<h2>Outline of an implementation<a class="headerlink" href="#outline-of-an-implementation" title="Permalink to this headline">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">NeutralAtomCircuit</span><span class="p">:</span>
@@ -572,6 +611,7 @@ title="Print to PDF"
 </div>
 </div>
 </section>
+</section>
 <section class="tex2jax_ignore mathjax_ignore" id="implementation">
 <h1>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">#</a></h1>
 <div class="cell docutils container">
@@ -613,16 +653,6 @@ title="Print to PDF"
 
 <span class="n">psi</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">state</span><span class="p">(</span><span class="s2">&quot;11&quot;</span><span class="p">)</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">psi</span><span class="p">,</span> <span class="n">step_rate</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
-
-<span class="c1"># print(circuit.t, result.times)</span>
-<span class="c1"># state_idx = [0, -1]</span>
-<span class="c1"># if state_idx:</span>
-<span class="c1">#     computational_basis_blochs([result.states[i] for i in state_idx], &quot;rb&quot;)</span>
-<span class="c1"># computational_basis_blochs(result.states, &quot;rb&quot;)</span>
-
-<span class="c1"># print(qutip.expect(circuit.rr[0], result.states[0::10]))</span>
-<span class="c1"># print(qutip.expect(circuit.rr[1], result.states[0::10]))</span>
-<span class="c1"># len(result.states)</span>
 </pre></div>
 </div>
 </div>
@@ -663,10 +693,10 @@ title="Print to PDF"
             <p class="prev-next-title">02: A Single Atom</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="../tutorials/00-qutip-intro.html" title="next page">
+    <a class='right-next' id="next-link" href="04-neutral-atom-simulator-exploration.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">00: Introduction to QuTiP</p>
+        <p class="prev-next-title">04: Neutral Atom Simulator Class (Exploration)</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

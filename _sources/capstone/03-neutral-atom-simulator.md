@@ -4,12 +4,18 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.8
+    jupytext_version: 1.14.1
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
 ---
+
+# 03: Neutral Atom Simulator (Outline)
+
++++
+
+## Imports
 
 ```{code-cell} ipython3
 import qutip
@@ -21,7 +27,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 ```
 
-# 00: A Neutral Atom Simulator Class (Empty)
+## Outline of an implementation
 
 ```{code-cell} ipython3
 class NeutralAtomCircuit:
@@ -97,14 +103,4 @@ circuit.ry(1, np.pi / 4)
 
 psi = circuit.state("11")
 result = circuit.run(psi, step_rate=20)
-
-# print(circuit.t, result.times)
-# state_idx = [0, -1]
-# if state_idx:
-#     computational_basis_blochs([result.states[i] for i in state_idx], "rb")
-# computational_basis_blochs(result.states, "rb")
-
-# print(qutip.expect(circuit.rr[0], result.states[0::10]))
-# print(qutip.expect(circuit.rr[1], result.states[0::10]))
-# len(result.states)
 ```

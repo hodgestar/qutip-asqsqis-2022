@@ -71,6 +71,22 @@ to start with:
 
 If you get this far, you've done great! Take a moment to celebrate.
 
+
+## Worked solutions
+
+Once you have made a solid attempt on your own, here are two worked solutions
+that you can look at if you get stuck or if you would like to read a
+different solution for comparison.
+
+The first is an exploratory notebook that shows how you might go about trying
+things out and testing and improving your understanding of the system.
+
+The second is a more complete cleaned up solution.
+
+- [Neutral Atom Simulator (Exploratorion)](./04-neutral-atom-simulator-exploration.md)
+- [Neutral Atom Simulator (Worked Solution)](./05-neutral-atom-simulator-worked-solution.md)
+
+
 ## Further things to do
 
 It's unlikely that you'll get to everything above in a single day. But
