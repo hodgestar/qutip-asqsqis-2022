@@ -77,7 +77,7 @@ def computational_basis_blochs(states, colors="r", view=(60, 30)):
 
 ## Implementation
 
-I chose to implement the simulator as a single class. This keeps the implementation all neatly in one place.
+We implement the simulator as a single class. This keeps the implementation all neatly in one place.
 
 Here is an overview of the methods of the class to help in understanding it:
 
@@ -435,18 +435,24 @@ computational_basis_blochs([result.states[0], result.states[-1]], "rb")
 computational_basis_blochs(result.states, "rb")
 ```
 
-The fully entangled state appears as two completely mixed states that are represented by the arrow heads at the centre of the Bloch sphere. Let's check that the final state really is the expected Bell state and not some other state that has the same reduced density matrix probabilities but a different relative phase:
+The fully entangled state appears as two completely mixed states that are represented by the arrow heads at the centre of the Bloch sphere. Let's check that the final state really is the expected Bell state and not some other state that has the same reduced density matrix probabilities but a different relative phase.
+
+Note: We use `.tidyup(atol=1e-5)` to hide the small but non-zero coefficients. This makes it easier to see the large coefficients, but you should also look at the coefficients without `.tidyup` to see what magnitude they are. The `atol=1e-5` hides all coefficients less than `1e-5`.
+
+To understand what the coefficients on the final state mean, remember that the first coefficient is for the basis state `|aa>`, the second for `|ab>`, the third for `|ar>`, and then remainder for `|ba>`, `|bb>`, `|br>`, `|ra>`, `|rb>` and `|rr>`, in order.
+
+The Bell state is `|aa> + |bb>` so we expect the first and fifth coefficients to be $\frac{1}{\sqrt{2}}$ and the remaining coefficients to be small.
 
 ```{code-cell} ipython3
-result.states[-1]
+result.states[-1].copy().tidyup(atol=1e-5)
 ```
 
 And here are the reduce density matrices for the two qubits:
 
 ```{code-cell} ipython3
-result.states[-1].ptrace(0)
+result.states[-1].ptrace(0).tidyup(atol=1e-5)
 ```
 
 ```{code-cell} ipython3
-result.states[-1].ptrace(1)
+result.states[-1].ptrace(1).tidyup(atol=1e-5)
 ```

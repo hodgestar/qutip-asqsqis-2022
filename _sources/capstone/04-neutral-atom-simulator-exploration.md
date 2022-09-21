@@ -71,7 +71,7 @@ To represent such a time-dependent term in the Hamiltonian, we use `QobjEvo`. A 
 
 So, for example, `QobjEvo([[sx, A]])` represents a term in the Hamiltonian that looks like $A(t) \cdot σ_x$.
 
-In QuTiP, the function `A(t)` may also be passed additional parameters such as the duration or amplitude of the pulse. This makes it easier to adjust these values without having to write a new function `A` each time.  
+In QuTiP, the function `A(t)` may also be passed additional parameters such as the duration or amplitude of the pulse. This makes it easier to adjust these values without having to write a new function `A` each time.
 
 ```{code-cell} ipython3
 # Define a square pulse function:
@@ -104,17 +104,24 @@ H_sz = qutip.QobjEvo([[sz, A]], args={"theta": np.pi / 2, "start": 1, "dt": 1})
 H_sx(t=1)
 ```
 
-Now, let's bring these elements together and apply some pulses to an initial system state, using `qutip.sesolve` to simulate the evolution, and examine the results.
+We're almost ready to bring everything together, but there are a couple of things we need to do still.
 
-We're going to use `qutip.sesolve` multiple times -- one for each pulse. At the end of each use of `qutip.sesolve`, we'll record the final state and use it as the initial state for the next pulse.
-
-This isn't necessarily how one would code this in practice, but it is very useful for exploring and seeing what is happening.
+First we need to define some expectation values that we'd like to record while the circuit is running. These will help us see how the quantum state is evolving and determine whether our quantum state is correct:
 
 ```{code-cell} ipython3
-# First, let's define the initial state psi:
+# We need to choose some expectation values to measure. We could just use the projectors
+# for |a> and |b>, but let's include those for |+> and |-> too so that we can see those
+# states more easily in our plots:
 
-psi0 = (a).unit()
+eop_a = a.proj()
+eop_b = b.proj()
+eop_p = (a + b).unit().proj()  # projector onto the plus state
+eop_m = (a - b).unit().proj()  # projector onto the minus state
+```
 
+Secondly, we need to specify how long to evolve the system for, how often to record results (i.e. expectation values and the state of the system), and limit how big the time steps taken by the solver are allowed to get. This last is important -- if the solver takes too big a step, it might skip over a pulse entirely.
+
+```{code-cell} ipython3
 # Next we need to choose how long to evolve the system for each pulse.
 # Our pulses are from t=1 to t=2, so let's evolve the system from time 0 to 3
 # so that we can see not only the evolution during the pulse, but also the time
@@ -124,15 +131,6 @@ psi0 = (a).unit()
 
 tlist = np.linspace(0, 3, 40)
 
-# Now we need to choose some expectation values to measure. We could just use the projectors
-# for |a> and |b>, but let's include those for |+> and |-> too so that we can see those
-# states more easily in our plots:
-
-eop_a = a.proj()
-eop_b = b.proj()
-eop_p = (a + b).unit().proj()
-eop_m = (a - b).unit().proj()
-
 # Now for the important (!!) but boring step of specifying options to the solver. For
 # time-dependent Hamiltonians we must set the max_step to a time smaller than the shortest
 # pulse so that the solver does not skip over any pulses accidentally.
@@ -141,9 +139,71 @@ eop_m = (a - b).unit().proj()
 # even though we will specify expectation values to store too:
 
 options = qutip.Options(max_step=0.5, store_states=True)
+```
 
+Finally we're ready to apply a pulse and run `sesolve` to see what happens!
 
-# Finally, we specify some gates to run:
+```{code-cell} ipython3
+# Let's define the initial state psi:
+
+psi0 = (a).unit()
+
+# And the pulse to apply:
+
+H = [[sx, A]]
+theta = np.pi / 4
+
+# Now we run sesovle.
+# Note how we pass the angle `theta` as an argument to `sesolve`. The solver
+# will then pass it on to our amplitude function, A(t).
+
+result = qutip.sesolve(
+        H, psi0, tlist,
+        e_ops=[eop_a, eop_b, eop_p, eop_m],
+        args={"theta": theta, "start": 1, "dt": 1},
+        options=options,
+    )
+
+# And let's plot the expectation values to see what happened:
+    
+plt.plot(result.times, result.expect[0], label="P(a)");
+plt.plot(result.times, result.expect[1], label="P(b)");
+plt.plot(result.times, result.expect[2], label="P(+)");
+plt.plot(result.times, result.expect[3], label="P(-)");
+```
+
+We can also plot the evolution on the Bloch sphere.
+
+We use a slightly fancy color scheme to make it look nice.
+The `[(r, 0, 1-r) for r in np.linspace(0., 1., len(states))]` just says "generate a list of colours that goes from blue (`(0, 0, 1)`) to red (`(1, 0, 0)`) in a number of steps equal to the number of states (`len(states)`).
+
+```{code-cell} ipython3
+bl = qutip.Bloch()
+bl.vector_color = [(r, 0, 1-r) for r in np.linspace(0., 1., len(result.states))]
+bl.add_states(result.states)
+bl.show()
+```
+
+Before moving on, take some time to try different pulses. Change the operator $σ_x$ to one of the other operators. Change the angle `theta`, the start time and the duration, `dt`. Take a moment to understand what happens in each case. Also change the initial state, `psi0`. Try to predict what the plot will look like before you run it.
+
+Once you've tried lots of different parameters, you'll be ready to move on to multiple pluses in the next section.
+
++++
+
+Now that you've explored what happens with a single pulse thoroughly, it's time to run multiple pulses in succession.
+
+We're going to use `qutip.sesolve` multiple times -- one for each pulse. At the end of each use of `qutip.sesolve`, we'll record the final state and use it as the initial state for the next pulse.
+
+This isn't necessarily how one would code this in practice, but it is very useful for exploring and seeing what is happening.
+
+Calling `sesolve` repeatedly means we have to gather the results. This adds some extra line of code, but they are not very complicated, just long.
+
+```{code-cell} ipython3
+# As before, we define the initial state psi:
+
+psi0 = (a).unit()
+
+# Now we specify multiply gates to run in a list:
 
 gates = [
     (H_sx, np.pi / 4),
@@ -152,22 +212,11 @@ gates = [
 ]
 
 # Everything is setup, now all that remains is to run sesolve for each pulse:
-
-# Set up some lists to store all the results from all the sesolve runs:
-expect_a = []
-expect_b = []
-expect_p = []
-expect_m = []
-states = []
-times = []
-
-# We also need to keep track of how much time has passed so that we can update
-# the times appropriately before storing them in the `times` list. If we did not,
-# each result would be recorded as having taken place from t=0 to t=3 and they
-# would all overlap on our plots:
-start = 0
-
 # For each gate, run sesolve and store the results. 
+# We store all the results in a list named `results`.
+
+results = []
+
 for H, theta in gates:
     # Run sesovle.
     # Note how we pass the angle `theta` as an argument to `sesolve`. The solver
@@ -181,17 +230,30 @@ for H, theta in gates:
 
     # set the initial state for the next gate to the final state of this one
     psi0 = result.states[-1]
+    
+    # store the results for plotting
+    results.append(result)
 
-    # store the states and the expectation values for plotting:
-    expect_a.extend(result.expect[0])
-    expect_b.extend(result.expect[1])
-    expect_p.extend(result.expect[2])
-    expect_m.extend(result.expect[3])
-    states.extend(result.states)
+# Now we gather up the results for plottng.
+# Gathering the times is a bit more tricky because we have to adjust them according to the pulse
+# start time:
 
-    # sore the times for plotting, keeping track of the current overall time:
-    times.extend([start + t for t in tlist])
-    start += 3
+expect_a = []
+expect_b = []
+expect_p = []
+expect_m = []
+states = []
+times = []
+
+start = 0
+for r in results:
+    expect_a.extend(r.expect[0])
+    expect_b.extend(r.expect[1])
+    expect_p.extend(r.expect[2])
+    expect_m.extend(r.expect[3])
+    states.extend(r.states)
+    times.extend(t + start for t in r.times)
+    start += 3  # each solver run was for three seconds
 
 # And let's plot the expectation values to see what happened:
     
@@ -201,10 +263,7 @@ plt.plot(times, expect_p, label="P(+)");
 plt.plot(times, expect_m, label="P(-)");
 ```
 
-And we can also plot the evolution on the Bloch sphere.
-
-We use a slightly fancy color scheme to make it look nice.
-The `[(r, 0, 1-r) for r in np.linspace(0., 1., len(states))]` just says "generate a list of colours that goes from blue (`(0, 0, 1)`) to red (`(1, 0, 0)`) in a number of steps equal to the number of states (`len(states)`).
+And we can also plot the evolution over all pulses on the Bloch sphere, using the same color scheme as before:
 
 ```{code-cell} ipython3
 bl = qutip.Bloch()

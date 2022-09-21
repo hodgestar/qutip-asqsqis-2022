@@ -615,16 +615,26 @@ title="Print to PDF"
 \[\begin{split}Quantum object: dims = [[2], [2]], shape = (2, 2), type = oper, isherm = True\begin{equation*}\left(\begin{array}{*{11}c}0.0 &amp; 1.571\\1.571 &amp; 0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
 </div>
 </div>
-<p>Now, let’s bring these elements together and apply some pulses to an initial system state, using <code class="docutils literal notranslate"><span class="pre">qutip.sesolve</span></code> to simulate the evolution, and examine the results.</p>
-<p>We’re going to use <code class="docutils literal notranslate"><span class="pre">qutip.sesolve</span></code> multiple times – one for each pulse. At the end of each use of <code class="docutils literal notranslate"><span class="pre">qutip.sesolve</span></code>, we’ll record the final state and use it as the initial state for the next pulse.</p>
-<p>This isn’t necessarily how one would code this in practice, but it is very useful for exploring and seeing what is happening.</p>
+<p>We’re almost ready to bring everything together, but there are a couple of things we need to do still.</p>
+<p>First we need to define some expectation values that we’d like to record while the circuit is running. These will help us see how the quantum state is evolving and determine whether our quantum state is correct:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># First, let&#39;s define the initial state psi:</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># We need to choose some expectation values to measure. We could just use the projectors</span>
+<span class="c1"># for |a&gt; and |b&gt;, but let&#39;s include those for |+&gt; and |-&gt; too so that we can see those</span>
+<span class="c1"># states more easily in our plots:</span>
 
-<span class="n">psi0</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">.</span><span class="n">unit</span><span class="p">()</span>
-
-<span class="c1"># Next we need to choose how long to evolve the system for each pulse.</span>
+<span class="n">eop_a</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">proj</span><span class="p">()</span>
+<span class="n">eop_b</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">proj</span><span class="p">()</span>
+<span class="n">eop_p</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span><span class="o">.</span><span class="n">unit</span><span class="p">()</span><span class="o">.</span><span class="n">proj</span><span class="p">()</span>  <span class="c1"># projector onto the plus state</span>
+<span class="n">eop_m</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span> <span class="o">-</span> <span class="n">b</span><span class="p">)</span><span class="o">.</span><span class="n">unit</span><span class="p">()</span><span class="o">.</span><span class="n">proj</span><span class="p">()</span>  <span class="c1"># projector onto the minus state</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Secondly, we need to specify how long to evolve the system for, how often to record results (i.e. expectation values and the state of the system), and limit how big the time steps taken by the solver are allowed to get. This last is important – if the solver takes too big a step, it might skip over a pulse entirely.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Next we need to choose how long to evolve the system for each pulse.</span>
 <span class="c1"># Our pulses are from t=1 to t=2, so let&#39;s evolve the system from time 0 to 3</span>
 <span class="c1"># so that we can see not only the evolution during the pulse, but also the time</span>
 <span class="c1"># immediately before and after.</span>
@@ -632,15 +642,6 @@ title="Print to PDF"
 <span class="c1"># intervals during the three seconds because that makes the plots look reasonably smooth:</span>
 
 <span class="n">tlist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">40</span><span class="p">)</span>
-
-<span class="c1"># Now we need to choose some expectation values to measure. We could just use the projectors</span>
-<span class="c1"># for |a&gt; and |b&gt;, but let&#39;s include those for |+&gt; and |-&gt; too so that we can see those</span>
-<span class="c1"># states more easily in our plots:</span>
-
-<span class="n">eop_a</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">proj</span><span class="p">()</span>
-<span class="n">eop_b</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">proj</span><span class="p">()</span>
-<span class="n">eop_p</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span><span class="o">.</span><span class="n">unit</span><span class="p">()</span><span class="o">.</span><span class="n">proj</span><span class="p">()</span>
-<span class="n">eop_m</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span> <span class="o">-</span> <span class="n">b</span><span class="p">)</span><span class="o">.</span><span class="n">unit</span><span class="p">()</span><span class="o">.</span><span class="n">proj</span><span class="p">()</span>
 
 <span class="c1"># Now for the important (!!) but boring step of specifying options to the solver. For</span>
 <span class="c1"># time-dependent Hamiltonians we must set the max_step to a time smaller than the shortest</span>
@@ -650,9 +651,75 @@ title="Print to PDF"
 <span class="c1"># even though we will specify expectation values to store too:</span>
 
 <span class="n">options</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">Options</span><span class="p">(</span><span class="n">max_step</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">store_states</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Finally we’re ready to apply a pulse and run <code class="docutils literal notranslate"><span class="pre">sesolve</span></code> to see what happens!</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Let&#39;s define the initial state psi:</span>
 
+<span class="n">psi0</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">.</span><span class="n">unit</span><span class="p">()</span>
 
-<span class="c1"># Finally, we specify some gates to run:</span>
+<span class="c1"># And the pulse to apply:</span>
+
+<span class="n">H</span> <span class="o">=</span> <span class="p">[[</span><span class="n">sx</span><span class="p">,</span> <span class="n">A</span><span class="p">]]</span>
+<span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">4</span>
+
+<span class="c1"># Now we run sesovle.</span>
+<span class="c1"># Note how we pass the angle `theta` as an argument to `sesolve`. The solver</span>
+<span class="c1"># will then pass it on to our amplitude function, A(t).</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">sesolve</span><span class="p">(</span>
+        <span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span>
+        <span class="n">e_ops</span><span class="o">=</span><span class="p">[</span><span class="n">eop_a</span><span class="p">,</span> <span class="n">eop_b</span><span class="p">,</span> <span class="n">eop_p</span><span class="p">,</span> <span class="n">eop_m</span><span class="p">],</span>
+        <span class="n">args</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;theta&quot;</span><span class="p">:</span> <span class="n">theta</span><span class="p">,</span> <span class="s2">&quot;start&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;dt&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
+        <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">,</span>
+    <span class="p">)</span>
+
+<span class="c1"># And let&#39;s plot the expectation values to see what happened:</span>
+    
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">times</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;P(a)&quot;</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">times</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;P(b)&quot;</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">times</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;P(+)&quot;</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">times</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;P(-)&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/04-neutral-atom-simulator-exploration_17_0.png" src="../_images/04-neutral-atom-simulator-exploration_17_0.png" />
+</div>
+</div>
+<p>We can also plot the evolution on the Bloch sphere.</p>
+<p>We use a slightly fancy color scheme to make it look nice.
+The <code class="docutils literal notranslate"><span class="pre">[(r,</span> <span class="pre">0,</span> <span class="pre">1-r)</span> <span class="pre">for</span> <span class="pre">r</span> <span class="pre">in</span> <span class="pre">np.linspace(0.,</span> <span class="pre">1.,</span> <span class="pre">len(states))]</span></code> just says “generate a list of colours that goes from blue (<code class="docutils literal notranslate"><span class="pre">(0,</span> <span class="pre">0,</span> <span class="pre">1)</span></code>) to red (<code class="docutils literal notranslate"><span class="pre">(1,</span> <span class="pre">0,</span> <span class="pre">0)</span></code>) in a number of steps equal to the number of states (<code class="docutils literal notranslate"><span class="pre">len(states)</span></code>).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bl</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">Bloch</span><span class="p">()</span>
+<span class="n">bl</span><span class="o">.</span><span class="n">vector_color</span> <span class="o">=</span> <span class="p">[(</span><span class="n">r</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="o">-</span><span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">states</span><span class="p">))]</span>
+<span class="n">bl</span><span class="o">.</span><span class="n">add_states</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">states</span><span class="p">)</span>
+<span class="n">bl</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/04-neutral-atom-simulator-exploration_19_0.png" src="../_images/04-neutral-atom-simulator-exploration_19_0.png" />
+</div>
+</div>
+<p>Before moving on, take some time to try different pulses. Change the operator <span class="math notranslate nohighlight">\(σ_x\)</span> to one of the other operators. Change the angle <code class="docutils literal notranslate"><span class="pre">theta</span></code>, the start time and the duration, <code class="docutils literal notranslate"><span class="pre">dt</span></code>. Take a moment to understand what happens in each case. Also change the initial state, <code class="docutils literal notranslate"><span class="pre">psi0</span></code>. Try to predict what the plot will look like before you run it.</p>
+<p>Once you’ve tried lots of different parameters, you’ll be ready to move on to multiple pluses in the next section.</p>
+<p>Now that you’ve explored what happens with a single pulse thoroughly, it’s time to run multiple pulses in succession.</p>
+<p>We’re going to use <code class="docutils literal notranslate"><span class="pre">qutip.sesolve</span></code> multiple times – one for each pulse. At the end of each use of <code class="docutils literal notranslate"><span class="pre">qutip.sesolve</span></code>, we’ll record the final state and use it as the initial state for the next pulse.</p>
+<p>This isn’t necessarily how one would code this in practice, but it is very useful for exploring and seeing what is happening.</p>
+<p>Calling <code class="docutils literal notranslate"><span class="pre">sesolve</span></code> repeatedly means we have to gather the results. This adds some extra line of code, but they are not very complicated, just long.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># As before, we define the initial state psi:</span>
+
+<span class="n">psi0</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">.</span><span class="n">unit</span><span class="p">()</span>
+
+<span class="c1"># Now we specify multiply gates to run in a list:</span>
 
 <span class="n">gates</span> <span class="o">=</span> <span class="p">[</span>
     <span class="p">(</span><span class="n">H_sx</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">4</span><span class="p">),</span>
@@ -661,22 +728,11 @@ title="Print to PDF"
 <span class="p">]</span>
 
 <span class="c1"># Everything is setup, now all that remains is to run sesolve for each pulse:</span>
-
-<span class="c1"># Set up some lists to store all the results from all the sesolve runs:</span>
-<span class="n">expect_a</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="n">expect_b</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="n">expect_p</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="n">expect_m</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="n">states</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="n">times</span> <span class="o">=</span> <span class="p">[]</span>
-
-<span class="c1"># We also need to keep track of how much time has passed so that we can update</span>
-<span class="c1"># the times appropriately before storing them in the `times` list. If we did not,</span>
-<span class="c1"># each result would be recorded as having taken place from t=0 to t=3 and they</span>
-<span class="c1"># would all overlap on our plots:</span>
-<span class="n">start</span> <span class="o">=</span> <span class="mi">0</span>
-
 <span class="c1"># For each gate, run sesolve and store the results. </span>
+<span class="c1"># We store all the results in a list named `results`.</span>
+
+<span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+
 <span class="k">for</span> <span class="n">H</span><span class="p">,</span> <span class="n">theta</span> <span class="ow">in</span> <span class="n">gates</span><span class="p">:</span>
     <span class="c1"># Run sesovle.</span>
     <span class="c1"># Note how we pass the angle `theta` as an argument to `sesolve`. The solver</span>
@@ -690,17 +746,30 @@ title="Print to PDF"
 
     <span class="c1"># set the initial state for the next gate to the final state of this one</span>
     <span class="n">psi0</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    
+    <span class="c1"># store the results for plotting</span>
+    <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 
-    <span class="c1"># store the states and the expectation values for plotting:</span>
-    <span class="n">expect_a</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-    <span class="n">expect_b</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-    <span class="n">expect_p</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
-    <span class="n">expect_m</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
-    <span class="n">states</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">states</span><span class="p">)</span>
+<span class="c1"># Now we gather up the results for plottng.</span>
+<span class="c1"># Gathering the times is a bit more tricky because we have to adjust them according to the pulse</span>
+<span class="c1"># start time:</span>
 
-    <span class="c1"># sore the times for plotting, keeping track of the current overall time:</span>
-    <span class="n">times</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">start</span> <span class="o">+</span> <span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tlist</span><span class="p">])</span>
-    <span class="n">start</span> <span class="o">+=</span> <span class="mi">3</span>
+<span class="n">expect_a</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">expect_b</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">expect_p</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">expect_m</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">states</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">times</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="n">start</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+    <span class="n">expect_a</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">expect_b</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">expect_p</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="n">expect_m</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+    <span class="n">states</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">states</span><span class="p">)</span>
+    <span class="n">times</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="n">start</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">r</span><span class="o">.</span><span class="n">times</span><span class="p">)</span>
+    <span class="n">start</span> <span class="o">+=</span> <span class="mi">3</span>  <span class="c1"># each solver run was for three seconds</span>
 
 <span class="c1"># And let&#39;s plot the expectation values to see what happened:</span>
     
@@ -712,12 +781,10 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/04-neutral-atom-simulator-exploration_13_0.png" src="../_images/04-neutral-atom-simulator-exploration_13_0.png" />
+<img alt="../_images/04-neutral-atom-simulator-exploration_22_0.png" src="../_images/04-neutral-atom-simulator-exploration_22_0.png" />
 </div>
 </div>
-<p>And we can also plot the evolution on the Bloch sphere.</p>
-<p>We use a slightly fancy color scheme to make it look nice.
-The <code class="docutils literal notranslate"><span class="pre">[(r,</span> <span class="pre">0,</span> <span class="pre">1-r)</span> <span class="pre">for</span> <span class="pre">r</span> <span class="pre">in</span> <span class="pre">np.linspace(0.,</span> <span class="pre">1.,</span> <span class="pre">len(states))]</span></code> just says “generate a list of colours that goes from blue (<code class="docutils literal notranslate"><span class="pre">(0,</span> <span class="pre">0,</span> <span class="pre">1)</span></code>) to red (<code class="docutils literal notranslate"><span class="pre">(1,</span> <span class="pre">0,</span> <span class="pre">0)</span></code>) in a number of steps equal to the number of states (<code class="docutils literal notranslate"><span class="pre">len(states)</span></code>).</p>
+<p>And we can also plot the evolution over all pulses on the Bloch sphere, using the same color scheme as before:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bl</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">Bloch</span><span class="p">()</span>
@@ -728,7 +795,7 @@ The <code class="docutils literal notranslate"><span class="pre">[(r,</span> <sp
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/04-neutral-atom-simulator-exploration_15_0.png" src="../_images/04-neutral-atom-simulator-exploration_15_0.png" />
+<img alt="../_images/04-neutral-atom-simulator-exploration_24_0.png" src="../_images/04-neutral-atom-simulator-exploration_24_0.png" />
 </div>
 </div>
 </section>

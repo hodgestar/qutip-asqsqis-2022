@@ -677,7 +677,7 @@ title="Print to PDF"
 </section>
 <section id="implementation">
 <h2>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">#</a></h2>
-<p>I chose to implement the simulator as a single class. This keeps the implementation all neatly in one place.</p>
+<p>We implement the simulator as a single class. This keeps the implementation all neatly in one place.</p>
 <p>Here is an overview of the methods of the class to help in understanding it:</p>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">__init__</span></code>:</p>
@@ -1113,39 +1113,42 @@ Number of pulses: 9
 <img alt="../_images/05-neutral-atom-simulator-worked-solution_23_2.png" src="../_images/05-neutral-atom-simulator-worked-solution_23_2.png" />
 </div>
 </div>
-<p>The fully entangled state appears as two completely mixed states that are represented by the arrow heads at the centre of the Bloch sphere. Let’s check that the final state really is the expected Bell state and not some other state that has the same reduced density matrix probabilities but a different relative phase:</p>
+<p>The fully entangled state appears as two completely mixed states that are represented by the arrow heads at the centre of the Bloch sphere. Let’s check that the final state really is the expected Bell state and not some other state that has the same reduced density matrix probabilities but a different relative phase.</p>
+<p>Note: We use <code class="docutils literal notranslate"><span class="pre">.tidyup(atol=1e-5)</span></code> to hide the small but non-zero coefficients. This makes it easier to see the large coefficients, but you should also look at the coefficients without <code class="docutils literal notranslate"><span class="pre">.tidyup</span></code> to see what magnitude they are. The <code class="docutils literal notranslate"><span class="pre">atol=1e-5</span></code> hides all coefficients less than <code class="docutils literal notranslate"><span class="pre">1e-5</span></code>.</p>
+<p>To understand what the coefficients on the final state mean, remember that the first coefficient is for the basis state <code class="docutils literal notranslate"><span class="pre">|aa&gt;</span></code>, the second for <code class="docutils literal notranslate"><span class="pre">|ab&gt;</span></code>, the third for <code class="docutils literal notranslate"><span class="pre">|ar&gt;</span></code>, and then remainder for <code class="docutils literal notranslate"><span class="pre">|ba&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">|bb&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">|br&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">|ra&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">|rb&gt;</span></code> and <code class="docutils literal notranslate"><span class="pre">|rr&gt;</span></code>, in order.</p>
+<p>The Bell state is <code class="docutils literal notranslate"><span class="pre">|aa&gt;</span> <span class="pre">+</span> <span class="pre">|bb&gt;</span></code> so we expect the first and fifth coefficients to be <span class="math notranslate nohighlight">\(\frac{1}{\sqrt{2}}\)</span> and the remaining coefficients to be small.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">tidyup</span><span class="p">(</span><span class="n">atol</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
 <div class="output text_latex math notranslate nohighlight">
-\[\begin{split}Quantum object: dims = [[3, 3], [1, 1]], shape = (9, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}(4.632\times10^{-05}-0.707j)\\(4.564\times10^{-05}+2.007\times10^{-06}j)\\(2.038\times10^{-09}-7.259\times10^{-09}j)\\(2.030\times10^{-06}+2.091\times10^{-06}j)\\(-2.706\times10^{-06}-0.707j)\\-7.396\times10^{-08}j\\(3.474\times10^{-07}+1.646\times10^{-11}j)\\(-2.196\times10^{-06}+1.170\times10^{-11}j)\\(-1.354\times10^{-04}-6.107\times10^{-05}j)\\\end{array}\right)\end{equation*}\end{split}\]</div>
+\[\begin{split}Quantum object: dims = [[3, 3], [1, 1]], shape = (9, 1), type = ket\begin{equation*}\left(\begin{array}{*{11}c}(4.632\times10^{-05}-0.707j)\\4.564\times10^{-05}\\0.0\\0.0\\-0.707j\\0.0\\0.0\\0.0\\(-1.354\times10^{-04}-6.107\times10^{-05}j)\\\end{array}\right)\end{equation*}\end{split}\]</div>
 </div>
 </div>
 <p>And here are the reduce density matrices for the two qubits:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">ptrace</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">ptrace</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">tidyup</span><span class="p">(</span><span class="n">atol</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
 <div class="output text_latex math notranslate nohighlight">
-\[\begin{split}Quantum object: dims = [[3], [3]], shape = (3, 3), type = oper, isherm = True\begin{equation*}\left(\begin{array}{*{11}c}0.500 &amp; (-2.898\times10^{-06}+3.084\times10^{-05}j) &amp; (-9.560\times10^{-11}-2.457\times10^{-07}j)\\(-2.898\times10^{-06}-3.084\times10^{-05}j) &amp; 0.500 &amp; (2.894\times10^{-12}+1.553\times10^{-06}j)\\(-9.560\times10^{-11}+2.457\times10^{-07}j) &amp; (2.894\times10^{-12}-1.553\times10^{-06}j) &amp; 2.207\times10^{-08}\\\end{array}\right)\end{equation*}\end{split}\]</div>
+\[\begin{split}Quantum object: dims = [[3], [3]], shape = (3, 3), type = oper, isherm = True\begin{equation*}\left(\begin{array}{*{11}c}0.500 &amp; 3.084\times10^{-05}j &amp; 0.0\\-3.084\times10^{-05}j &amp; 0.500 &amp; 0.0\\0.0 &amp; 0.0 &amp; 0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">ptrace</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">ptrace</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">tidyup</span><span class="p">(</span><span class="n">atol</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
 <div class="output text_latex math notranslate nohighlight">
-\[\begin{split}Quantum object: dims = [[3], [3]], shape = (3, 3), type = oper, isherm = True\begin{equation*}\left(\begin{array}{*{11}c}0.500 &amp; (-2.896\times10^{-06}-3.084\times10^{-05}j) &amp; (5.086\times10^{-09}-1.420\times10^{-09}j)\\(-2.896\times10^{-06}+3.084\times10^{-05}j) &amp; 0.500 &amp; (5.259\times10^{-08}-1.339\times10^{-10}j)\\(5.086\times10^{-09}+1.420\times10^{-09}j) &amp; (5.259\times10^{-08}+1.339\times10^{-10}j) &amp; 2.207\times10^{-08}\\\end{array}\right)\end{equation*}\end{split}\]</div>
+\[\begin{split}Quantum object: dims = [[3], [3]], shape = (3, 3), type = oper, isherm = True\begin{equation*}\left(\begin{array}{*{11}c}0.500 &amp; -3.084\times10^{-05}j &amp; 0.0\\3.084\times10^{-05}j &amp; 0.500 &amp; 0.0\\0.0 &amp; 0.0 &amp; 0.0\\\end{array}\right)\end{equation*}\end{split}\]</div>
 </div>
 </div>
 </section>
