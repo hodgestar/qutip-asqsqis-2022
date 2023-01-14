@@ -1,0 +1,843 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>04: Adding dissipation to the Jaynes-Cummings model &#8212; ASQSQIS Tutorials with QuTiP</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="05: Jaynes-Cummings Ultra-strong Coupling" href="05-qutip-jcm-iii.html" />
+    <link rel="prev" title="03: Jaynes-Cummings Model and the Rotating Wave Approximation" href="03-qutip-jcm-i.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../_static/logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">ASQSQIS Tutorials with QuTiP</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Overview
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Tutorials
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="00-qutip-intro.html">
+   00: Introduction to QuTiP
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="01-qutip-qip-i.html">
+   01: Quantum Information Processing in QuTiP I
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="02-qutip-qip-ii.html">
+   02: Quantum Information Processing in QuTiP II
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="03-qutip-jcm-i.html">
+   03: Jaynes-Cummings Model and the Rotating Wave Approximation
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   04: Adding dissipation to the Jaynes-Cummings model
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="05-qutip-jcm-iii.html">
+   05: Jaynes-Cummings Ultra-strong Coupling
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Capstone
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../capstone/00-introduction.html">
+   Capstone project: Simulating a Neutral Atom Quantum Device
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../capstone/01-neutral-atom-devices.html">
+   01: Neutral Atom Devices
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../capstone/02-a-single-atom.html">
+   02: A Single Atom
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../capstone/03-neutral-atom-simulator.html">
+   03: Neutral Atom Simulator (Outline)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../capstone/04-neutral-atom-simulator-exploration.html">
+   04: Neutral Atom Simulator Class (Exploration)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../capstone/05-neutral-atom-simulator-worked-solution.html">
+   05: Neutral Atom Simulator (Worked Solution)
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Worked solutions
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../tutorials/00-qutip-intro.html">
+   00: Introduction to QuTiP
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../tutorials/01-qutip-qip-i.html">
+   01: Quantum Information Processing in QuTiP I
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../tutorials/02-qutip-qip-ii.html">
+   02: Quantum Information Processing in QuTiP II
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../tutorials/03-qutip-jcm-i.html">
+   03: Jaynes-Cummings Model and the Rotating Wave Approximation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../tutorials/04-qutip-jcm-ii.html">
+   04: Adding dissipation to the Jaynes-Cummings model
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../tutorials/05-qutip-jcm-iii.html">
+   05: Jaynes-Cummings Ultra-strong Coupling
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Backmatter
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../build-stats.html">
+   Build information
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../references.html">
+   Bibliography
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://mybinder.org/v2/gh/hodgestar/qutip-asqsqis-2022/master?urlpath=tree/tutbok/student-tutorials/04-qutip-jcm-ii.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Launch on Binder"
+>
+  
+
+<span class="headerbtn__icon-container">
+  
+    <img src="../_static/images/logo_binder.svg">
+  </span>
+<span class="headerbtn__text-container">Binder</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/hodgestar/qutip-asqsqis-2022"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/hodgestar/qutip-asqsqis-2022/issues/new?title=Issue%20on%20page%20%2Fstudent-tutorials/04-qutip-jcm-ii.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/student-tutorials/04-qutip-jcm-ii.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download notebook file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-code"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="../_sources/student-tutorials/04-qutip-jcm-ii.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   04: Adding dissipation to the Jaynes-Cummings model
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#tasks">
+     Tasks
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#imports">
+     Imports
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#helper-functions">
+     Helper functions
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#re-cap-of-solving-without-dissipation">
+     Re-cap of solving without dissipation
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#construct-collapse-operators">
+     Construct collapse operators
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#solve-the-linblad-master-equation">
+     Solve the Linblad Master equation
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#visualise-cavity-modes-as-wigner-functions">
+     Visualise cavity modes as Wigner functions
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#finding-the-steady-state">
+   Finding the steady state
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#links-for-further-study">
+     Links for further study
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>04: Adding dissipation to the Jaynes-Cummings model</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   04: Adding dissipation to the Jaynes-Cummings model
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#tasks">
+     Tasks
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#imports">
+     Imports
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#helper-functions">
+     Helper functions
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#re-cap-of-solving-without-dissipation">
+     Re-cap of solving without dissipation
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#construct-collapse-operators">
+     Construct collapse operators
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#solve-the-linblad-master-equation">
+     Solve the Linblad Master equation
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#visualise-cavity-modes-as-wigner-functions">
+     Visualise cavity modes as Wigner functions
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#finding-the-steady-state">
+   Finding the steady state
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#links-for-further-study">
+     Links for further study
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section class="tex2jax_ignore mathjax_ignore" id="adding-dissipation-to-the-jaynes-cummings-model">
+<h1>04: Adding dissipation to the Jaynes-Cummings model<a class="headerlink" href="#adding-dissipation-to-the-jaynes-cummings-model" title="Permalink to this headline">#</a></h1>
+<p>In this tutorial we will add interactions with the environment to the Jaynes-Cummings model in the form of dissipation from the atom and the cavity. We will use the Wigner function to visualise the modes of the cavity certain times in the evolution to see how these evolve over time.</p>
+<section id="tasks">
+<h2>Tasks<a class="headerlink" href="#tasks" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="#Construct-collapse-operators">Construct collapse operators</a></p></li>
+<li><p><a class="reference external" href="#Solve-the-linblad-master-equation">Solve the Lindblad Master equation</a></p></li>
+<li><p><a class="reference external" href="#Visualise-cavity-modes-as-wigner-functions">Visualise cavity modes as Wigner functions</a></p></li>
+<li><p><a class="reference external" href="#Finding-the-steady-state">Finding the steady state</a></p></li>
+</ul>
+</section>
+<section id="imports">
+<h2>Imports<a class="headerlink" href="#imports" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">matplotlib</span> inline
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">qutip</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="helper-functions">
+<h2>Helper functions<a class="headerlink" href="#helper-functions" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">jcm_h</span><span class="p">(</span><span class="n">wc</span><span class="p">,</span> <span class="n">wa</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">atom</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Construct the Jaynes-Cummings Hamiltonian (non-RWA). &quot;&quot;&quot;</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">qutip</span><span class="o">.</span><span class="n">destroy</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">qutip</span><span class="o">.</span><span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+    <span class="n">sm</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">qutip</span><span class="o">.</span><span class="n">qeye</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">qutip</span><span class="o">.</span><span class="n">sigmam</span><span class="p">())</span>
+    <span class="n">atom</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">qutip</span><span class="o">.</span><span class="n">qeye</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">atom</span><span class="p">)</span>
+    
+    <span class="n">H</span> <span class="o">=</span> <span class="n">wc</span> <span class="o">*</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span> <span class="o">+</span> <span class="n">wa</span> <span class="o">*</span> <span class="n">atom</span> <span class="o">+</span> <span class="n">g</span> <span class="o">*</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">+</span> <span class="n">a</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">sm</span> <span class="o">+</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">())</span>
+    <span class="k">return</span> <span class="n">H</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">jcm_rwa_h</span><span class="p">(</span><span class="n">wc</span><span class="p">,</span> <span class="n">wa</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">atom</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Construct the Jaynes-Cummings Hamiltonian (RWA). &quot;&quot;&quot;</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">qutip</span><span class="o">.</span><span class="n">destroy</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">qutip</span><span class="o">.</span><span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+    <span class="n">sm</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">qutip</span><span class="o">.</span><span class="n">qeye</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">qutip</span><span class="o">.</span><span class="n">sigmam</span><span class="p">())</span>
+    <span class="n">atom</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">qutip</span><span class="o">.</span><span class="n">qeye</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">atom</span><span class="p">)</span>
+
+    <span class="n">H</span> <span class="o">=</span> <span class="n">wc</span> <span class="o">*</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span> <span class="o">+</span> <span class="n">wa</span> <span class="o">*</span> <span class="n">atom</span> <span class="o">+</span> <span class="n">g</span> <span class="o">*</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span> <span class="o">+</span> <span class="n">a</span> <span class="o">*</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">())</span>
+    <span class="k">return</span> <span class="n">H</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="re-cap-of-solving-without-dissipation">
+<h2>Re-cap of solving without dissipation<a class="headerlink" href="#re-cap-of-solving-without-dissipation" title="Permalink to this headline">#</a></h2>
+<p>Let’s re-cap what we did in the previous tutorial and solve the Schrödinger equation for the Jaynes-Cummings Hamiltonian without dissipation.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Jaynes-Cummings parameters</span>
+<span class="c1"># system parameters</span>
+<span class="n">wc</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>  <span class="c1"># cavity frequency</span>
+<span class="n">wa</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>  <span class="c1"># atom frequency</span>
+<span class="n">g</span> <span class="o">=</span> <span class="mf">0.05</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>  <span class="c1"># coupling strength</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">15</span>  <span class="c1"># number of cavity fock states</span>
+
+<span class="c1"># Atom hamiltonian</span>
+<span class="n">H_atom</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">qutip</span><span class="o">.</span><span class="n">sigmaz</span><span class="p">()</span>
+
+<span class="n">H</span> <span class="o">=</span> <span class="n">jcm_h</span><span class="p">(</span><span class="n">wc</span><span class="p">,</span> <span class="n">wa</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">H_atom</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># system operators</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">qutip</span><span class="o">.</span><span class="n">destroy</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">qutip</span><span class="o">.</span><span class="n">qeye</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+<span class="n">sm</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">qutip</span><span class="o">.</span><span class="n">qeye</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">qutip</span><span class="o">.</span><span class="n">sigmam</span><span class="p">())</span>
+
+<span class="c1"># relaxation operators</span>
+<span class="n">a</span>  <span class="c1"># cavity relaxation</span>
+<span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span>  <span class="c1"># cavity excitation</span>
+<span class="n">sm</span> <span class="o">=</span> <span class="n">sm</span> <span class="c1"># qubit relaxation</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Operators to determine the expectation values of:</span>
+<span class="n">eop_a</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">a</span>  <span class="c1"># light</span>
+<span class="n">eop_sm</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">dag</span><span class="p">()</span> <span class="o">*</span> <span class="n">sm</span>  <span class="c1"># matter</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">psi0</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">basis</span><span class="p">([</span><span class="n">N</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>  <span class="c1"># start with an excited atom</span>
+<span class="n">tlist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">101</span><span class="p">)</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">qutip</span><span class="o">.</span><span class="n">sesolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">psi0</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">e_ops</span><span class="o">=</span><span class="p">[</span><span class="n">eop_a</span><span class="p">,</span> <span class="n">eop_sm</span><span class="p">])</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tlist</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Light&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tlist</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;matter&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/04-qutip-jcm-ii_13_0.png" src="../_images/04-qutip-jcm-ii_13_0.png" />
+</div>
+</div>
+</section>
+<section id="construct-collapse-operators">
+<h2>Construct collapse operators<a class="headerlink" href="#construct-collapse-operators" title="Permalink to this headline">#</a></h2>
+<p>Now we will create the collapse operators for the Lindblad master equation.</p>
+<p>These are also called jump operators or Lindblad operators.</p>
+<ul class="simple">
+<li><p>Define variables for the cavity dissipation rate (<span class="math notranslate nohighlight">\(\kappa\)</span>), atom dissipation rate (<span class="math notranslate nohighlight">\(\gamma\)</span>), and average number of thermal bath excitations (<span class="math notranslate nohighlight">\(N_{\mathrm{thermal}}\)</span>).</p></li>
+<li><p>Create a list for adding the collapse operators to.</p></li>
+<li><p>Create the cavity relaxation collapse operator. Consider the appropriate operator and then determine the rate based on the dissipation and thermal occupation level.</p></li>
+<li><p>Create the cavity excitation collapse operator, again considering the appropriate operator and rate.</p></li>
+<li><p>Create the atom relaxation collapse operator, again considering the appropriate operator and rate.</p></li>
+<li><p>Add the operators to the list if the corresponding rate is greater than zero.</p></li>
+</ul>
+<p>Some suggested values for the initial dissipation rates and averge bath excitations:</p>
+<p><span class="math notranslate nohighlight">\(
+  \kappa = 0.005 \\
+  \gamma = 0.05 \\
+  N_{\mathrm{thermal}} = 5 \\
+\)</span></p>
+</section>
+<section id="solve-the-linblad-master-equation">
+<h2>Solve the Linblad Master equation<a class="headerlink" href="#solve-the-linblad-master-equation" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>Evolve the system, starting from excited atom state, using mesolve, utilising the collapse operators from above and saving the result.</p></li>
+<li><p>Plot the expectation values for the atom and cavity excitations.</p></li>
+<li><p>What happens if you extent the evolution time?</p></li>
+</ul>
+</section>
+<section id="visualise-cavity-modes-as-wigner-functions">
+<h2>Visualise cavity modes as Wigner functions<a class="headerlink" href="#visualise-cavity-modes-as-wigner-functions" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>Note the times when the cavity excitation is at a maximum or minimum.</p></li>
+<li><p>Use the master equation solver to generate density matrices of the time evolution (this is the default mode when no expectation operators are given) for these times.</p></li>
+<li><p>For each of these density matrices, trace out (partial trace) the atom from the density matrix and create and plot the Wigner function.</p></li>
+</ul>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="finding-the-steady-state">
+<h1>Finding the steady state<a class="headerlink" href="#finding-the-steady-state" title="Permalink to this headline">#</a></h1>
+<p>When you extended the time evolution, it looked like the system was heading towards a steady state. Let’s find it!</p>
+<p>You can use <code class="docutils literal notranslate"><span class="pre">qutip.steadystate</span></code> to determine it. Read the documentation by typing <code class="docutils literal notranslate"><span class="pre">qutip.steadystate?</span></code>.</p>
+<p>Plot the expectation values and Wigner function of the steady state and compare them to the values you saw from the evolution.</p>
+<section id="links-for-further-study">
+<h2>Links for further study<a class="headerlink" href="#links-for-further-study" title="Permalink to this headline">#</a></h2>
+<p>There is an excellent paper <a class="reference external" href="https://arxiv.org/abs/2202.00330">The Jaynes-Cummings model and its descendants</a> by Larson and Mavrogordatos, that reviews the Jaynes-Cummings model and its many variations. You can try reading this paper and implementing some of the simpler variants in QuTiP.</p>
+<p>If you do, please consider polishing your notebook, adding good explanations to it and submitting it as an example for others by opening a pull request for it at <a class="reference external" href="https://github.com/qutip/qutip-tutorials/">https://github.com/qutip/qutip-tutorials/</a>.</p>
+<p>This paper covers a <em>lot</em> of work, so don’t expect to understand all of it quickly. Start with the earlier sections. We will explore the Jaynes-Cumming model more in the remaining tutorials.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./student-tutorials"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="03-qutip-jcm-i.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">03: Jaynes-Cummings Model and the Rotating Wave Approximation</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="05-qutip-jcm-iii.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">05: Jaynes-Cummings Ultra-strong Coupling</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Simon Cross<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>
